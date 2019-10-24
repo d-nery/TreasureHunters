@@ -1,8 +1,8 @@
 export const characters = [
   {
     flipX: false,
-    x: 100,
-    y: 100,
+    x: 183,
+    y: 456,
     idx: 0,
     takenBy: null,
     idlespriteidx: 0,
@@ -13,8 +13,8 @@ export const characters = [
   },
   {
     flipX: false,
-    x: 150,
-    y: 150,
+    x: 209,
+    y: 456,
     idx: 1,
     takenBy: null,
     idlespriteidx: 3,
@@ -25,8 +25,8 @@ export const characters = [
   },
   {
     flipX: false,
-    x: 100,
-    y: 150,
+    x: 235,
+    y: 456,
     idx: 2,
     takenBy: null,
     idlespriteidx: 18,
@@ -37,8 +37,8 @@ export const characters = [
   },
   {
     flipX: false,
-    x: 150,
-    y: 100,
+    x: 262,
+    y: 456,
     idx: 3,
     takenBy: null,
     idlespriteidx: 21,

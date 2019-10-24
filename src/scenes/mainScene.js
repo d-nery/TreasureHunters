@@ -74,6 +74,8 @@ export default class MainScene extends Phaser.Scene {
     // creating the layers
     this.map.createStaticLayer("Grass", tiles, 0, 0);
     this.obstacles = this.map.createStaticLayer("Obstacles", tiles, 0, 0);
+    this.map.createStaticLayer("Visual_torches", tiles, 0, 0);
+    this.map.createStaticLayer("Door_Alavanca", tiles, 0, 0);
 
     this.obstacles.setCollisionByExclusion([-1]);
 
