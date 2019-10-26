@@ -7,71 +7,48 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     this.socket = io();
-    // this.otherPlayers = this.physics.add.group();
 
-    // create map
     this.createMap();
 
-    // user input
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    // create enemies
-    // this.createEnemies();
-
     this.socket.on("character", charIdx => {
-      console.log("Received my character index: ", charIdx)
+      console.log("Received my character index: ", charIdx);
 
       this.charIdx = charIdx;
     });
 
-    // listen for web socket events
     this.socket.on("allCharacters", chars => {
-      console.log("Received allCharacters event: ", chars)
+      console.log("Received allCharacters event: ", chars);
 
       this.allCharacters = chars;
       this.createCharacters();
-
-      // create player animations
       this.createAnimations();
-
-      // update camera
       this.updateCamera();
 
-      // don't walk on trees
-        this.physics.add.collider(this.containers[this.charIdx], this.obstacles);
+      this.physics.add.collider(this.containers[this.charIdx], this.obstacles);
     });
 
     this.socket.on("newPlayer", playerChar => {
-        console.log("New player connected ", playerChar)
+      console.log("New player connected ", playerChar);
     });
 
     this.socket.on("playerMoved", char => {
-        if (char.takenBy == this.socket.id) {
-            return
-        }
+      if (char.takenBy == this.socket.id) {
+        return;
+      }
 
-        this.updateOtherChar(char);
-    })
-
-    // this.socket.on("disconnect", playerId => {
-    //   this.otherPlayers.getChildren().forEach(player => {
-    //     if (playerId === player.playerId) {
-    //       player.destroy();
-    //     }
-    //   });
-    // });
+      this.updateOtherChar(char);
+    });
   }
 
   createMap() {
-    // create the map
     this.map = this.make.tilemap({
       key: "map",
     });
 
-    // first parameter is the name of the tilemap in tiled
     let tiles = this.map.addTilesetImage("spritesheet", "tiles", 16, 16, 0, 0);
 
-    // creating the layers
     this.map.createStaticLayer("Grass", tiles, 0, 0);
     this.obstacles = this.map.createStaticLayer("Obstacles", tiles, 0, 0);
     this.map.createStaticLayer("Visual_torches", tiles, 0, 0);
@@ -79,17 +56,16 @@ export default class MainScene extends Phaser.Scene {
 
     this.obstacles.setCollisionByExclusion([-1]);
 
-    // don't go out of the map
     this.physics.world.bounds.width = this.map.widthInPixels;
     this.physics.world.bounds.height = this.map.heightInPixels;
   }
 
   createAnimations() {
-    console.log("createAnimations() start")
+    console.log("createAnimations() start");
 
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
     const char = this.allCharacters[this.charIdx];
-    console.log("createAnimations() creating for ", char)
+    console.log("createAnimations() creating for ", char);
 
     this.anims.create({
       key: "left",
@@ -128,11 +104,11 @@ export default class MainScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    console.log("createAnimations() done")
+    console.log("createAnimations() done");
   }
 
   createCharacters() {
-    console.log("createCharacters() start")
+    console.log("createCharacters() start");
 
     this.characterSprites = [];
     this.containers = [];
@@ -153,7 +129,7 @@ export default class MainScene extends Phaser.Scene {
       this.containers.push(container);
     }
 
-    console.log("createCharacters() done")
+    console.log("createCharacters() done");
   }
 
   createPlayer(playerInfo) {
@@ -191,9 +167,9 @@ export default class MainScene extends Phaser.Scene {
   }
 
   updateOtherChar(char) {
-      this.allCharacters[char.idx] = char
-      this.containers[char.idx].setPosition(char.x, char.y)
-      this.characterSprites[char.idx].flipX = char.flipX
+    this.allCharacters[char.idx] = char;
+    this.containers[char.idx].setPosition(char.x, char.y);
+    this.characterSprites[char.idx].flipX = char.flipX;
   }
 
   createEnemies() {
@@ -252,9 +228,9 @@ export default class MainScene extends Phaser.Scene {
     }
 
     this.socket.emit("playerMovement", {
-        x: container.x,
-        y: container.y,
-        flipX: charSprite.flipX
-    })
+      x: container.x,
+      y: container.y,
+      flipX: charSprite.flipX,
+    });
   }
 }
