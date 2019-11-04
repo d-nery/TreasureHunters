@@ -1,82 +1,181 @@
+import io from "socket.io-client";
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: "MainScene" });
   }
 
   create() {
-    // create the map
-    var map = this.make.tilemap({
-      key: "map"
+    this.socket = io();
+
+    this.createMap();
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.socket.on("character", charIdx => {
+      console.log("Received my character index: ", charIdx);
+
+      this.charIdx = charIdx;
     });
 
-    // first parameter is the name of the tilemap in tiled
-    var tiles = map.addTilesetImage("spritesheet", "tiles", 16, 16, 1, 2);
+    this.socket.on("allCharacters", chars => {
+      console.log("Received allCharacters event: ", chars);
 
-    // creating the layers
-    var grass = map.createStaticLayer("Grass", tiles, 0, 0);
-    var obstacles = map.createStaticLayer("Obstacles", tiles, 0, 0);
+      this.allCharacters = chars;
+      this.createCharacters();
+      this.createAnimations();
+      this.updateCamera();
 
-    // make all tiles in obstacles collidable
-    obstacles.setCollisionByExclusion([-1]);
+      this.physics.add.collider(this.containers[this.charIdx], this.obstacles);
+    });
+
+    this.socket.on("newPlayer", playerChar => {
+      console.log("New player connected ", playerChar);
+    });
+
+    this.socket.on("playerMoved", char => {
+      if (char.takenBy == this.socket.id) {
+        return;
+      }
+
+      this.updateOtherChar(char);
+    });
+  }
+
+  createMap() {
+    this.map = this.make.tilemap({
+      key: "map",
+    });
+
+    let tiles = this.map.addTilesetImage("spritesheet", "tiles", 16, 16, 0, 0);
+
+    this.map.createStaticLayer("Grass", tiles, 0, 0);
+    this.obstacles = this.map.createStaticLayer("Obstacles", tiles, 0, 0);
+    this.map.createStaticLayer("Visual_torches", tiles, 0, 0);
+    this.map.createStaticLayer("Door_Alavanca", tiles, 0, 0);
+
+    this.obstacles.setCollisionByExclusion([-1]);
+
+    this.physics.world.bounds.width = this.map.widthInPixels;
+    this.physics.world.bounds.height = this.map.heightInPixels;
+  }
+
+  createAnimations() {
+    console.log("createAnimations() start");
 
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
+    const char = this.allCharacters[this.charIdx];
+    console.log("createAnimations() creating for ", char);
+
     this.anims.create({
       key: "left",
       frames: this.anims.generateFrameNumbers("player", {
-        frames: [1, 7, 1, 13]
+        frames: char.leftFrames,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     });
 
     // animation with key 'right'
     this.anims.create({
       key: "right",
       frames: this.anims.generateFrameNumbers("player", {
-        frames: [1, 7, 1, 13]
+        frames: char.rightFrames,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     });
+
     this.anims.create({
       key: "up",
       frames: this.anims.generateFrameNumbers("player", {
-        frames: [2, 8, 2, 14]
+        frames: char.upFrames,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     });
+
     this.anims.create({
       key: "down",
       frames: this.anims.generateFrameNumbers("player", {
-        frames: [0, 6, 0, 12]
+        frames: char.downFrames,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     });
 
-    // our player sprite created through the phycis system
-    this.player = this.physics.add.sprite(50, 100, "player", 6);
+    console.log("createAnimations() done");
+  }
+
+  createCharacters() {
+    console.log("createCharacters() start");
+
+    this.characterSprites = [];
+    this.containers = [];
+
+    for (let char of this.allCharacters) {
+      // our player sprite created through the physics system
+      const _char = this.add.sprite(0, 0, "player", char.idlespriteidx);
+      const container = this.add.container(char.x, char.y);
+      container.setSize(16, 16);
+
+      this.physics.world.enable(container);
+      container.add(_char);
+
+      // don't go out of the map
+      container.body.setCollideWorldBounds(true);
+
+      this.characterSprites.push(_char);
+      this.containers.push(container);
+    }
+
+    console.log("createCharacters() done");
+  }
+
+  createPlayer(playerInfo) {
+    // our player sprite created through the physics system
+    this.player = this.add.sprite(0, 0, "player", playerInfo.idlespriteidx);
+
+    this.container = this.add.container(playerInfo.x, playerInfo.y);
+    this.container.setSize(16, 16);
+    this.physics.world.enable(this.container);
+    this.container.add(this.player);
+
+    // update camera
+    this.updateCamera();
 
     // don't go out of the map
-    this.physics.world.bounds.width = map.widthInPixels;
-    this.physics.world.bounds.height = map.heightInPixels;
-    this.player.setCollideWorldBounds(true);
+    this.container.body.setCollideWorldBounds(true);
+  }
 
-    // don't walk on trees
-    this.physics.add.collider(this.player, obstacles);
+  addOtherPlayers(playerInfo) {
+    const otherPlayer = this.add.sprite(
+      playerInfo.x,
+      playerInfo.y,
+      "player",
+      playerInfo.idlespriteidx
+    );
+    otherPlayer.playerId = playerInfo.takenBy;
+    this.otherPlayers.add(otherPlayer);
+  }
 
+  updateCamera() {
     // limit camera to map
-    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    this.cameras.main.startFollow(this.player);
+    this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+    this.cameras.main.startFollow(this.containers[this.charIdx]);
     this.cameras.main.roundPixels = true; // avoid tile bleed
+  }
 
-    // user input
-    this.cursors = this.input.keyboard.createCursorKeys();
+  updateOtherChar(char) {
+    this.allCharacters[char.idx] = char;
+    this.containers[char.idx].setPosition(char.x, char.y);
+    this.characterSprites[char.idx].flipX = char.flipX;
+  }
 
+  createEnemies() {
     // where the enemies will be
     this.spawns = this.physics.add.group({
-      classType: Phaser.GameObjects.Zone
+      classType: Phaser.GameObjects.Zone,
     });
     for (var i = 0; i < 30; i++) {
       var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
@@ -84,48 +183,54 @@ export default class MainScene extends Phaser.Scene {
       // parameters are x, y, width, height
       this.spawns.create(x, y, 20, 20);
     }
-    // add collider
-    this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
-  }
-
-  onMeetEnemy(player, zone) {
-    // we move the zone to some other location
-    zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-    zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
   }
 
   update() {
-    // this.controls.update(delta);
+    if (this.charIdx === undefined) {
+      return;
+    }
 
-    this.player.body.setVelocity(0);
+    const container = this.containers[this.charIdx];
+    const charSprite = this.characterSprites[this.charIdx];
+
+    // console.log("update() player container: ", container)
+    // console.log("update() player sprite: ", charSprite)
+
+    container.body.setVelocity(0);
 
     // Horizontal movement
     if (this.cursors.left.isDown) {
-      this.player.body.setVelocityX(-80);
+      container.body.setVelocityX(-80);
     } else if (this.cursors.right.isDown) {
-      this.player.body.setVelocityX(80);
+      container.body.setVelocityX(80);
     }
 
     // Vertical movement
     if (this.cursors.up.isDown) {
-      this.player.body.setVelocityY(-80);
+      container.body.setVelocityY(-80);
     } else if (this.cursors.down.isDown) {
-      this.player.body.setVelocityY(80);
+      container.body.setVelocityY(80);
     }
 
     // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
-      this.player.anims.play("left", true);
-      this.player.flipX = true;
+      charSprite.anims.play("left", true);
+      charSprite.flipX = true;
     } else if (this.cursors.right.isDown) {
-      this.player.anims.play("right", true);
-      this.player.flipX = false;
+      charSprite.anims.play("right", true);
+      charSprite.flipX = false;
     } else if (this.cursors.up.isDown) {
-      this.player.anims.play("up", true);
+      charSprite.anims.play("up", true);
     } else if (this.cursors.down.isDown) {
-      this.player.anims.play("down", true);
+      charSprite.anims.play("down", true);
     } else {
-      this.player.anims.stop();
+      charSprite.anims.stop();
     }
+
+    this.socket.emit("playerMovement", {
+      x: container.x,
+      y: container.y,
+      flipX: charSprite.flipX,
+    });
   }
 }

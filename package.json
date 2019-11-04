@@ -5,8 +5,11 @@
   "private": true,
   "dependencies": {
     "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "ip": "^1.1.5",
     "phaser": "3.20.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "uws": "^100.0.1"
   },
   "scripts": {
     "clean": "rmdir dist",
