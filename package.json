@@ -9,7 +9,7 @@
     "socket.io": "^2.3.0"
   },
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rmdir dist",
     "build-dev-server": "webpack --mode development --config ./webpack/webpack.server.config.js",
     "build-dev-app": "webpack --mode development --config ./webpack/webpack.dev.config.js",
     "build-prod-server": "webpack --mode production --config ./webpack/webpack.server.config.js",
