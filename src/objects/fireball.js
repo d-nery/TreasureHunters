@@ -13,13 +13,13 @@ export default class Fireball extends Phaser.GameObjects.Image {
     this.direction = d;
     this.spawned = t;
 
-    if (this.direction === 0) {
+    if (this.direction === "up") {
       this.angle = -90;
-    } else if (this.direction === 1) {
+    } else if (this.direction === "right") {
       this.angle = 0;
-    } else if (this.direction === 2) {
+    } else if (this.direction === "down") {
       this.angle = 90;
-    } else if (this.direction === 3) {
+    } else if (this.direction === "left") {
       this.angle = 180;
     }
 
@@ -33,13 +33,13 @@ export default class Fireball extends Phaser.GameObjects.Image {
   }
 
   update(time, delta) {
-    if (this.direction === 0) {
+    if (this.direction === "up") {
       this.y -= this.speed * delta;
-    } else if (this.direction === 1) {
+    } else if (this.direction === "right") {
       this.x += this.speed * delta;
-    } else if (this.direction === 2) {
+    } else if (this.direction === "down") {
       this.y += this.speed * delta;
-    } else if (this.direction === 3) {
+    } else if (this.direction === "left") {
       this.x -= this.speed * delta;
     }
 
