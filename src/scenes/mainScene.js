@@ -134,6 +134,7 @@ export default class MainScene extends Phaser.Scene {
       const _char = this.add.sprite(0, 0, char.spritename, char.idlespriteidx);
       const container = this.add.container(char.x, char.y);
       container.setSize(16, 16);
+      container.direction = 0
 
       this.physics.world.enable(container);
       container.add(_char);
@@ -209,7 +210,6 @@ export default class MainScene extends Phaser.Scene {
     const container = this.containers[this.charIdx];
     const charSprite = this.characterSprites[this.charIdx];
 
-    let direction = 0;
 
     container.body.setVelocity(0);
 
@@ -230,16 +230,16 @@ export default class MainScene extends Phaser.Scene {
     // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
       charSprite.anims.play("left", true);
-      direction = 3;
+      container.direction = 3;
     } else if (this.cursors.right.isDown) {
       charSprite.anims.play("right", true);
-      direction = 1;
+      container.direction = 1;
     } else if (this.cursors.up.isDown) {
       charSprite.anims.play("up", true);
-      direction = 0;
+      container.direction = 0;
     } else if (this.cursors.down.isDown) {
       charSprite.anims.play("down", true);
-      direction = 2;
+      container.direction = 2;
     } else {
       charSprite.anims.stop();
     }
@@ -248,12 +248,12 @@ export default class MainScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
       let fb = this.fireballs.get();
       if (fb) {
-        fb.fire(container.x, container.y, direction, time);
+        fb.fire(container.x, container.y, container.direction, time);
 
         this.socket.emit("shoot", {
           x: container.x,
           y: container.y,
-          direction: direction,
+          direction: container.direction,
         });
 
         this.lastFired = time + 200;
