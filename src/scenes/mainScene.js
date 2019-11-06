@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 
+import Fireball from "../objects/fireball";
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: "MainScene" });
@@ -40,6 +42,14 @@ export default class MainScene extends Phaser.Scene {
 
       this.updateOtherChar(char);
     });
+
+    this.fireballs = this.add.group({
+      classType: Fireball,
+      maxSize: 10,
+      runChildUpdate: true,
+    });
+
+    this.lastFired = 0;
   }
 
   createMap() {
@@ -69,7 +79,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.leftFrames,
       }),
       frameRate: 10,
@@ -79,7 +89,7 @@ export default class MainScene extends Phaser.Scene {
     // animation with key 'right'
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.rightFrames,
       }),
       frameRate: 10,
@@ -88,7 +98,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "up",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.upFrames,
       }),
       frameRate: 10,
@@ -97,7 +107,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "down",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.downFrames,
       }),
       frameRate: 10,
@@ -115,7 +125,7 @@ export default class MainScene extends Phaser.Scene {
 
     for (let char of this.allCharacters) {
       // our player sprite created through the physics system
-      const _char = this.add.sprite(0, 0, "player", char.idlespriteidx);
+      const _char = this.add.sprite(0, 0, char.spritename, char.idlespriteidx);
       const container = this.add.container(char.x, char.y);
       container.setSize(16, 16);
 
@@ -185,7 +195,7 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  update() {
+  update(time) {
     if (this.charIdx === undefined) {
       return;
     }
@@ -215,16 +225,23 @@ export default class MainScene extends Phaser.Scene {
     // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
       charSprite.anims.play("left", true);
-      charSprite.flipX = true;
     } else if (this.cursors.right.isDown) {
       charSprite.anims.play("right", true);
-      charSprite.flipX = false;
     } else if (this.cursors.up.isDown) {
       charSprite.anims.play("up", true);
     } else if (this.cursors.down.isDown) {
       charSprite.anims.play("down", true);
     } else {
       charSprite.anims.stop();
+    }
+
+    // TODO ver o lado que está apontando para atirar
+    if (this.input.activePointer.isDown && time > this.lastFired) {
+      let fb = this.fireballs.get();
+      if (fb) {
+        fb.fire(container.x, container.y, 0);
+        this.lastFired = time + 200;
+      }
     }
 
     this.socket.emit("playerMovement", {
