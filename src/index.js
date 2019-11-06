@@ -15,18 +15,19 @@ const config = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT
+    height: DEFAULT_HEIGHT,
   },
   scene: [PreloadScene, MainScene],
   physics: {
     default: "arcade",
     arcade: {
       debug: true,
-      gravity: { y: 0 }
-    }
-  }
+      gravity: { y: 0 },
+    },
+  },
 };
 
 window.addEventListener("load", () => {
+  console.log("%cWelcome to TreasureHunters!", ["background:brown", "color:white"].join(";"));
   let game = new Phaser.Game(config);
 });
