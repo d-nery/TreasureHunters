@@ -136,6 +136,7 @@ export default class MainScene extends Phaser.Scene {
 
       this.physics.world.enable(container);
       container.add(_char);
+      container.direction = "up";
 
       // don't go out of the map
       container.body.setCollideWorldBounds(true);
@@ -208,8 +209,6 @@ export default class MainScene extends Phaser.Scene {
     const container = this.containers[this.charIdx];
     const charSprite = this.characterSprites[this.charIdx];
 
-    let direction = "up";
-
     container.body.setVelocity(0);
 
     // Horizontal movement
@@ -229,16 +228,16 @@ export default class MainScene extends Phaser.Scene {
     // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
       charSprite.anims.play(`left-${char.name}`, true);
-      direction = "left";
+      container.direction = "left";
     } else if (this.cursors.right.isDown) {
       charSprite.anims.play(`right-${char.name}`, true);
-      direction = "right";
+      container.direction = "right";
     } else if (this.cursors.up.isDown) {
       charSprite.anims.play(`up-${char.name}`, true);
-      direction = "up";
+      container.direction = "up";
     } else if (this.cursors.down.isDown) {
       charSprite.anims.play(`down-${char.name}`, true);
-      direction = "down";
+      container.direction = "down";
     } else {
       charSprite.anims.stop();
     }
@@ -246,12 +245,12 @@ export default class MainScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
       let fb = this.fireballs.get();
       if (fb) {
-        fb.fire(container.x, container.y, direction, time);
+        fb.fire(container.x, container.y, container.direction, time);
 
         this.socket.emit("shoot", {
           x: container.x,
           y: container.y,
-          direction: direction,
+          direction: container.direction,
         });
 
         this.lastFired = time + 200;
@@ -267,7 +266,7 @@ export default class MainScene extends Phaser.Scene {
     this.socket.emit("playerMovement", {
       x: container.x,
       y: container.y,
-      direction: direction,
+      direction: container.direction,
     });
   }
 }
