@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 
+import Fireball from "../objects/fireball";
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: "MainScene" });
@@ -11,6 +13,8 @@ export default class MainScene extends Phaser.Scene {
     this.createMap();
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.tab = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 
     this.socket.on("character", charIdx => {
       console.log("Received my character index: ", charIdx);
@@ -29,6 +33,13 @@ export default class MainScene extends Phaser.Scene {
       this.physics.add.collider(this.containers[this.charIdx], this.obstacles);
     });
 
+    this.socket.on("updateCharacter", charIdx => {
+      console.log("Received my character index: ", charIdx);
+
+      this.charIdx = charIdx;
+      this.updateCamera();
+    });
+
     this.socket.on("newPlayer", playerChar => {
       console.log("New player connected ", playerChar);
     });
@@ -40,6 +51,14 @@ export default class MainScene extends Phaser.Scene {
 
       this.updateOtherChar(char);
     });
+
+    this.fireballs = this.add.group({
+      classType: Fireball,
+      maxSize: 10,
+      runChildUpdate: true,
+    });
+
+    this.lastFired = 0;
   }
 
   createMap() {
@@ -63,23 +82,21 @@ export default class MainScene extends Phaser.Scene {
   createAnimations() {
     console.log("createAnimations() start");
 
-    //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
     const char = this.allCharacters[this.charIdx];
     console.log("createAnimations() creating for ", char);
 
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.leftFrames,
       }),
       frameRate: 10,
       repeat: -1,
     });
 
-    // animation with key 'right'
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.rightFrames,
       }),
       frameRate: 10,
@@ -88,7 +105,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "up",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.upFrames,
       }),
       frameRate: 10,
@@ -97,7 +114,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "down",
-      frames: this.anims.generateFrameNumbers("player", {
+      frames: this.anims.generateFrameNumbers(char.spritename, {
         frames: char.downFrames,
       }),
       frameRate: 10,
@@ -114,8 +131,7 @@ export default class MainScene extends Phaser.Scene {
     this.containers = [];
 
     for (let char of this.allCharacters) {
-      // our player sprite created through the physics system
-      const _char = this.add.sprite(0, 0, "player", char.idlespriteidx);
+      const _char = this.add.sprite(0, 0, char.spritename, char.idlespriteidx);
       const container = this.add.container(char.x, char.y);
       container.setSize(16, 16);
 
@@ -185,7 +201,7 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  update() {
+  update(time) {
     if (this.charIdx === undefined) {
       return;
     }
@@ -193,8 +209,7 @@ export default class MainScene extends Phaser.Scene {
     const container = this.containers[this.charIdx];
     const charSprite = this.characterSprites[this.charIdx];
 
-    // console.log("update() player container: ", container)
-    // console.log("update() player sprite: ", charSprite)
+    let direction = 0;
 
     container.body.setVelocity(0);
 
@@ -215,16 +230,40 @@ export default class MainScene extends Phaser.Scene {
     // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
       charSprite.anims.play("left", true);
-      charSprite.flipX = true;
+      direction = 3;
     } else if (this.cursors.right.isDown) {
       charSprite.anims.play("right", true);
-      charSprite.flipX = false;
+      direction = 1;
     } else if (this.cursors.up.isDown) {
       charSprite.anims.play("up", true);
+      direction = 0;
     } else if (this.cursors.down.isDown) {
       charSprite.anims.play("down", true);
+      direction = 2;
     } else {
       charSprite.anims.stop();
+    }
+
+    // TODO ver o lado que está apontando para atirar
+    if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
+      let fb = this.fireballs.get();
+      if (fb) {
+        fb.fire(container.x, container.y, direction, time);
+
+        this.socket.emit("shoot", {
+          x: container.x,
+          y: container.y,
+          direction: direction,
+        });
+
+        this.lastFired = time + 200;
+      }
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.tab)) {
+      container.body.setVelocity(0);
+      charSprite.anims.stop();
+      this.socket.emit("playerSwitch");
     }
 
     this.socket.emit("playerMovement", {
