@@ -60,13 +60,36 @@ io.on("connection", socket => {
     }
 
     const char = characters[player.char];
-    // console.debug("Received player movement for char ", char.idx, movementData)
 
     char.x = movementData.x;
     char.y = movementData.y;
     char.flipX = movementData.flipX;
-    // emit a message to all players about the player that moved
+
     socket.broadcast.emit("playerMoved", char);
+  });
+
+  socket.on("playerSwitch", () => {
+    console.log("Received player switch request");
+
+    const idx = players[socket.id].char;
+
+    let new_idx = (idx + 1) % characters.length;
+    while (new_idx != idx) {
+      if (characters[new_idx].takenBy == null) {
+        console.debug("Found non-taken character: ", new_idx);
+        characters[idx].takenBy = null;
+
+        characters[new_idx].takenBy = socket.id;
+        players[socket.id] = {
+          char: new_idx,
+        };
+
+        socket.emit("updateCharacter", new_idx);
+        break;
+      }
+
+      new_idx = (new_idx + 1) % characters.length;
+    }
   });
 });
 

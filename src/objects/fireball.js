@@ -5,11 +5,13 @@ export default class Fireball extends Phaser.GameObjects.Image {
 
     this.speed = Phaser.Math.GetSpeed(200, 1);
     this.direction = 0;
+    this.lifespan = 5000;
   }
 
-  fire(x, y, d) {
+  fire(x, y, d, t) {
     this.setPosition(x, y - 8);
     this.direction = d;
+    this.spawned = t;
 
     if (this.direction === 0) {
       this.angle = -90;
@@ -25,6 +27,11 @@ export default class Fireball extends Phaser.GameObjects.Image {
     this.setVisible(true);
   }
 
+  kill() {
+    this.setActive(true);
+    this.setVisible(true);
+  }
+
   update(time, delta) {
     if (this.direction === 0) {
       this.y -= this.speed * delta;
@@ -36,7 +43,7 @@ export default class Fireball extends Phaser.GameObjects.Image {
       this.x -= this.speed * delta;
     }
 
-    if (this.y < -16 || this.x < -16) {
+    if (this.y < -16 || this.x < -16 || time - this.spawned > this.lifespan) {
       this.setActive(false);
       this.setVisible(false);
     }
