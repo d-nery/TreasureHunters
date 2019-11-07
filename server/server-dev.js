@@ -64,6 +64,7 @@ io.on("connection", socket => {
     char.x = movementData.x;
     char.y = movementData.y;
     char.direction = movementData.direction;
+    char.stopped = movementData.stopped;
 
     socket.broadcast.emit("playerMoved", char);
   });

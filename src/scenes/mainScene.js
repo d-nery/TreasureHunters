@@ -29,8 +29,6 @@ export default class MainScene extends Phaser.Scene {
       this.createCharacters();
       this.createAnimations();
       this.updateCamera();
-
-      this.physics.add.collider(this.containers[this.charIdx], this.obstacles);
     });
 
     this.socket.on("updateCharacter", charIdx => {
@@ -137,42 +135,17 @@ export default class MainScene extends Phaser.Scene {
       this.physics.world.enable(container);
       container.add(_char);
       container.direction = "up";
+      container.stopped = true;
 
       // don't go out of the map
       container.body.setCollideWorldBounds(true);
+      this.physics.add.collider(container, this.obstacles);
 
       this.characterSprites.push(_char);
       this.containers.push(container);
     }
 
     console.log("createCharacters() done");
-  }
-
-  createPlayer(playerInfo) {
-    // our player sprite created through the physics system
-    this.player = this.add.sprite(0, 0, "player", playerInfo.idlespriteidx);
-
-    this.container = this.add.container(playerInfo.x, playerInfo.y);
-    this.container.setSize(16, 16);
-    this.physics.world.enable(this.container);
-    this.container.add(this.player);
-
-    // update camera
-    this.updateCamera();
-
-    // don't go out of the map
-    this.container.body.setCollideWorldBounds(true);
-  }
-
-  addOtherPlayers(playerInfo) {
-    const otherPlayer = this.add.sprite(
-      playerInfo.x,
-      playerInfo.y,
-      "player",
-      playerInfo.idlespriteidx
-    );
-    otherPlayer.playerId = playerInfo.takenBy;
-    this.otherPlayers.add(otherPlayer);
   }
 
   updateCamera() {
@@ -187,7 +160,9 @@ export default class MainScene extends Phaser.Scene {
     this.containers[char.idx].setPosition(char.x, char.y);
     const charSprite = this.characterSprites[char.idx];
 
-    if (char.direction === "left") {
+    if (char.stopped) {
+      charSprite.anims.stop();
+    } else if (char.direction === "left") {
       charSprite.anims.play(`left-${char.name}`, true);
     } else if (char.direction === "right") {
       charSprite.anims.play(`right-${char.name}`, true);
@@ -226,6 +201,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // Update the animation last and give left/right animations precedence over up/down animations
+    container.stopped = false;
     if (this.cursors.left.isDown) {
       charSprite.anims.play(`left-${char.name}`, true);
       container.direction = "left";
@@ -240,6 +216,7 @@ export default class MainScene extends Phaser.Scene {
       container.direction = "down";
     } else {
       charSprite.anims.stop();
+      container.stopped = true;
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
@@ -267,6 +244,7 @@ export default class MainScene extends Phaser.Scene {
       x: container.x,
       y: container.y,
       direction: container.direction,
+      stopped: container.stopped,
     });
   }
 }
