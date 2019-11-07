@@ -14,12 +14,16 @@ export default class Fireball extends Phaser.GameObjects.Image {
     this.spawned = t;
 
     if (this.direction === "up") {
+      this.setPosition(x, y - 8);
       this.angle = -90;
     } else if (this.direction === "right") {
+      this.setPosition(x + 8, y);
       this.angle = 0;
     } else if (this.direction === "down") {
+      this.setPosition(x, y + 8);
       this.angle = 90;
     } else if (this.direction === "left") {
+      this.setPosition(x - 8, y);
       this.angle = 180;
     }
 
