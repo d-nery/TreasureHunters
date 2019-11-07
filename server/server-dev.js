@@ -69,6 +69,13 @@ io.on("connection", socket => {
     socket.broadcast.emit("playerMoved", char);
   });
 
+  socket.on("destroyDoor", () => {    
+    console.log("user destroyed door: ");
+  // emit a message to all players to remove this player
+  socket.broadcast.emit("destroyDoor");
+});
+
+
   socket.on("playerSwitch", () => {
     console.log("Received player switch request");
 

@@ -50,6 +50,11 @@ export default class MainScene extends Phaser.Scene {
       this.updateOtherChar(char);
     });
 
+    this.socket.on("destroyDoor", () => {
+      this.door.setCollisionByExclusion([-1]);
+      this.door.setVisible(false);
+    });
+
     this.fireballs = this.add.group({
       classType: Fireball,
       maxSize: 10,
@@ -69,9 +74,10 @@ export default class MainScene extends Phaser.Scene {
     this.map.createStaticLayer("Grass", tiles, 0, 0);
     this.obstacles = this.map.createStaticLayer("Obstacles", tiles, 0, 0);
     this.map.createStaticLayer("Visual_torches", tiles, 0, 0);
-    this.map.createStaticLayer("Door_Alavanca", tiles, 0, 0);
+    this.door = this.map.createDynamicLayer("Door_Alavanca", tiles, 0, 0);
 
     this.obstacles.setCollisionByExclusion([-1]);
+    this.door.setCollisionByExclusion([-1]);
 
     this.physics.world.bounds.width = this.map.widthInPixels;
     this.physics.world.bounds.height = this.map.heightInPixels;
@@ -140,6 +146,7 @@ export default class MainScene extends Phaser.Scene {
       // don't go out of the map
       container.body.setCollideWorldBounds(true);
       this.physics.add.collider(container, this.obstacles);
+      this.physics.add.collider(container, this.door);
 
       this.characterSprites.push(_char);
       this.containers.push(container);
@@ -220,6 +227,11 @@ export default class MainScene extends Phaser.Scene {
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
+      this.door.setVisible(false);
+      this.door.setCollisionByExclusion([0]);
+      this.socket.emit("destroyDoor", () => {
+        this.socket.emit("destroyDoor");
+      });
       let fb = this.fireballs.get();
       if (fb) {
         fb.fire(container.x, container.y, container.direction, time);
