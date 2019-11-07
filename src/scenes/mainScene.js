@@ -29,12 +29,10 @@ export default class MainScene extends Phaser.Scene {
       this.createCharacters();
       this.createAnimations();
       this.updateCamera();
-
-      this.physics.add.collider(this.containers[this.charIdx], this.obstacles);
     });
 
     this.socket.on("updateCharacter", charIdx => {
-      console.log("Received my character index: ", charIdx);
+      console.log("Received new character: ", charIdx, this.allCharacters[charIdx].name);
 
       this.charIdx = charIdx;
       this.updateCamera();
@@ -82,44 +80,43 @@ export default class MainScene extends Phaser.Scene {
   createAnimations() {
     console.log("createAnimations() start");
 
-    const char = this.allCharacters[this.charIdx];
-    console.log("createAnimations() creating for ", char);
+    for (let char of this.allCharacters) {
+      this.anims.create({
+        key: `left-${char.name}`,
+        frames: this.anims.generateFrameNumbers(char.spritename, {
+          frames: char.leftFrames,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers(char.spritename, {
-        frames: char.leftFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+      this.anims.create({
+        key: `right-${char.name}`,
+        frames: this.anims.generateFrameNumbers(char.spritename, {
+          frames: char.rightFrames,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers(char.spritename, {
-        frames: char.rightFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+      this.anims.create({
+        key: `up-${char.name}`,
+        frames: this.anims.generateFrameNumbers(char.spritename, {
+          frames: char.upFrames,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-    this.anims.create({
-      key: "up",
-      frames: this.anims.generateFrameNumbers(char.spritename, {
-        frames: char.upFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "down",
-      frames: this.anims.generateFrameNumbers(char.spritename, {
-        frames: char.downFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+      this.anims.create({
+        key: `down-${char.name}`,
+        frames: this.anims.generateFrameNumbers(char.spritename, {
+          frames: char.downFrames,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
 
     console.log("createAnimations() done");
   }
@@ -137,42 +134,18 @@ export default class MainScene extends Phaser.Scene {
 
       this.physics.world.enable(container);
       container.add(_char);
+      container.direction = "up";
+      container.stopped = true;
 
       // don't go out of the map
       container.body.setCollideWorldBounds(true);
+      this.physics.add.collider(container, this.obstacles);
 
       this.characterSprites.push(_char);
       this.containers.push(container);
     }
 
     console.log("createCharacters() done");
-  }
-
-  createPlayer(playerInfo) {
-    // our player sprite created through the physics system
-    this.player = this.add.sprite(0, 0, "player", playerInfo.idlespriteidx);
-
-    this.container = this.add.container(playerInfo.x, playerInfo.y);
-    this.container.setSize(16, 16);
-    this.physics.world.enable(this.container);
-    this.container.add(this.player);
-
-    // update camera
-    this.updateCamera();
-
-    // don't go out of the map
-    this.container.body.setCollideWorldBounds(true);
-  }
-
-  addOtherPlayers(playerInfo) {
-    const otherPlayer = this.add.sprite(
-      playerInfo.x,
-      playerInfo.y,
-      "player",
-      playerInfo.idlespriteidx
-    );
-    otherPlayer.playerId = playerInfo.takenBy;
-    this.otherPlayers.add(otherPlayer);
   }
 
   updateCamera() {
@@ -185,19 +158,20 @@ export default class MainScene extends Phaser.Scene {
   updateOtherChar(char) {
     this.allCharacters[char.idx] = char;
     this.containers[char.idx].setPosition(char.x, char.y);
-    this.characterSprites[char.idx].flipX = char.flipX;
-  }
+    const charSprite = this.characterSprites[char.idx];
 
-  createEnemies() {
-    // where the enemies will be
-    this.spawns = this.physics.add.group({
-      classType: Phaser.GameObjects.Zone,
-    });
-    for (var i = 0; i < 30; i++) {
-      var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-      var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-      // parameters are x, y, width, height
-      this.spawns.create(x, y, 20, 20);
+    if (char.stopped) {
+      charSprite.anims.stop();
+    } else if (char.direction === "left") {
+      charSprite.anims.play(`left-${char.name}`, true);
+    } else if (char.direction === "right") {
+      charSprite.anims.play(`right-${char.name}`, true);
+    } else if (char.direction === "up") {
+      charSprite.anims.play(`up-${char.name}`, true);
+    } else if (char.direction === "down") {
+      charSprite.anims.play(`down-${char.name}`, true);
+    } else {
+      charSprite.anims.stop();
     }
   }
 
@@ -206,10 +180,9 @@ export default class MainScene extends Phaser.Scene {
       return;
     }
 
+    const char = this.allCharacters[this.charIdx];
     const container = this.containers[this.charIdx];
     const charSprite = this.characterSprites[this.charIdx];
-
-    let direction = 0;
 
     container.body.setVelocity(0);
 
@@ -228,32 +201,33 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // Update the animation last and give left/right animations precedence over up/down animations
+    container.stopped = false;
     if (this.cursors.left.isDown) {
-      charSprite.anims.play("left", true);
-      direction = 3;
+      charSprite.anims.play(`left-${char.name}`, true);
+      container.direction = "left";
     } else if (this.cursors.right.isDown) {
-      charSprite.anims.play("right", true);
-      direction = 1;
+      charSprite.anims.play(`right-${char.name}`, true);
+      container.direction = "right";
     } else if (this.cursors.up.isDown) {
-      charSprite.anims.play("up", true);
-      direction = 0;
+      charSprite.anims.play(`up-${char.name}`, true);
+      container.direction = "up";
     } else if (this.cursors.down.isDown) {
-      charSprite.anims.play("down", true);
-      direction = 2;
+      charSprite.anims.play(`down-${char.name}`, true);
+      container.direction = "down";
     } else {
       charSprite.anims.stop();
+      container.stopped = true;
     }
 
-    // TODO ver o lado que está apontando para atirar
     if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
       let fb = this.fireballs.get();
       if (fb) {
-        fb.fire(container.x, container.y, direction, time);
+        fb.fire(container.x, container.y, container.direction, time);
 
         this.socket.emit("shoot", {
           x: container.x,
           y: container.y,
-          direction: direction,
+          direction: container.direction,
         });
 
         this.lastFired = time + 200;
@@ -269,7 +243,8 @@ export default class MainScene extends Phaser.Scene {
     this.socket.emit("playerMovement", {
       x: container.x,
       y: container.y,
-      flipX: charSprite.flipX,
+      direction: container.direction,
+      stopped: container.stopped,
     });
   }
 }
