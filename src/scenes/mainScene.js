@@ -299,6 +299,7 @@ export default class MainScene extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       container.body.setVelocity(0);
+      container.stopped = true;
       charSprite.anims.stop();
       this.socket.emit("playerSwitch");
     }
