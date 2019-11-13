@@ -76,7 +76,7 @@ export default class MainScene extends Phaser.Scene {
     this.lastFired = 0;
 
     this.switch1 = true;
-    this.switch2 = true
+    this.switch2 = true;
     this.doorClosed = true;
 
   }
@@ -104,7 +104,26 @@ export default class MainScene extends Phaser.Scene {
 
   createAnimations() {
     console.log("createAnimations() start");
+    
+    this.anims.create({
+      key: "fireball",
+      frames: this.anims.generateFrameNumbers("fireball", {
+        frames: [0, 1],
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
 
+    this.anims.create({
+      key: "iceball",
+      frames: this.anims.generateFrameNumbers("iceball", {
+        frames: [0, 1],
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    
     for (let char of this.allCharacters) {
       this.anims.create({
         key: `left-${char.name}`,
@@ -247,20 +266,27 @@ export default class MainScene extends Phaser.Scene {
     //const container = this.add.container(char.x, char.y);
     //this.physics.collide(container, this.door, this.removeDoor, false, this);
     if (Phaser.Input.Keyboard.JustDown(this.actionKey)) {
-        console.log(container.x,container.y);
-       
+        
+      console.log(container.x,container.y);
+      console.log(container);
         //curupira passa parede
-//comment
-        //switch1
-        if (container.x > 90 && container.x < 110 && container.y > 320 && container.y < 328){
-          this.switch1 = 0;
-          if (this.doorClosed && !this.switch1 && !this.switch2){
-            this.doorClosed = 0;
-            this.MapChange_removeDoor();
-          }
+        
+        if (container.x > 90 && container.x < 110 && container.y > 320 && container.y < 330){
+          //if (container.name == "Fire Girl"){
+            container.x = 80;
+            container.y = 350;
+          //}
+        }
+
+        if (container.x > 82 && container.x < 88 && container.y > 355 && container.y < 365){
+          //if (container.name == "Fire Girl"){
+            container.x = 100;
+            container.y = 280;
+          //}
         }
         
-        if (container.x > 30 && container.x < 50 && container.y > 430 && container.y < 450){
+        //lever1
+        if (container.x > 30 && container.x < 50 && container.y > 220 && container.y < 250){
           this.switch1 = 0;
           if (this.doorClosed && !this.switch1 && !this.switch2){
             this.doorClosed = 0;
@@ -268,8 +294,8 @@ export default class MainScene extends Phaser.Scene {
           }
         }
 
-        //switch2
-        if (container.x > 20 && container.x < 60 && container.y > 210 && container.y < 260){
+        //lever2
+        if (container.x > 30 && container.x < 60 && container.y > 400 && container.y < 430){
           this.switch2 = 0;
           if (this.doorClosed && !this.switch1 && !this.switch2){
             this.doorClosed = 0;
