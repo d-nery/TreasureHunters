@@ -2,9 +2,20 @@ import io from "socket.io-client";
 
 import Fireball from "../objects/fireball";
 
+
+
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: "MainScene" });
+  }
+
+  MapChange_removeDoor()
+  {
+    this.door.setVisible(false);
+    this.door.setCollisionByExclusion([0]);
+    this.socket.emit("destroyDoor", () => {
+        this.socket.emit("destroyDoor");
+    });
   }
 
   create() {
@@ -14,6 +25,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.actionKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
     this.tab = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 
     this.socket.on("character", charIdx => {
@@ -62,6 +74,11 @@ export default class MainScene extends Phaser.Scene {
     });
 
     this.lastFired = 0;
+
+    this.switch1 = true;
+    this.switch2 = true
+    this.doorClosed = true;
+
   }
 
   createMap() {
@@ -74,7 +91,9 @@ export default class MainScene extends Phaser.Scene {
     this.map.createStaticLayer("Grass", tiles, 0, 0);
     this.obstacles = this.map.createStaticLayer("Obstacles", tiles, 0, 0);
     this.map.createStaticLayer("Visual_torches", tiles, 0, 0);
+    
     this.door = this.map.createDynamicLayer("Door_Alavanca", tiles, 0, 0);
+    //this.door.setCollisionBetween(66, 67);
 
     this.obstacles.setCollisionByExclusion([-1]);
     this.door.setCollisionByExclusion([-1]);
@@ -146,8 +165,7 @@ export default class MainScene extends Phaser.Scene {
       // don't go out of the map
       container.body.setCollideWorldBounds(true);
       this.physics.add.collider(container, this.obstacles);
-      this.physics.add.collider(container, this.door);
-
+      this.physics.add.collider(container, this.door, this.removeDoor, null, this);
       this.characterSprites.push(_char);
       this.containers.push(container);
     }
@@ -226,12 +244,45 @@ export default class MainScene extends Phaser.Scene {
       container.stopped = true;
     }
 
+    //const container = this.add.container(char.x, char.y);
+    //this.physics.collide(container, this.door, this.removeDoor, false, this);
+    if (Phaser.Input.Keyboard.JustDown(this.actionKey)) {
+        console.log(container.x,container.y);
+       
+        //curupira passa parede
+
+        //switch1
+        if (container.x > 90 && container.x < 110 && container.y > 320 && container.y < 328){
+          this.switch1 = 0;
+          if (this.doorClosed && !this.switch1 && !this.switch2){
+            this.doorClosed = 0;
+            this.MapChange_removeDoor();
+          }
+        }
+        
+        if (container.x > 30 && container.x < 50 && container.y > 430 && container.y < 450){
+          this.switch1 = 0;
+          if (this.doorClosed && !this.switch1 && !this.switch2){
+            this.doorClosed = 0;
+            this.MapChange_removeDoor();
+          }
+        }
+
+        //switch2
+        if (container.x > 20 && container.x < 60 && container.y > 210 && container.y < 260){
+          this.switch2 = 0;
+          if (this.doorClosed && !this.switch1 && !this.switch2){
+            this.doorClosed = 0;
+            this.MapChange_removeDoor();
+          }
+        } 
+    
+    }
+
     if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
-      this.door.setVisible(false);
-      this.door.setCollisionByExclusion([0]);
-      this.socket.emit("destroyDoor", () => {
-        this.socket.emit("destroyDoor");
-      });
+      
+     
+
       let fb = this.fireballs.get();
       if (fb) {
         fb.fire(container.x, container.y, container.direction, time);
