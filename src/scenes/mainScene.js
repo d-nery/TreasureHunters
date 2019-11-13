@@ -250,7 +250,7 @@ export default class MainScene extends Phaser.Scene {
         console.log(container.x,container.y);
        
         //curupira passa parede
-
+//comment
         //switch1
         if (container.x > 90 && container.x < 110 && container.y > 320 && container.y < 328){
           this.switch1 = 0;
