@@ -105,6 +105,24 @@ export default class MainScene extends Phaser.Scene {
   createAnimations() {
     console.log("createAnimations() start");
 
+    this.anims.create({
+      key: "fireball",
+      frames: this.anims.generateFrameNumbers("fireball", {
+        frames: [0, 1],
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "iceball",
+      frames: this.anims.generateFrameNumbers("iceball", {
+        frames: [0, 1],
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
     for (let char of this.allCharacters) {
       this.anims.create({
         key: `left-${char.name}`,

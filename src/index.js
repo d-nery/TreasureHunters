@@ -4,6 +4,8 @@ import "./assets/css/style.css";
 
 import MainScene from "./scenes/mainScene";
 import PreloadScene from "./scenes/preloadScene";
+import BootScene from "./scenes/BootScene";
+import TitleScene from "./scenes/TitleScene";
 
 const DEFAULT_WIDTH = 320;
 const DEFAULT_HEIGHT = 240;
@@ -17,7 +19,7 @@ const config = {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT,
   },
-  scene: [PreloadScene, MainScene],
+  scene: [/* BootScene, TitleScene, */ PreloadScene, MainScene],
   physics: {
     default: "arcade",
     arcade: {
