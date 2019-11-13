@@ -286,21 +286,19 @@ export default class MainScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.actionKey)) {
         
       console.log(container.x,container.y);
-      console.log(container);
-        //curupira passa parede
-        
+      console.log(this.charIdx);
+      
+        //curupira passa parede  
         if (container.x > 90 && container.x < 110 && container.y > 320 && container.y < 330){
-          //if (container.name == "Fire Girl"){
-            container.x = 80;
-            container.y = 350;
-          //}
+          if (this.charIdx == 3){
+            container.x = 82;
+            container.y = 360;
+          }
         }
-
-        if (container.x > 82 && container.x < 88 && container.y > 355 && container.y < 365){
-          //if (container.name == "Fire Girl"){
+        //curupira volta do isolamento
+        if (container.x > 82 && container.x < 95 && container.y > 357 && container.y < 365){
             container.x = 100;
-            container.y = 280;
-          //}
+            container.y = 328;
         }
         
         //lever1
@@ -323,9 +321,7 @@ export default class MainScene extends Phaser.Scene {
     
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {
-      
-     
+    if (Phaser.Input.Keyboard.JustDown(this.spacebar) && time > this.lastFired) {     
 
       let fb = this.fireballs.get();
       if (fb) {
