@@ -2,9 +2,9 @@ import io from "socket.io-client";
 
 import Fireball from "../objects/fireball";
 
-export default class MainScene extends Phaser.Scene {
+export default class GameScene extends Phaser.Scene {
   constructor() {
-    super({ key: "MainScene" });
+    super({ key: "GameScene" });
   }
 
   MapChange_removeDoor() {
@@ -34,7 +34,6 @@ export default class MainScene extends Phaser.Scene {
 
       this.allCharacters = chars;
       this.createCharacters();
-      this.createAnimations();
       this.updateCamera();
     });
 
@@ -94,77 +93,6 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.world.bounds.width = this.map.widthInPixels;
     this.physics.world.bounds.height = this.map.heightInPixels;
-  }
-
-  createAnimations() {
-    console.log("createAnimations() start");
-
-    this.anims.create({
-      key: "fireball",
-      frames: this.anims.generateFrameNumbers("fireball", {
-        frames: [0, 1],
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "iceball",
-      frames: this.anims.generateFrameNumbers("iceball", {
-        frames: [0, 1],
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "arrow",
-      frames: this.anims.generateFrameNumbers("arrow", {
-        frames: [0, 1],
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    for (let char of this.allCharacters) {
-      this.anims.create({
-        key: `left-${char.name}`,
-        frames: this.anims.generateFrameNumbers(char.spritename, {
-          frames: char.leftFrames,
-        }),
-        frameRate: 10,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: `right-${char.name}`,
-        frames: this.anims.generateFrameNumbers(char.spritename, {
-          frames: char.rightFrames,
-        }),
-        frameRate: 10,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: `up-${char.name}`,
-        frames: this.anims.generateFrameNumbers(char.spritename, {
-          frames: char.upFrames,
-        }),
-        frameRate: 10,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: `down-${char.name}`,
-        frames: this.anims.generateFrameNumbers(char.spritename, {
-          frames: char.downFrames,
-        }),
-        frameRate: 10,
-        repeat: -1,
-      });
-    }
-
-    console.log("createAnimations() done");
   }
 
   createCharacters() {

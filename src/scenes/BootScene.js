@@ -7,6 +7,7 @@ import archerSprites from "../assets/archer.png";
 import fireball from "../assets/fireball.png";
 import iceball from "../assets/iceball.png";
 import arrow from "../assets/arrow.png";
+import logo from "../assets/img/TreasureHunters.png";
 
 import createAnimations from "../helpers/animations";
 
@@ -33,6 +34,7 @@ class BootScene extends Phaser.Scene {
       this.scene.start("TitleScene");
     });
 
+    this.load.image("logo", logo);
     this.load.image("tiles", tiles);
     this.load.tilemapTiledJSON("map", map);
 

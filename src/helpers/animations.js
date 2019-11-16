@@ -28,43 +28,43 @@ const createAnimations = scene => {
     repeat: -1,
   });
 
-  for (let char of scene.allCharacters) {
-    scene.anims.create({
-      key: `left-${char.name}`,
-      frames: scene.anims.generateFrameNumbers(char.spritename, {
-        frames: char.leftFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+  //   for (let char of scene.allCharacters) {
+  //     scene.anims.create({
+  //       key: `left-${char.name}`,
+  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
+  //         frames: char.leftFrames,
+  //       }),
+  //       frameRate: 10,
+  //       repeat: -1,
+  //     });
 
-    scene.anims.create({
-      key: `right-${char.name}`,
-      frames: scene.anims.generateFrameNumbers(char.spritename, {
-        frames: char.rightFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+  //     scene.anims.create({
+  //       key: `right-${char.name}`,
+  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
+  //         frames: char.rightFrames,
+  //       }),
+  //       frameRate: 10,
+  //       repeat: -1,
+  //     });
 
-    scene.anims.create({
-      key: `up-${char.name}`,
-      frames: scene.anims.generateFrameNumbers(char.spritename, {
-        frames: char.upFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+  //     scene.anims.create({
+  //       key: `up-${char.name}`,
+  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
+  //         frames: char.upFrames,
+  //       }),
+  //       frameRate: 10,
+  //       repeat: -1,
+  //     });
 
-    scene.anims.create({
-      key: `down-${char.name}`,
-      frames: scene.anims.generateFrameNumbers(char.spritename, {
-        frames: char.downFrames,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-  }
+  //     scene.anims.create({
+  //       key: `down-${char.name}`,
+  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
+  //         frames: char.downFrames,
+  //       }),
+  //       frameRate: 10,
+  //       repeat: -1,
+  //     });
+  //   }
 
   console.log("[createAnimations] Done.");
 };
