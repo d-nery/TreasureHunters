@@ -5,36 +5,26 @@ export default class TitleScene extends Phaser.Scene {
     });
   }
 
-  preload() {}
-
   create() {
-    let container = document.getElementsByClassName("container")[0];
-    let sh = container.offsetHeight;
-    let sw = container.offsetWidth;
+    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    let multiplier = 1;
-    if (sh > sw) {
-      multiplier = sw / 320;
-    } else {
-      multiplier = sh / 240;
-    }
-
-    let el = document.getElementsByTagName("canvas")[0];
-    el.style.width = 320 * multiplier - 4 + "px";
-    el.style.height = 240 * multiplier - 4 + "px";
-
-    this.title = this.add.image(this.sys.game.config.width / 2, 50, "logo");
+    this.title = this.add.image(this.sys.game.config.width / 2, this.sys.game.config.height * 0.15, "logo");
     let w = this.title.width;
-    let h = this.title.height;
     let scale = (this.sys.game.config.width * 0.5) / w;
 
-    this.title.setDisplaySize(w * scale, h * scale);
+    this.title.setScale(scale);
     this.title.setVisible(true);
 
-    this.input.on("pointerdown", () => {
-      this.scene.start("MainScene");
+    this.crew = this.add.image(this.sys.game.config.width / 2, this.sys.game.config.height * 0.6, "crew");
+    w = this.crew.width;
+    scale = (this.sys.game.config.width * 0.5) / w;
+
+    this.crew.setScale(scale);
+    this.crew.setVisible(true);
+
+    this.spacebar.on("down", event => {
+      this.spacebar.off("down");
+      this.scene.start("GameScene");
     });
   }
-
-  update(time, delta) {}
 }

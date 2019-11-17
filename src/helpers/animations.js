@@ -28,43 +28,57 @@ const createAnimations = scene => {
     repeat: -1,
   });
 
-  //   for (let char of scene.allCharacters) {
-  //     scene.anims.create({
-  //       key: `left-${char.name}`,
-  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
-  //         frames: char.leftFrames,
-  //       }),
-  //       frameRate: 10,
-  //       repeat: -1,
-  //     });
+  for (let char of [
+    ["-fg", "firegirl", 10],
+    ["-wiz", "wizard", 5],
+    ["-arch", "archer", 10],
+    ["-nj", "ninja", 12],
+  ]) {
+    scene.anims.create({
+      key: "standing" + char[0],
+      frames: scene.anims.generateFrameNumbers(char[1], {
+        frames: [1],
+      }),
+      frameRate: char[2],
+      repeat: -1,
+    });
 
-  //     scene.anims.create({
-  //       key: `right-${char.name}`,
-  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
-  //         frames: char.rightFrames,
-  //       }),
-  //       frameRate: 10,
-  //       repeat: -1,
-  //     });
+    scene.anims.create({
+      key: "left" + char[0],
+      frames: scene.anims.generateFrameNumbers(char[1], {
+        frames: [4, 3, 4, 5],
+      }),
+      frameRate: char[2],
+      repeat: -1,
+    });
 
-  //     scene.anims.create({
-  //       key: `up-${char.name}`,
-  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
-  //         frames: char.upFrames,
-  //       }),
-  //       frameRate: 10,
-  //       repeat: -1,
-  //     });
+    scene.anims.create({
+      key: "right" + char[0],
+      frames: scene.anims.generateFrameNumbers(char[1], {
+        frames: [7, 6, 7, 8],
+      }),
+      frameRate: char[2],
+      repeat: -1,
+    });
 
-  //     scene.anims.create({
-  //       key: `down-${char.name}`,
-  //       frames: scene.anims.generateFrameNumbers(char.spritename, {
-  //         frames: char.downFrames,
-  //       }),
-  //       frameRate: 10,
-  //       repeat: -1,
-  //     });
-  //   }
+    scene.anims.create({
+      key: "up" + char[0],
+      frames: scene.anims.generateFrameNumbers(char[1], {
+        frames: [10, 9, 10, 11],
+      }),
+      frameRate: char[2],
+      repeat: -1,
+    });
+
+    scene.anims.create({
+      key: "down" + char[0],
+      frames: scene.anims.generateFrameNumbers(char[1], {
+        frames: [1, 0, 1, 2],
+      }),
+      frameRate: char[2],
+      repeat: -1,
+    });
+  }
 
   console.log("[createAnimations] Done.");
 };

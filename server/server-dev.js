@@ -21,34 +21,41 @@ const players = {};
 
 io.on("connection", socket => {
   console.log("a user connected: ", socket.id);
-  // create a new player and add it to our players object
-  for (let [i, char] of characters.entries()) {
+
+  socket.emit("allCharacters", characters);
+
+  for (let [name, char] of Object.entries(characters)) {
     if (char.takenBy == null) {
       console.debug("Found non-taken character: ", char);
 
       char.takenBy = socket.id;
       players[socket.id] = {
-        char: i,
+        char: name,
       };
 
-      socket.emit("character", i);
+      socket.emit("newCharacter", name);
       break;
     }
   }
 
-  // send the players object to the new player
-  socket.emit("allCharacters", characters);
-
   // update all other players of the new player
-  socket.broadcast.emit("newPlayer", characters[players[socket.id].char]);
+  socket.broadcast.emit("newPlayer", {
+    id: socket.id,
+    char: characters[players[socket.id].char],
+  });
 
   // when a player disconnects, remove them from our players object
   socket.on("disconnect", () => {
     console.log("user disconnected: ", socket.id);
-    characters[players[socket.id].char].takenBy = null;
+
+    let char = players[socket.id].char;
+    characters[char].takenBy = null;
     delete players[socket.id];
-    // emit a message to all players to remove this player
-    io.emit("disconnect", socket.id);
+
+    io.emit("disconnect", {
+      id: socket.id,
+      char: char,
+    });
   });
 
   // when a player moves, update the player data
@@ -69,35 +76,43 @@ io.on("connection", socket => {
     socket.broadcast.emit("playerMoved", char);
   });
 
-  socket.on("destroyDoor", () => {    
+  socket.on("destroyDoor", () => {
     console.log("user destroyed door: ");
-  // emit a message to all players to remove this player
-  socket.broadcast.emit("destroyDoor");
-});
-
+    // emit a message to all players to remove this player
+    socket.broadcast.emit("destroyDoor");
+  });
 
   socket.on("playerSwitch", () => {
     console.log("Received player switch request");
 
-    const idx = players[socket.id].char;
+    const cycleOrder = Object.keys(characters);
+    const idx = cycleOrder.indexOf(players[socket.id].char);
 
-    let new_idx = (idx + 1) % characters.length;
+    let new_idx = (idx + 1) % cycleOrder.length;
     while (new_idx != idx) {
-      if (characters[new_idx].takenBy == null) {
-        console.debug("Found non-taken character: ", new_idx);
-        characters[idx].takenBy = null;
+      let c = cycleOrder[new_idx];
 
-        characters[new_idx].takenBy = socket.id;
+      if (characters[c].takenBy == null) {
+        console.debug("Found non-taken character: ", c);
+        characters[cycleOrder[idx]].takenBy = null;
+
+        characters[c].takenBy = socket.id;
         players[socket.id] = {
-          char: new_idx,
+          char: c,
         };
 
-        socket.emit("updateCharacter", new_idx);
+        socket.emit("newCharacter", c);
         break;
       }
 
-      new_idx = (new_idx + 1) % characters.length;
+      new_idx = (new_idx + 1) % cycleOrder.length;
     }
+  });
+
+  socket.on("fired", fireData => {
+    console.log("A player just fired!", fireData);
+
+    socket.broadcast.emit("playerFired", fireData);
   });
 });
 
@@ -123,6 +138,6 @@ app.get("*", (req, res, next) => {
 const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, () => {
-  console.log(`App listening on ${require("ip").address()}:${PORT}....`);
+  console.log(`App listening on ${require("ip").address()}:${PORT}...`);
   console.log("Press Ctrl+C to quit.");
 });
