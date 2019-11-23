@@ -43,6 +43,7 @@ io.on("connection", socket => {
     id: socket.id,
     char: characters[players[socket.id].char],
   });
+  socket.broadcast.emit("takenUpdate", characters);
 
   // when a player disconnects, remove them from our players object
   socket.on("disconnect", () => {
@@ -102,6 +103,8 @@ io.on("connection", socket => {
         };
 
         socket.emit("newCharacter", c);
+        socket.broadcast.emit("takenUpdate", characters);
+
         break;
       }
 

@@ -3,12 +3,12 @@ const webpack = require("webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: {
-    main: ["webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000", "./src/index.js"]
+    main: ["webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000", "./src/index.js"],
   },
   output: {
     path: path.join(__dirname, "../dist"),
     publicPath: "/",
-    filename: "[name].js"
+    filename: "[name].js",
   },
   mode: "development",
   target: "web",
@@ -18,7 +18,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: "babel-loader",
       },
       {
         // Loads the javacript into html template provided.
@@ -26,28 +26,28 @@ module.exports = {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader"
+            loader: "html-loader",
             //options: { minimize: true }
-          }
-        ]
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: ["file-loader"]
-      }
-    ]
+        use: ["file-loader"],
+      },
+    ],
   },
   plugins: [
     new HtmlWebPackPlugin({
       template: "./src/html/index.html",
       filename: "./index.html",
-      excludeChunks: ["server"]
+      excludeChunks: ["server"],
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-  ]
+    new webpack.NoEmitOnErrorsPlugin(),
+  ],
 };

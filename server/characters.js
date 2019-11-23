@@ -2,8 +2,8 @@ export const characters = {
   firegirl: {
     id: "firegirl",
     name: "Fire Girl",
-    x: 209,
-    y: 456,
+    x: 200,
+    y: 504,
     direction: "up",
     stopped: true,
     takenBy: null,
@@ -11,8 +11,8 @@ export const characters = {
   archer: {
     id: "archer",
     name: "Archer",
-    x: 183,
-    y: 456,
+    x: 216,
+    y: 504,
     direction: "up",
     stopped: true,
     takenBy: null,
@@ -20,8 +20,8 @@ export const characters = {
   wizard: {
     id: "wizard",
     name: "Ice Wizard",
-    x: 235,
-    y: 456,
+    x: 232,
+    y: 504,
     direction: "up",
     stopped: true,
     takenBy: null,
@@ -29,8 +29,8 @@ export const characters = {
   ninja: {
     id: "ninja",
     name: "Ninja",
-    x: 262,
-    y: 456,
+    x: 248,
+    y: 504,
     direction: "up",
     stopped: true,
     takenBy: null,

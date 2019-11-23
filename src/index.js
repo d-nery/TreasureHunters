@@ -5,6 +5,7 @@ import "./assets/css/style.css";
 import BootScene from "./scenes/BootScene";
 import TitleScene from "./scenes/TitleScene";
 import GameScene from "./scenes/GameScene";
+import HUDScene from "./scenes/HUDScene";
 
 export const DEBUG = true;
 
@@ -26,7 +27,7 @@ window.addEventListener("load", () => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [BootScene, TitleScene, GameScene],
+    scene: [BootScene, TitleScene, GameScene, HUDScene],
     physics: {
       default: "arcade",
       arcade: {

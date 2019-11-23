@@ -17,10 +17,6 @@ export default class GameScene extends Phaser.Scene {
     this.socket.emit("destroyDoor");
   }
 
-  preload() {
-    this.scale.setGameSize(320, 240);
-  }
-
   create() {
     this.socket = io();
 
@@ -101,15 +97,35 @@ export default class GameScene extends Phaser.Scene {
     this.currentCharacter = null;
     this.initCamera();
 
+    this.scene.launch("HUDScene");
+    this.hud = this.scene.get("HUDScene");
+
     this.socket.on("allCharacters", characters => {
+      this.firegirl.takenBy = characters["firegirl"].takenBy;
+      this.wizard.takenBy = characters["wizard"].takenBy;
+      this.archer.takenBy = characters["archer"].takenBy;
+      this.ninja.takenBy = characters["ninja"].takenBy;
+
       this.firegirl.setPosition(characters["firegirl"].x, characters["firegirl"].y);
       this.wizard.setPosition(characters["wizard"].x, characters["wizard"].y);
       this.archer.setPosition(characters["archer"].x, characters["archer"].y);
       this.ninja.setPosition(characters["ninja"].x, characters["ninja"].y);
     });
 
+    this.socket.on("takenUpdate", characters => {
+      this.firegirl.takenBy = characters["firegirl"].takenBy;
+      this.wizard.takenBy = characters["wizard"].takenBy;
+      this.archer.takenBy = characters["archer"].takenBy;
+      this.ninja.takenBy = characters["ninja"].takenBy;
+
+      this.hud.placeThumbnails(this.currentCharacter.name);
+    });
+
     this.socket.on("newCharacter", char => {
       console.log("Got a newCharacter event:", char);
+      if (this.currentCharacter) {
+        this.currentCharacter.takenBy = null;
+      }
 
       if (char === "firegirl") {
         this.currentCharacter = this.firegirl;
@@ -123,6 +139,8 @@ export default class GameScene extends Phaser.Scene {
 
       this.cameras.main.startFollow(this.currentCharacter);
       this.currentCharacter.takenBy = this.socket.id;
+
+      this.hud.placeThumbnails(this.currentCharacter.name);
     });
 
     this.socket.on("playerMoved", char => {
@@ -152,7 +170,7 @@ export default class GameScene extends Phaser.Scene {
       let proj = projectiles.get();
 
       if (proj) {
-        proj.fire(fireData.x, fireData.y, fireData.direction, true);
+        proj.fire(fireData.x, fireData.y, fireData.direction);
       }
     });
   }
@@ -163,6 +181,11 @@ export default class GameScene extends Phaser.Scene {
 
   initCamera() {
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+    let targetWidth = 320;
+    let currentWidth = this.scale.width;
+
+    this.cameras.main.setZoom(currentWidth / targetWidth);
     this.cameras.main.roundPixels = true;
   }
 
@@ -182,6 +205,7 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
+    character.takenBy = char.takenBy;
     character.stopped = char.stopped;
     character.facing = char.direction;
     character.setPosition(char.x, char.y);

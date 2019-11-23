@@ -42,16 +42,21 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   }
 
   initialize() {
-    let tiles = this.addTilesetImage("spritesheet", "tiles", 16, 16, 0, 0);
+    let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
-    this.createStaticLayer("Grass", tiles, 0, 0);
-    this.obstacles = this.createStaticLayer("Obstacles", tiles, 0, 0);
-    this.createStaticLayer("Visual_torches", tiles, 0, 0);
+    this.createStaticLayer("Floor", tiles, 0, 0);
+    this.createStaticLayer("Torches", tiles, 0, 0);
 
-    this.door = this.createDynamicLayer("Door_Alavanca", tiles, 0, 0);
-    //this.door.setCollisionBetween(66, 67);
+    this.river = this.createStaticLayer("Rio", tiles, 0, 0);
+    this.walls = this.createStaticLayer("Walls", tiles, 0, 0);
 
-    this.obstacles.setCollisionByExclusion([-1]);
+    this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
+    this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
+
+    this.door = this.createDynamicLayer("DoorClosed", tiles, 0, 0);
+
+    this.river.setCollisionByExclusion([-1]);
+    this.walls.setCollisionByExclusion([-1]);
     this.door.setCollisionByExclusion([-1]);
 
     this.scene.physics.world.bounds.width = this.widthInPixels;
@@ -64,7 +69,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     if (this.scene.registry.get("debug") === true) {
       this.debugGraphics = this.scene.add.graphics();
 
-      this.obstacles.renderDebug(this.debugGraphics, {
+      this.walls.renderDebug(this.debugGraphics, {
         tileColor: null,
         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 120), // Colliding tiles
         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
@@ -81,8 +86,14 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   addCollisionToSprite(sprite) {
     console.log("Adding colliders to", sprite);
 
-    this.scene.physics.add.collider(sprite, this.obstacles);
-    this.scene.physics.add.collider(sprite, this.door);
+    sprite._wallCollider = this.scene.physics.add.collider(sprite, this.walls);
+    sprite._doorCollider = this.scene.physics.add.collider(sprite, this.door);
+    sprite._riverCollider = this.scene.physics.add.collider(sprite, this.river);
+  }
+
+  removeRiverCollisionFromSprite(sprite) {
+    sprite._riverCollider && sprite._riverCollider.destroy();
+    delete sprite._riverCollider;
   }
 
   removeDoor() {

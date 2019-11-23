@@ -13,9 +13,10 @@ export default class Projectile extends Phaser.GameObjects.Sprite {
 
     this.body.setCollideWorldBounds(true);
     this.scene.map.addCollisionToSprite(this);
+    this.scene.map.removeRiverCollisionFromSprite(this);
   }
 
-  fire(x, y, d, visual = false) {
+  fire(x, y, d) {
     console.log("Firing projectile", this.name, x, y, d);
 
     this.direction = d;
