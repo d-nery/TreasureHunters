@@ -138,7 +138,18 @@ export default class GameScene extends Phaser.Scene {
         this.currentCharacter = this.archer;
       }
 
-      this.cameras.main.startFollow(this.currentCharacter);
+      this.tweens.add({
+        targets: this.cam,
+        scrollX: this.currentCharacter.getCenter().x - 627,
+        scrollY: this.currentCharacter.getCenter().y - 471,
+        ease: "Quad.EaseInOut",
+        duration: 300,
+        repeat: 0,
+        yoyo: false,
+        onStart: () => this.cam.stopFollow(),
+        onComplete: () => this.cam.startFollow(this.currentCharacter, true, 0.2, 0.2),
+      });
+
       this.currentCharacter.takenBy = this.socket.id;
 
       this.hud.placeThumbnails(this.currentCharacter.name);
@@ -181,13 +192,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   initCamera() {
-    this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+    this.cam = this.cameras.main;
+
+    this.cam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     let targetWidth = 320;
     let currentWidth = this.scale.width;
 
-    this.cameras.main.setZoom(currentWidth / targetWidth);
-    this.cameras.main.roundPixels = true;
+    this.cam.setZoom(currentWidth / targetWidth);
+    this.cam.roundPixels = true;
   }
 
   updateOtherChar(char) {

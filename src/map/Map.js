@@ -73,8 +73,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
 
     this.door = this.createFromObjects("Interactive", "door", { key: "door", frame: 0 }, this.scene)[0];
-    this.scene.physics.world.enable(this.door);
     this.door.setDepth(10);
+    this.scene.physics.world.enable(this.door);
     this.door.body.setImmovable();
     this.door.body.moves = false;
 
