@@ -12,11 +12,6 @@ export default class GameScene extends Phaser.Scene {
     super({ key: "GameScene" });
   }
 
-  MapChange_removeDoor() {
-    this.map.removeDoor();
-    this.socket.emit("destroyDoor");
-  }
-
   create() {
     this.socket = io();
 
@@ -235,11 +230,8 @@ export default class GameScene extends Phaser.Scene {
       arrow.update(time, delta);
     }
 
-    this.currentCharacter.update(this.keys, time, delta);
-    this.socket.emit("playerMovement", this.currentCharacter.getMovementData());
-
-    if (this.currentCharacter.fired) {
-      this.socket.emit("fired", this.currentCharacter.getLastFireData());
+    if (this.keys.action.isDown) {
+      this.map.removeDoor();
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
@@ -247,6 +239,15 @@ export default class GameScene extends Phaser.Scene {
       this.currentCharacter.takenBy = null;
       this.socket.emit("playerMovement", this.currentCharacter.getMovementData());
       this.socket.emit("playerSwitch");
+
+      return;
+    }
+
+    this.currentCharacter.update(this.keys, time, delta);
+    this.socket.emit("playerMovement", this.currentCharacter.getMovementData());
+
+    if (this.currentCharacter.fired) {
+      this.socket.emit("fired", this.currentCharacter.getLastFireData());
     }
   }
 }

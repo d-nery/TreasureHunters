@@ -10,6 +10,7 @@ import leverSprites from "../assets/props/lever.png";
 import keySprites from "../assets/props/key.png";
 import chestSprites from "../assets/props/chest.png";
 import fireFontSprites from "../assets/props/firefont.png";
+import doorSprites from "../assets/props/door.png";
 
 import fireball from "../assets/projectiles/fireball.png";
 import iceball from "../assets/projectiles/iceball.png";
@@ -134,6 +135,11 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet("firefont", fireFontSprites, {
       frameWidth: 16,
       frameHeight: 16,
+    });
+
+    this.load.spritesheet("door", doorSprites, {
+      frameWidth: 32,
+      frameHeight: 32,
     });
   }
 }
