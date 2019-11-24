@@ -80,6 +80,24 @@ const createAnimations = scene => {
     });
   }
 
+  scene.anims.create({
+    key: "firefont-up",
+    frames: scene.anims.generateFrameNumbers("firefont", {
+      frames: [0, 1, 2],
+    }),
+    frameRate: 8,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "firefont-down",
+    frames: scene.anims.generateFrameNumbers("firefont", {
+      frames: [3, 4, 5],
+    }),
+    frameRate: 8,
+    repeat: -1,
+  });
+
   console.log("[createAnimations] Done.");
 };
 

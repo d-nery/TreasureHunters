@@ -6,6 +6,11 @@ import fireGirlSprites from "../assets/characters/firegirl.png";
 import wizardSprites from "../assets/characters/wizard.png";
 import archerSprites from "../assets/characters/archer.png";
 
+import leverSprites from "../assets/props/lever.png";
+import keySprites from "../assets/props/key.png";
+import chestSprites from "../assets/props/chest.png";
+import fireFontSprites from "../assets/props/firefont.png";
+
 import fireball from "../assets/projectiles/fireball.png";
 import iceball from "../assets/projectiles/iceball.png";
 import arrow from "../assets/projectiles/arrow.png";
@@ -22,6 +27,11 @@ import ninjaThumb from "../assets/img/ninja-thumb.png";
 import wizardThumb from "../assets/img/wizard-thumb.png";
 import firegirlThumb from "../assets/img/firegirl-thumb.png";
 import archerThumb from "../assets/img/archer-thumb.png";
+
+import ninjaFrame from "../assets/img/ninja-speaking-frame.png";
+import wizardFrame from "../assets/img/wizard-speaking-frame.png";
+import firegirlFrame from "../assets/img/firegirl-speaking-frame.png";
+import archerFrame from "../assets/img/archer-speaking-frame.png";
 
 import createAnimations from "../helpers/animations";
 import { DEBUG } from "../index";
@@ -64,6 +74,11 @@ class BootScene extends Phaser.Scene {
     this.load.image("nin-thumb", ninjaThumb);
     this.load.image("arc-thumb", archerThumb);
 
+    this.load.image("fg-frame", firegirlFrame);
+    this.load.image("wiz-frame", wizardFrame);
+    this.load.image("nin-frame", ninjaFrame);
+    this.load.image("arc-frame", archerFrame);
+
     this.load.tilemapTiledJSON("map", map);
 
     this.load.spritesheet("fireball", fireball, {
@@ -97,6 +112,26 @@ class BootScene extends Phaser.Scene {
     });
 
     this.load.spritesheet("archer", archerSprites, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("lever", leverSprites, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("key", keySprites, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("chest", chestSprites, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("firefont", fireFontSprites, {
       frameWidth: 16,
       frameHeight: 16,
     });

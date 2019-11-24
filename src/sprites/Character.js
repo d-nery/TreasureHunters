@@ -38,10 +38,10 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.fired = false;
 
     let input = {
-      left: keys.left.isDown,
-      right: keys.right.isDown,
-      down: keys.down.isDown,
-      up: keys.up.isDown,
+      left: keys.left.isDown || keys.a.isDown,
+      right: keys.right.isDown || keys.d.isDown,
+      down: keys.down.isDown || keys.s.isDown,
+      up: keys.up.isDown || keys.w.isDown,
       fire: keys.fire.isDown,
     };
 

@@ -26,19 +26,19 @@ export default class GameScene extends Phaser.Scene {
 
     this.fireballs = this.add.group({
       classType: FireBall,
-      maxSize: 10,
+      maxSize: 5,
       runChildUpdate: false,
     });
 
     this.iceballs = this.add.group({
       classType: IceBall,
-      maxSize: 10,
+      maxSize: 5,
       runChildUpdate: false,
     });
 
     this.arrows = this.add.group({
       classType: Arrow,
-      maxSize: 10,
+      maxSize: 5,
       runChildUpdate: false,
     });
 
@@ -47,6 +47,10 @@ export default class GameScene extends Phaser.Scene {
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
       down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+      w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
       fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       action: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
     };
@@ -125,6 +129,8 @@ export default class GameScene extends Phaser.Scene {
       console.log("Got a newCharacter event:", char);
       if (this.currentCharacter) {
         this.currentCharacter.takenBy = null;
+      } else {
+        this.hud.showDialog(char);
       }
 
       if (char === "firegirl") {

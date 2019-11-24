@@ -45,14 +45,33 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createStaticLayer("Floor", tiles, 0, 0);
-    this.createStaticLayer("Torches", tiles, 0, 0);
-
     this.river = this.createStaticLayer("Rio", tiles, 0, 0);
     this.walls = this.createStaticLayer("Walls", tiles, 0, 0);
+    this.createStaticLayer("Torches", tiles, 0, 0);
+
+    this.levers = this.createFromObjects("Interactive", "lever", { key: "lever", frame: 0 }, this.scene);
+    this.scene.physics.world.enable(this.levers);
+
+    this.key = this.createFromObjects("Interactive", "key", { key: "key", frame: 0 }, this.scene)[0];
+    this.scene.physics.world.enable(this.key);
+
+    this.chest = this.createFromObjects("Interactive", "chest", { key: "chest", frame: 0 }, this.scene)[0];
+    this.scene.physics.world.enable(this.chest);
+
+    this.firefonts = this.createFromObjects("Interactive", "firefont", { key: "firefont", frame: 0 }, this.scene);
+
+    for (let font of this.firefonts) {
+      if (font.data.values[0].value == "up") {
+        font.anims.play("firefont-up");
+      } else {
+        font.anims.play("firefont-down");
+      }
+    }
 
     this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
     this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
 
+    this.createDynamicLayer("DoorOpen", tiles, 0, 0);
     this.door = this.createDynamicLayer("DoorClosed", tiles, 0, 0);
 
     this.river.setCollisionByExclusion([-1]);

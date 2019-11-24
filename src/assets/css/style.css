@@ -24,3 +24,9 @@ body {
   -ms-interpolation-mode: nearest-neighbor; /* IE (non standard naming) */
   image-rendering: pixelated; /* Chrome 41 */
 }
+
+@font-face {
+  font-family: "Dungeon";
+  src: url("../fonts/PKMN-Mystery-Dungeon.woff") format("woff"),
+    url("../fonts/PKMN-Mystery-Dungeon.ttf") format("truetype");
+}

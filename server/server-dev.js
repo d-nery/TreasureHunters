@@ -132,6 +132,7 @@ app.get("*", (req, res, next) => {
     if (err) {
       return next(err);
     }
+
     res.set("content-type", "text/html");
     res.send(result);
     res.end();
