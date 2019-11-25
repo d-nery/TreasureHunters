@@ -128,16 +128,15 @@ export default class GameScene extends Phaser.Scene {
 
     //this.createEnemies();
 
-    this.map.addCollisionToSprite(this.firegirl);
-    this.map.addCollisionToSprite(this.wizard);
-    this.map.addCollisionToSprite(this.archer);
-    this.map.addCollisionToSprite(this.ninja);
-    this.map.addCollisionToSprite(this.boss);
-    this.map.addCollisionToSprite(this.enemy1);
-    this.map.addCollisionToSprite(this.enemy2);
-    this.map.addCollisionToSprite(this.enemy3);
+    this.map.addWorldCollisionToCharacter(this.firegirl);
+    this.map.addWorldCollisionToCharacter(this.wizard);
+    this.map.addWorldCollisionToCharacter(this.archer);
+    this.map.addWorldCollisionToCharacter(this.ninja);
+    this.map.addWorldCollisionToCharacter(this.boss);
+    this.map.addWorldCollisionToCharacter(this.enemy1);
+    this.map.addWorldCollisionToCharacter(this.enemy2);
+    this.map.addWorldCollisionToCharacter(this.enemy3);
 
-    	
     this.physics.add.overlap(this.firegirl, this.boss, this.onMeetEnemy, false, this);
     this.physics.add.overlap(this.firegirl, this.enemy1, this.onMeetEnemy, false, this);
     this.physics.add.overlap(this.firegirl, this.enemy2, this.onMeetEnemy, false, this);
@@ -158,9 +157,9 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.ninja, this.enemy2, this.onMeetEnemy, false, this);
     this.physics.add.overlap(this.ninja, this.enemy3, this.onMeetEnemy, false, this);
 
-    this.physics.add.overlap(this.boss  , this.iceballs, this.onFreezeEnemy, false, this);
-    this.physics.add.overlap(this.boss  , this.fireballs, this.onHitBoss, false, this);
-    this.physics.add.overlap(this.boss  , this.arrows, this.onHitBoss, false, this);
+    this.physics.add.overlap(this.boss, this.iceballs, this.onFreezeEnemy, false, this);
+    this.physics.add.overlap(this.boss, this.fireballs, this.onHitBoss, false, this);
+    this.physics.add.overlap(this.boss, this.arrows, this.onHitBoss, false, this);
 
     this.physics.add.overlap(this.enemy1, this.fireballs, this.onHitEnemy, false, this);
     this.physics.add.overlap(this.enemy1, this.iceballs, this.onHitEnemy, false, this);
@@ -169,8 +168,6 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.enemy2, this.fireballs, this.onHitEnemy, false, this);
     this.physics.add.overlap(this.enemy2, this.iceballs, this.onHitEnemy, false, this);
     this.physics.add.overlap(this.enemy2, this.arrows, this.onHitEnemy, false, this);
-
-
 
     this.currentCharacter = null;
     this.initCamera();
@@ -260,7 +257,6 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.on("EnemyMovement", enem => {
-
       this.updateEnemies(enem);
     });
 
@@ -328,22 +324,22 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onMeetEnemy(player, enemy) {
-    if (this.currentCharacter.id = "firegirl") {
+    if (this.currentCharacter.id == "firegirl") {
       console.log("The firegirl has died!");
       this.currentCharacter.setPosition(200, 504);
       this.currentCharacter.stopped = true;
       this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.id = "wizard") {
+    } else if (this.currentCharacter.id == "wizard") {
       console.log("The wizard has died!");
       this.currentCharacter.setPosition(232, 504);
       this.currentCharacter.stopped = true;
       this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.id = "ninja") {
+    } else if (this.currentCharacter.id == "ninja") {
       console.log("The ninja has died!");
       this.currentCharacter.setPosition(248, 504);
       this.currentCharacter.stopped = true;
       this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.id = "archer") {
+    } else if (this.currentCharacter.id == "archer") {
       console.log("The archer has died!");
       this.currentCharacter.setPosition(216, 504);
       this.currentCharacter.stopped = true;

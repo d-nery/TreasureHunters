@@ -73,6 +73,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
 
     this.door = this.createFromObjects("Interactive", "door", { key: "door", frame: 0 }, this.scene)[0];
+
     this.door.setDepth(10);
     this.scene.physics.world.enable(this.door);
     this.door.body.setImmovable();
@@ -105,17 +106,28 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     }
   }
 
-  addCollisionToSprite(sprite) {
-    console.log("Adding colliders to", sprite);
+  addWorldCollisionToCharacter(char) {
+    console.log("Adding colliders to", char);
 
-    sprite._wallCollider = this.scene.physics.add.collider(sprite, this.walls);
-    sprite._riverCollider = this.scene.physics.add.collider(sprite, this.river);
-    sprite._doorCollider = this.scene.physics.add.collider(sprite, this.door);
+    char._wallCollider = this.scene.physics.add.collider(char, this.walls);
+    char._riverCollider = this.scene.physics.add.collider(char, this.river);
+    char._doorCollider = this.scene.physics.add.collider(char, this.door);
   }
 
-  removeRiverCollisionFromSprite(sprite) {
-    sprite._riverCollider && sprite._riverCollider.destroy();
-    delete sprite._riverCollider;
+  addWorldCollisionToProjectile(proj) {
+    console.log("Adding colliders to", proj);
+
+    const destroyProj = () => {
+      proj.destroy();
+    };
+
+    proj._wallCollider = this.scene.physics.add.collider(proj, this.walls, destroyProj, null, this);
+    proj._doorCollider = this.scene.physics.add.collider(proj, this.door, destroyProj, null, this);
+  }
+
+  removeRiverCollisionFromCharacter(char) {
+    char._riverCollider && char._riverCollider.destroy();
+    delete char._riverCollider;
   }
 
   removeDoor() {
