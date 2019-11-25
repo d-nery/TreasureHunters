@@ -4,6 +4,8 @@ import Character from "../sprites/Character";
 import FireBall from "../sprites/FireBall";
 import IceBall from "../sprites/IceBall";
 import Arrow from "../sprites/Arrow";
+import Enemy from "../sprites/Enemy";
+import Boss from "../sprites/Boss";
 import Map from "../map/Map";
 import { characters } from "../../server/characters";
 
@@ -93,10 +95,87 @@ export default class GameScene extends Phaser.Scene {
       speed: 120,
     });
 
+    this.boss = new Boss({
+      scene: this,
+      key: "king",
+      x: 262,
+      y: 406,
+      suffix: "-kg",
+      speed: 40,
+    });
+
+    this.enemy1 = new Enemy({
+      scene: this,
+      key: "skeleton",
+      x: 210,
+      y: 350,
+      suffix: "-sk",
+      speed: 50,
+    });
+
+    this.enemy2 = new Enemy({
+      scene: this,
+      key: "skeleton",
+      x: 230,
+      y: 350,
+      suffix: "-sk",
+      speed: 50,
+    });
+
+    this.enemy3 = new Enemy({
+      scene: this,
+      key: "skeleton",
+      x: 250,
+      y: 350,
+      suffix: "-sk",
+      speed: 50,
+    });
+
+    //this.createEnemies();
+
     this.map.addCollisionToSprite(this.firegirl);
     this.map.addCollisionToSprite(this.wizard);
     this.map.addCollisionToSprite(this.archer);
     this.map.addCollisionToSprite(this.ninja);
+    this.map.addCollisionToSprite(this.boss);
+    this.map.addCollisionToSprite(this.enemy1);
+    this.map.addCollisionToSprite(this.enemy2);
+    this.map.addCollisionToSprite(this.enemy3);
+
+    	
+    this.physics.add.overlap(this.firegirl, this.boss, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.firegirl, this.enemy1, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.firegirl, this.enemy2, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.firegirl, this.enemy3, this.onMeetEnemy, false, this);
+
+    this.physics.add.overlap(this.wizard, this.boss, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.wizard, this.enemy1, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.wizard, this.enemy2, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.wizard, this.enemy3, this.onMeetEnemy, false, this);
+
+    this.physics.add.overlap(this.archer, this.boss, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.archer, this.enemy1, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.archer, this.enemy2, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.archer, this.enemy3, this.onMeetEnemy, false, this);
+
+    this.physics.add.overlap(this.ninja, this.boss, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.ninja, this.enemy1, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.ninja, this.enemy2, this.onMeetEnemy, false, this);
+    this.physics.add.overlap(this.ninja, this.enemy3, this.onMeetEnemy, false, this);
+
+    this.physics.add.overlap(this.boss  , this.iceballs, this.onFreezeEnemy, false, this);
+    this.physics.add.overlap(this.boss  , this.fireballs, this.onHitBoss, false, this);
+    this.physics.add.overlap(this.boss  , this.arrows, this.onHitBoss, false, this);
+
+    this.physics.add.overlap(this.enemy1, this.fireballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy1, this.iceballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy1, this.arrows, this.onHitEnemy, false, this);
+
+    this.physics.add.overlap(this.enemy2, this.fireballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy2, this.iceballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy2, this.arrows, this.onHitEnemy, false, this);
+
+
 
     this.currentCharacter = null;
     this.initCamera();
@@ -149,12 +228,34 @@ export default class GameScene extends Phaser.Scene {
       this.hud.placeThumbnails(this.currentCharacter.name);
     });
 
+    this.socket.on("newEnemy", enem => {
+      console.log("Got a newEnemy event:", enem);
+      if (this.currentCharacter) {
+        this.currentCharacter.takenBy = null;
+      } else {
+        this.hud.showDialog(char);
+      }
+
+      if (enem === "enemy1") {
+        this.currentCharacter = this.enemy1;
+      } else if (enem === "enemy2") {
+        this.currentCharacter = this.enemy2;
+      } else if (enem === "enemy3") {
+        this.currentCharacter = this.enemy3;
+      }
+    });
+
     this.socket.on("playerMoved", char => {
       if (char.takenBy == this.socket.id) {
         return;
       }
 
       this.updateOtherChar(char);
+    });
+
+    this.socket.on("EnemyMovement", enem => {
+
+      this.updateEnemies(enem);
     });
 
     this.socket.on("playerFired", fireData => {
@@ -216,6 +317,63 @@ export default class GameScene extends Phaser.Scene {
     character.facing = char.direction;
     character.setPosition(char.x, char.y);
     character.animate();
+  }
+
+  onMeetEnemy(player, enemy) {
+    if (this.currentCharacter.id = "firegirl") {
+      console.log("The firegirl has died!");
+      this.currentCharacter.setPosition(200, 504);
+      this.currentCharacter.stopped = true;
+      this.currentCharacter.facing = "up";
+    } else if (this.currentCharacter.id = "wizard") {
+      console.log("The wizard has died!");
+      this.currentCharacter.setPosition(232, 504);
+      this.currentCharacter.stopped = true;
+      this.currentCharacter.facing = "up";
+    } else if (this.currentCharacter.id = "ninja") {
+      console.log("The ninja has died!");
+      this.currentCharacter.setPosition(248, 504);
+      this.currentCharacter.stopped = true;
+      this.currentCharacter.facing = "up";
+    } else if (this.currentCharacter.id = "archer") {
+      console.log("The archer has died!");
+      this.currentCharacter.setPosition(216, 504);
+      this.currentCharacter.stopped = true;
+      this.currentCharacter.facing = "up";
+    }
+  }
+
+  onHitEnemy(enemy, projectile) {
+    console.log("The enemy has been slain!");
+    //this.socket.emit("enemyHit", enemy);
+  }
+
+  onFreezeEnemy(boss, projectile) {
+    console.log("The boss is frozen solid!");
+    //this.socket.emit("freezeEnemy", boss);
+  }
+
+  onHitBoss(boss, projectile) {
+    console.log("Not very effective!");
+  }
+
+  updateEnemies(enem) {
+    let enemie = null;
+    if (enem.name === "skeleton1") {
+      enemie = this.enemy1;
+    } else if (enem.name === "skeleton2") {
+      enemie = this.enemy2;
+    } else if (enem.name === "skeleton3") {
+      enemie = this.enemy3;
+    }
+
+    if (!enemie) {
+      return;
+    }
+    enemie.facing = enem.direction;
+    enemie.setVelocityX(enem.velx);
+    enemie.setVelocityY(enem.vely);
+    enemie.animate();
   }
 
   update(time, delta) {

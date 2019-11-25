@@ -33,6 +33,8 @@ const createAnimations = scene => {
     ["-wiz", "wizard", 5],
     ["-arch", "archer", 10],
     ["-nj", "ninja", 12],
+    ["-kg", "king", 10],
+    ["-sk", "skeleton", 10],
   ]) {
     scene.anims.create({
       key: "standing" + char[0],

@@ -8,6 +8,7 @@ import http from "http";
 import sio from "socket.io";
 
 import { characters } from "./characters.js";
+import { enemies } from "./enemies.js";
 
 const app = express(),
   DIST_DIR = __dirname,
@@ -37,13 +38,36 @@ io.on("connection", socket => {
       break;
     }
   }
-
   // update all other players of the new player
   socket.broadcast.emit("newPlayer", {
     id: socket.id,
     char: characters[players[socket.id].char],
   });
   socket.broadcast.emit("takenUpdate", characters);
+
+  for (let [id, enem] of Object.entries(enemies)) {
+    if (enem.alive == true) {
+      const randX = Math.floor((Math.random() * 80));
+      const randY = Math.floor((Math.random() * 80));
+
+      enem.velx = randX;
+      enem.vely = randY;
+
+      if (randX < 0) {
+        enem.direction = "left";
+      } else if (randX > 0) {
+        enem.direction = "right";
+      } 
+      
+      if (randY < 0) {
+        enem.direction = "up";
+      } else if (randY > 0) {
+        enem.direction = "down";
+      }
+    
+      socket.broadcast.emit("EnemyMovement", enem);
+    }
+  }
 
   // when a player disconnects, remove them from our players object
   socket.on("disconnect", () => {

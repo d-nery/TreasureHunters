@@ -33,6 +33,9 @@ import wizardFrame from "../assets/img/wizard-speaking-frame.png";
 import firegirlFrame from "../assets/img/firegirl-speaking-frame.png";
 import archerFrame from "../assets/img/archer-speaking-frame.png";
 
+import skeletonSprites from "../assets/enemies/skeleton.png";
+import kingSprites from "../assets/enemies/king.png";
+
 import createAnimations from "../helpers/animations";
 import { DEBUG } from "../index";
 
@@ -78,6 +81,7 @@ class BootScene extends Phaser.Scene {
     this.load.image("wiz-frame", wizardFrame);
     this.load.image("nin-frame", ninjaFrame);
     this.load.image("arc-frame", archerFrame);
+
 
     this.load.tilemapTiledJSON("map", map);
 
@@ -135,6 +139,17 @@ class BootScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
+    this.load.spritesheet("skeleton", skeletonSprites, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("king", kingSprites, {
+      frameWidth: 55,
+      frameHeight: 55,
+    });
+
   }
 }
 
