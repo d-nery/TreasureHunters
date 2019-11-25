@@ -126,7 +126,6 @@ export default class GameScene extends Phaser.Scene {
       speed: 50,
     });
 
-    //this.createEnemies();
 
     this.map.addWorldCollisionToCharacter(this.firegirl);
     this.map.addWorldCollisionToCharacter(this.wizard);
@@ -162,12 +161,16 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.boss, this.arrows, this.onHitBoss, false, this);
 
     this.physics.add.overlap(this.enemy1, this.fireballs, this.onHitEnemy, false, this);
-    this.physics.add.overlap(this.enemy1, this.iceballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy1, this.iceballs, this.onFreezeEnemy, false, this);
     this.physics.add.overlap(this.enemy1, this.arrows, this.onHitEnemy, false, this);
 
     this.physics.add.overlap(this.enemy2, this.fireballs, this.onHitEnemy, false, this);
-    this.physics.add.overlap(this.enemy2, this.iceballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy2, this.iceballs, this.onFreezeEnemy, false, this);
     this.physics.add.overlap(this.enemy2, this.arrows, this.onHitEnemy, false, this);
+
+    this.physics.add.overlap(this.enemy3, this.fireballs, this.onHitEnemy, false, this);
+    this.physics.add.overlap(this.enemy3, this.iceballs, this.onFreezeEnemy, false, this);
+    this.physics.add.overlap(this.enemy3, this.arrows, this.onHitEnemy, false, this);
 
     this.currentCharacter = null;
     this.initCamera();
@@ -324,22 +327,22 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onMeetEnemy(player, enemy) {
-    if (this.currentCharacter.id == "firegirl") {
+    if (this.currentCharacter.name == "firegirl") {
       console.log("The firegirl has died!");
       this.currentCharacter.setPosition(200, 504);
       this.currentCharacter.stopped = true;
       this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.id == "wizard") {
+    } else if (this.currentCharacter.name == "wizard") {
       console.log("The wizard has died!");
       this.currentCharacter.setPosition(232, 504);
       this.currentCharacter.stopped = true;
       this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.id == "ninja") {
+    } else if (this.currentCharacter.name == "ninja") {
       console.log("The ninja has died!");
       this.currentCharacter.setPosition(248, 504);
       this.currentCharacter.stopped = true;
       this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.id == "archer") {
+    } else if (this.currentCharacter.name == "archer") {
       console.log("The archer has died!");
       this.currentCharacter.setPosition(216, 504);
       this.currentCharacter.stopped = true;
@@ -352,8 +355,9 @@ export default class GameScene extends Phaser.Scene {
     //this.socket.emit("enemyHit", enemy);
   }
 
-  onFreezeEnemy(boss, projectile) {
+  onFreezeEnemy(enemy, projectile) {
     console.log("The boss is frozen solid!");
+    enemy.freeze = true;
     //this.socket.emit("freezeEnemy", boss);
   }
 

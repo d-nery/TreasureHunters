@@ -46,6 +46,15 @@ const createAnimations = scene => {
     });
 
     scene.anims.create({
+      key: "freeze" + char[0],
+      frames: scene.anims.generateFrameNumbers(char[1], {
+        frames: [12],
+      }),
+      frameRate: char[2],
+      repeat: -1,
+    });
+
+    scene.anims.create({
       key: "left" + char[0],
       frames: scene.anims.generateFrameNumbers(char[1], {
         frames: [4, 3, 4, 5],
@@ -97,6 +106,42 @@ const createAnimations = scene => {
       frames: [3, 4, 5],
     }),
     frameRate: 8,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "king-standing",
+    frames: scene.anims.generateFrameNumbers("king", {
+      frames: [1],
+    }),
+    frameRate: 6,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "king-up",
+    frames: scene.anims.generateFrameNumbers("king", {
+      frames: [2, 3],
+    }),
+    frameRate: 6,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "king-down",
+    frames: scene.anims.generateFrameNumbers("king", {
+      frames: [0, 1],
+    }),
+    frameRate: 6,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "king-freeze",
+    frames: scene.anims.generateFrameNumbers("king", {
+      frames: [4],
+    }),
+    frameRate: 6,
     repeat: -1,
   });
 
