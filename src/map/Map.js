@@ -48,6 +48,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.river = this.createStaticLayer("Rio", tiles, 0, 0);
     this.walls = this.createStaticLayer("Walls", tiles, 0, 0);
     this.createStaticLayer("Torches", tiles, 0, 0);
+    this.createStaticLayer("AbovePlayer", tiles, 0, 0).setDepth(10);
 
     this.levers = this.createFromObjects("Interactive", "lever", { key: "lever", frame: 0 }, this.scene);
     this.scene.physics.world.enable(this.levers);
@@ -71,12 +72,14 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
     this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
 
-    this.createDynamicLayer("DoorOpen", tiles, 0, 0);
-    this.door = this.createDynamicLayer("DoorClosed", tiles, 0, 0);
+    this.door = this.createFromObjects("Interactive", "door", { key: "door", frame: 0 }, this.scene)[0];
+    this.door.setDepth(10);
+    this.scene.physics.world.enable(this.door);
+    this.door.body.setImmovable();
+    this.door.body.moves = false;
 
     this.river.setCollisionByExclusion([-1]);
     this.walls.setCollisionByExclusion([-1]);
-    this.door.setCollisionByExclusion([-1]);
 
     this.scene.physics.world.bounds.width = this.widthInPixels;
     this.scene.physics.world.bounds.height = this.heightInPixels;
@@ -94,7 +97,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
       });
 
-      this.door.renderDebug(this.debugGraphics, {
+      this.river.renderDebug(this.debugGraphics, {
         tileColor: null,
         collidingTileColor: new Phaser.Display.Color(200, 0, 0, 120), // Colliding tiles
         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
@@ -106,8 +109,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     console.log("Adding colliders to", sprite);
 
     sprite._wallCollider = this.scene.physics.add.collider(sprite, this.walls);
-    sprite._doorCollider = this.scene.physics.add.collider(sprite, this.door);
     sprite._riverCollider = this.scene.physics.add.collider(sprite, this.river);
+    sprite._doorCollider = this.scene.physics.add.collider(sprite, this.door);
   }
 
   removeRiverCollisionFromSprite(sprite) {
@@ -116,7 +119,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   }
 
   removeDoor() {
-    this.door.setVisible(false);
-    this.door.setCollisionByExclusion([0]);
+    this.scene.physics.world.disable(this.door);
+    this.door.setFrame(1, false, false);
   }
 }
