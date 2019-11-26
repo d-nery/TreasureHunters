@@ -7,7 +7,6 @@ export default class Boss extends Phaser.GameObjects.Sprite {
 
     this.name = config.key;
     this.animSuffix = config.suffix;
-    this.projectiles = config.projectiles;
     this.speed = config.speed || 80;
     this.frozen = false;
     this.alive = true;
@@ -18,50 +17,6 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.anims.play("standing" + this.animSuffix);
 
     this.body.setCollideWorldBounds(true);
-  }
-
-  update(keys, time, delta) {
-    if (!this.alive) {
-      return;
-    }
-
-    let input = {
-      left: keys.left.isDown || keys.a.isDown,
-      right: keys.right.isDown || keys.d.isDown,
-      down: keys.down.isDown || keys.s.isDown,
-      up: keys.up.isDown || keys.w.isDown,
-      fire: keys.fire.isDown,
-    };
-
-    this.body.setVelocity(0);
-
-    if (input.left) {
-      this.body.setVelocityX(-this.speed);
-    } else if (input.right) {
-      this.body.setVelocityX(this.speed);
-    }
-
-    if (input.up) {
-      this.body.setVelocityY(-this.speed);
-    } else if (input.down) {
-      this.body.setVelocityY(this.speed);
-    }
-
-    this.stopped = false;
-
-    if (input.left) {
-      this.facing = "left";
-    } else if (input.right) {
-      this.facing = "right";
-    } else if (input.up) {
-      this.facing = "up";
-    } else if (input.down) {
-      this.facing = "down";
-    } else {
-      this.stopped = true;
-    }
-
-    this.animate();
   }
 
   stop() {
@@ -82,10 +37,17 @@ export default class Boss extends Phaser.GameObjects.Sprite {
   }
 
   animate() {
-    if (this.stopped) {
-      this.anims.stop();
-    } else {
-      let anim = this.facing + this.animSuffix;
+    if (this.freeze) {
+      let anim = "king-freeze";
+      this.anims.play(anim, true);
+    } else if (this.stopped) {
+      let anim = "king-standing";
+      this.anims.play(anim, true);
+    } else if (this.facing == "up"){
+      let anim = "king-up";
+      this.anims.play(anim, true);
+    } else if (this.facing == "down"){
+      let anim = "king-down";
       this.anims.play(anim, true);
     }
   }
