@@ -59,6 +59,10 @@ export default class GameScene extends Phaser.Scene {
       y: 456,
       suffix: "-fg",
       projectiles: this.fireballs,
+      lightsource: this.lights
+        .addLight(209, 456, 120)
+        .setColor(0xe25822)
+        .setIntensity(5),
     });
 
     this.wizard = new Character({
@@ -69,6 +73,10 @@ export default class GameScene extends Phaser.Scene {
       suffix: "-wiz",
       projectiles: this.iceballs,
       speed: 50,
+      lightsource: this.lights
+        .addLight(235, 456, 120)
+        .setColor(0xed6ecef)
+        .setIntensity(3),
     });
 
     this.archer = new Character({
@@ -88,6 +96,7 @@ export default class GameScene extends Phaser.Scene {
       suffix: "-nj",
       projectiles: null,
       speed: 120,
+      size: 13,
     });
 
     this.boss = new Boss({
@@ -97,6 +106,7 @@ export default class GameScene extends Phaser.Scene {
       y: 406,
       suffix: "-kg",
       speed: 40,
+      size: 55,
     });
 
     this.enemy1 = new Enemy({
@@ -286,15 +296,6 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.lights.enable().setAmbientColor(0x444444);
-    this.fgLight = this.lights
-      .addLight(167, 480, 120)
-      .setColor(0xe25822)
-      .setIntensity(5);
-
-    this.wizLight = this.lights
-      .addLight(167, 480, 100)
-      .setColor(0xed6ecef)
-      .setIntensity(1);
   }
 
   createMap() {
@@ -376,22 +377,22 @@ export default class GameScene extends Phaser.Scene {
   }
 
   updateEnemies(enem) {
-    let enemie = null;
+    let enemy = null;
     if (enem.name === "skeleton1") {
-      enemie = this.enemy1;
+      enemy = this.enemy1;
     } else if (enem.name === "skeleton2") {
-      enemie = this.enemy2;
+      enemy = this.enemy2;
     } else if (enem.name === "skeleton3") {
-      enemie = this.enemy3;
+      enemy = this.enemy3;
     }
 
-    if (!enemie) {
+    if (!enemy) {
       return;
     }
-    enemie.facing = enem.direction;
-    enemie.setVelocityX(enem.velx);
-    enemie.setVelocityY(enem.vely);
-    enemie.animate();
+    enemy.facing = enem.direction;
+    enemy.setVelocityX(enem.velx);
+    enemy.setVelocityY(enem.vely);
+    enemy.animate();
   }
 
   update(time, delta) {
@@ -410,9 +411,6 @@ export default class GameScene extends Phaser.Scene {
     for (let arrow of this.arrows.children.entries) {
       arrow.update(time, delta);
     }
-
-    this.fgLight.setPosition(this.firegirl.getCenter().x, this.firegirl.getCenter().y);
-    this.wizLight.setPosition(this.wizard.getCenter().x, this.wizard.getCenter().y);
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       this.currentCharacter.stop();

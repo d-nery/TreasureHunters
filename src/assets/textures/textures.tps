@@ -56,7 +56,7 @@
         <key>jxrCompressionLevel</key>
         <uint>0</uint>
         <key>ditherType</key>
-        <enum type="SettingsBase::DitherType">NearestNeighbour</enum>
+        <enum type="SettingsBase::DitherType">PngQuantLow</enum>
         <key>backgroundColor</key>
         <uint>0</uint>
         <key>libGdx</key>
@@ -82,7 +82,7 @@
         <key>atfFormats</key>
         <string></string>
         <key>textureFormat</key>
-        <enum type="SettingsBase::TextureFormat">png</enum>
+        <enum type="SettingsBase::TextureFormat">png8</enum>
         <key>borderPadding</key>
         <uint>0</uint>
         <key>maxTextureSize</key>
@@ -132,7 +132,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>textures.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,240 +181,166 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">textures/characters/archer/archer_01.png</key>
-            <key type="filename">textures/characters/archer/archer_01_n.png</key>
-            <key type="filename">textures/characters/archer/archer_02.png</key>
-            <key type="filename">textures/characters/archer/archer_02_n.png</key>
-            <key type="filename">textures/characters/archer/archer_03.png</key>
-            <key type="filename">textures/characters/archer/archer_03_n.png</key>
-            <key type="filename">textures/characters/archer/archer_04.png</key>
-            <key type="filename">textures/characters/archer/archer_04_n.png</key>
-            <key type="filename">textures/characters/archer/archer_05.png</key>
-            <key type="filename">textures/characters/archer/archer_05_n.png</key>
-            <key type="filename">textures/characters/archer/archer_06.png</key>
-            <key type="filename">textures/characters/archer/archer_06_n.png</key>
-            <key type="filename">textures/characters/archer/archer_07.png</key>
-            <key type="filename">textures/characters/archer/archer_07_n.png</key>
-            <key type="filename">textures/characters/archer/archer_08.png</key>
-            <key type="filename">textures/characters/archer/archer_08_n.png</key>
-            <key type="filename">textures/characters/archer/archer_09.png</key>
-            <key type="filename">textures/characters/archer/archer_09_n.png</key>
-            <key type="filename">textures/characters/archer/archer_10.png</key>
-            <key type="filename">textures/characters/archer/archer_10_n.png</key>
-            <key type="filename">textures/characters/archer/archer_11.png</key>
-            <key type="filename">textures/characters/archer/archer_11_n.png</key>
-            <key type="filename">textures/characters/archer/archer_12.png</key>
-            <key type="filename">textures/characters/archer/archer_12_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_01.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_01_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_02.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_02_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_03.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_03_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_04.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_04_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_05.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_05_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_06.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_06_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_07.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_07_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_08.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_08_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_09.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_09_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_10.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_10_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_11.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_11_n.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_12.png</key>
-            <key type="filename">textures/characters/firegirl/firegirl_12_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_01.png</key>
-            <key type="filename">textures/characters/wizard/wizard_01_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_02.png</key>
-            <key type="filename">textures/characters/wizard/wizard_02_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_03.png</key>
-            <key type="filename">textures/characters/wizard/wizard_03_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_04.png</key>
-            <key type="filename">textures/characters/wizard/wizard_04_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_05.png</key>
-            <key type="filename">textures/characters/wizard/wizard_05_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_06.png</key>
-            <key type="filename">textures/characters/wizard/wizard_06_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_07.png</key>
-            <key type="filename">textures/characters/wizard/wizard_07_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_08.png</key>
-            <key type="filename">textures/characters/wizard/wizard_08_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_09.png</key>
-            <key type="filename">textures/characters/wizard/wizard_09_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_10.png</key>
-            <key type="filename">textures/characters/wizard/wizard_10_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_11.png</key>
-            <key type="filename">textures/characters/wizard/wizard_11_n.png</key>
-            <key type="filename">textures/characters/wizard/wizard_12.png</key>
-            <key type="filename">textures/characters/wizard/wizard_12_n.png</key>
-            <key type="filename">textures/map/map_01.png</key>
-            <key type="filename">textures/map/map_01_n.png</key>
-            <key type="filename">textures/map/map_02.png</key>
-            <key type="filename">textures/map/map_02_n.png</key>
-            <key type="filename">textures/map/map_03.png</key>
-            <key type="filename">textures/map/map_03_n.png</key>
-            <key type="filename">textures/map/map_04.png</key>
-            <key type="filename">textures/map/map_04_n.png</key>
-            <key type="filename">textures/map/map_05.png</key>
-            <key type="filename">textures/map/map_05_n.png</key>
-            <key type="filename">textures/map/map_06.png</key>
-            <key type="filename">textures/map/map_06_n.png</key>
-            <key type="filename">textures/map/map_07.png</key>
-            <key type="filename">textures/map/map_07_n.png</key>
-            <key type="filename">textures/map/map_08.png</key>
-            <key type="filename">textures/map/map_08_n.png</key>
-            <key type="filename">textures/map/map_09.png</key>
-            <key type="filename">textures/map/map_09_n.png</key>
-            <key type="filename">textures/map/map_10.png</key>
-            <key type="filename">textures/map/map_10_n.png</key>
-            <key type="filename">textures/map/map_11.png</key>
-            <key type="filename">textures/map/map_11_n.png</key>
-            <key type="filename">textures/map/map_12.png</key>
-            <key type="filename">textures/map/map_12_n.png</key>
-            <key type="filename">textures/map/map_13.png</key>
-            <key type="filename">textures/map/map_13_n.png</key>
-            <key type="filename">textures/map/map_14.png</key>
-            <key type="filename">textures/map/map_14_n.png</key>
-            <key type="filename">textures/map/map_15.png</key>
-            <key type="filename">textures/map/map_15_n.png</key>
-            <key type="filename">textures/map/map_16.png</key>
-            <key type="filename">textures/map/map_16_n.png</key>
-            <key type="filename">textures/map/map_17.png</key>
-            <key type="filename">textures/map/map_17_n.png</key>
-            <key type="filename">textures/map/map_18.png</key>
-            <key type="filename">textures/map/map_18_n.png</key>
-            <key type="filename">textures/map/map_19.png</key>
-            <key type="filename">textures/map/map_19_n.png</key>
-            <key type="filename">textures/map/map_20.png</key>
-            <key type="filename">textures/map/map_20_n.png</key>
-            <key type="filename">textures/map/map_21.png</key>
-            <key type="filename">textures/map/map_21_n.png</key>
-            <key type="filename">textures/map/map_22.png</key>
-            <key type="filename">textures/map/map_22_n.png</key>
-            <key type="filename">textures/map/map_23.png</key>
-            <key type="filename">textures/map/map_23_n.png</key>
-            <key type="filename">textures/map/map_24.png</key>
-            <key type="filename">textures/map/map_24_n.png</key>
-            <key type="filename">textures/map/map_25.png</key>
-            <key type="filename">textures/map/map_25_n.png</key>
-            <key type="filename">textures/map/map_26.png</key>
-            <key type="filename">textures/map/map_26_n.png</key>
-            <key type="filename">textures/map/map_27.png</key>
-            <key type="filename">textures/map/map_27_n.png</key>
-            <key type="filename">textures/map/map_28.png</key>
-            <key type="filename">textures/map/map_28_n.png</key>
-            <key type="filename">textures/map/map_29.png</key>
-            <key type="filename">textures/map/map_29_n.png</key>
-            <key type="filename">textures/map/map_30.png</key>
-            <key type="filename">textures/map/map_30_n.png</key>
-            <key type="filename">textures/map/map_31.png</key>
-            <key type="filename">textures/map/map_31_n.png</key>
-            <key type="filename">textures/map/map_32.png</key>
-            <key type="filename">textures/map/map_32_n.png</key>
-            <key type="filename">textures/map/map_33.png</key>
-            <key type="filename">textures/map/map_33_n.png</key>
-            <key type="filename">textures/map/map_34.png</key>
-            <key type="filename">textures/map/map_34_n.png</key>
-            <key type="filename">textures/map/map_35.png</key>
-            <key type="filename">textures/map/map_35_n.png</key>
-            <key type="filename">textures/map/map_36.png</key>
-            <key type="filename">textures/map/map_36_n.png</key>
-            <key type="filename">textures/map/map_37.png</key>
-            <key type="filename">textures/map/map_37_n.png</key>
-            <key type="filename">textures/map/map_38.png</key>
-            <key type="filename">textures/map/map_38_n.png</key>
-            <key type="filename">textures/map/map_39.png</key>
-            <key type="filename">textures/map/map_39_n.png</key>
-            <key type="filename">textures/map/map_40.png</key>
-            <key type="filename">textures/map/map_40_n.png</key>
-            <key type="filename">textures/map/map_41.png</key>
-            <key type="filename">textures/map/map_41_n.png</key>
-            <key type="filename">textures/map/map_42.png</key>
-            <key type="filename">textures/map/map_42_n.png</key>
-            <key type="filename">textures/map/map_43.png</key>
-            <key type="filename">textures/map/map_43_n.png</key>
-            <key type="filename">textures/map/map_44.png</key>
-            <key type="filename">textures/map/map_44_n.png</key>
-            <key type="filename">textures/map/map_45.png</key>
-            <key type="filename">textures/map/map_45_n.png</key>
-            <key type="filename">textures/map/map_46.png</key>
-            <key type="filename">textures/map/map_46_n.png</key>
-            <key type="filename">textures/map/map_47.png</key>
-            <key type="filename">textures/map/map_47_n.png</key>
-            <key type="filename">textures/map/map_48.png</key>
-            <key type="filename">textures/map/map_48_n.png</key>
-            <key type="filename">textures/map/map_49.png</key>
-            <key type="filename">textures/map/map_49_n.png</key>
-            <key type="filename">textures/map/map_50.png</key>
-            <key type="filename">textures/map/map_50_n.png</key>
-            <key type="filename">textures/map/map_51.png</key>
-            <key type="filename">textures/map/map_51_n.png</key>
-            <key type="filename">textures/map/map_52.png</key>
-            <key type="filename">textures/map/map_52_n.png</key>
-            <key type="filename">textures/map/map_53.png</key>
-            <key type="filename">textures/map/map_53_n.png</key>
-            <key type="filename">textures/map/map_54.png</key>
-            <key type="filename">textures/map/map_54_n.png</key>
-            <key type="filename">textures/map/map_55.png</key>
-            <key type="filename">textures/map/map_55_n.png</key>
-            <key type="filename">textures/map/map_56.png</key>
-            <key type="filename">textures/map/map_56_n.png</key>
-            <key type="filename">textures/map/map_57.png</key>
-            <key type="filename">textures/map/map_57_n.png</key>
-            <key type="filename">textures/map/map_58.png</key>
-            <key type="filename">textures/map/map_58_n.png</key>
-            <key type="filename">textures/map/map_59.png</key>
-            <key type="filename">textures/map/map_59_n.png</key>
-            <key type="filename">textures/map/map_60.png</key>
-            <key type="filename">textures/map/map_60_n.png</key>
-            <key type="filename">textures/map/map_61.png</key>
-            <key type="filename">textures/map/map_61_n.png</key>
-            <key type="filename">textures/map/map_62.png</key>
-            <key type="filename">textures/map/map_62_n.png</key>
-            <key type="filename">textures/map/map_63.png</key>
-            <key type="filename">textures/map/map_63_n.png</key>
-            <key type="filename">textures/map/map_64.png</key>
-            <key type="filename">textures/map/map_64_n.png</key>
-            <key type="filename">textures/map/map_65.png</key>
-            <key type="filename">textures/map/map_65_n.png</key>
-            <key type="filename">textures/map/map_66.png</key>
-            <key type="filename">textures/map/map_66_n.png</key>
-            <key type="filename">textures/map/map_67.png</key>
-            <key type="filename">textures/map/map_67_n.png</key>
-            <key type="filename">textures/map/map_68.png</key>
-            <key type="filename">textures/map/map_68_n.png</key>
-            <key type="filename">textures/map/map_69.png</key>
-            <key type="filename">textures/map/map_69_n.png</key>
-            <key type="filename">textures/map/map_70.png</key>
-            <key type="filename">textures/map/map_70_n.png</key>
-            <key type="filename">textures/map/map_71.png</key>
-            <key type="filename">textures/map/map_71_n.png</key>
-            <key type="filename">textures/map/map_72.png</key>
-            <key type="filename">textures/map/map_72_n.png</key>
-            <key type="filename">textures/map/map_73.png</key>
-            <key type="filename">textures/map/map_73_n.png</key>
-            <key type="filename">textures/map/map_74.png</key>
-            <key type="filename">textures/map/map_74_n.png</key>
-            <key type="filename">textures/map/map_75.png</key>
-            <key type="filename">textures/map/map_75_n.png</key>
-            <key type="filename">textures/map/map_76.png</key>
-            <key type="filename">textures/map/map_76_n.png</key>
-            <key type="filename">textures/map/map_77.png</key>
-            <key type="filename">textures/map/map_77_n.png</key>
-            <key type="filename">textures/map/map_78.png</key>
-            <key type="filename">textures/map/map_78_n.png</key>
-            <key type="filename">textures/map/map_79.png</key>
-            <key type="filename">textures/map/map_79_n.png</key>
-            <key type="filename">textures/map/map_80.png</key>
-            <key type="filename">textures/map/map_80_n.png</key>
-            <key type="filename">textures/props/key.png</key>
-            <key type="filename">textures/props/key_n.png</key>
+            <key type="filename">characters/archer/down/01.png</key>
+            <key type="filename">characters/archer/down/01_n.png</key>
+            <key type="filename">characters/archer/down/02.png</key>
+            <key type="filename">characters/archer/down/02_n.png</key>
+            <key type="filename">characters/archer/down/03.png</key>
+            <key type="filename">characters/archer/down/03_n.png</key>
+            <key type="filename">characters/archer/down/04.png</key>
+            <key type="filename">characters/archer/down/04_n.png</key>
+            <key type="filename">characters/archer/left/01.png</key>
+            <key type="filename">characters/archer/left/01_n.png</key>
+            <key type="filename">characters/archer/left/02.png</key>
+            <key type="filename">characters/archer/left/02_n.png</key>
+            <key type="filename">characters/archer/left/03.png</key>
+            <key type="filename">characters/archer/left/03_n.png</key>
+            <key type="filename">characters/archer/left/04.png</key>
+            <key type="filename">characters/archer/left/04_n.png</key>
+            <key type="filename">characters/archer/right/01.png</key>
+            <key type="filename">characters/archer/right/01_n.png</key>
+            <key type="filename">characters/archer/right/02.png</key>
+            <key type="filename">characters/archer/right/02_n.png</key>
+            <key type="filename">characters/archer/right/03.png</key>
+            <key type="filename">characters/archer/right/03_n.png</key>
+            <key type="filename">characters/archer/right/04.png</key>
+            <key type="filename">characters/archer/right/04_n.png</key>
+            <key type="filename">characters/archer/up/01.png</key>
+            <key type="filename">characters/archer/up/01_n.png</key>
+            <key type="filename">characters/archer/up/02.png</key>
+            <key type="filename">characters/archer/up/02_n.png</key>
+            <key type="filename">characters/archer/up/03.png</key>
+            <key type="filename">characters/archer/up/03_n.png</key>
+            <key type="filename">characters/archer/up/04.png</key>
+            <key type="filename">characters/archer/up/04_n.png</key>
+            <key type="filename">characters/firegirl/down/01.png</key>
+            <key type="filename">characters/firegirl/down/01_n.png</key>
+            <key type="filename">characters/firegirl/down/02.png</key>
+            <key type="filename">characters/firegirl/down/02_n.png</key>
+            <key type="filename">characters/firegirl/down/03.png</key>
+            <key type="filename">characters/firegirl/down/03_n.png</key>
+            <key type="filename">characters/firegirl/down/04.png</key>
+            <key type="filename">characters/firegirl/down/04_n.png</key>
+            <key type="filename">characters/firegirl/left/01.png</key>
+            <key type="filename">characters/firegirl/left/01_n.png</key>
+            <key type="filename">characters/firegirl/left/02.png</key>
+            <key type="filename">characters/firegirl/left/02_n.png</key>
+            <key type="filename">characters/firegirl/left/03.png</key>
+            <key type="filename">characters/firegirl/left/03_n.png</key>
+            <key type="filename">characters/firegirl/left/04.png</key>
+            <key type="filename">characters/firegirl/left/04_n.png</key>
+            <key type="filename">characters/firegirl/right/01.png</key>
+            <key type="filename">characters/firegirl/right/01_n.png</key>
+            <key type="filename">characters/firegirl/right/02.png</key>
+            <key type="filename">characters/firegirl/right/02_n.png</key>
+            <key type="filename">characters/firegirl/right/03.png</key>
+            <key type="filename">characters/firegirl/right/03_n.png</key>
+            <key type="filename">characters/firegirl/right/04.png</key>
+            <key type="filename">characters/firegirl/right/04_n.png</key>
+            <key type="filename">characters/firegirl/up/01.png</key>
+            <key type="filename">characters/firegirl/up/01_n.png</key>
+            <key type="filename">characters/firegirl/up/02.png</key>
+            <key type="filename">characters/firegirl/up/02_n.png</key>
+            <key type="filename">characters/firegirl/up/03.png</key>
+            <key type="filename">characters/firegirl/up/03_n.png</key>
+            <key type="filename">characters/firegirl/up/04.png</key>
+            <key type="filename">characters/firegirl/up/04_n.png</key>
+            <key type="filename">characters/wizard/down/01.png</key>
+            <key type="filename">characters/wizard/down/01_n.png</key>
+            <key type="filename">characters/wizard/down/02.png</key>
+            <key type="filename">characters/wizard/down/02_n.png</key>
+            <key type="filename">characters/wizard/down/03.png</key>
+            <key type="filename">characters/wizard/down/03_n.png</key>
+            <key type="filename">characters/wizard/down/04.png</key>
+            <key type="filename">characters/wizard/down/04_n.png</key>
+            <key type="filename">characters/wizard/left/01.png</key>
+            <key type="filename">characters/wizard/left/01_n.png</key>
+            <key type="filename">characters/wizard/left/02.png</key>
+            <key type="filename">characters/wizard/left/02_n.png</key>
+            <key type="filename">characters/wizard/left/03.png</key>
+            <key type="filename">characters/wizard/left/03_n.png</key>
+            <key type="filename">characters/wizard/left/04.png</key>
+            <key type="filename">characters/wizard/left/04_n.png</key>
+            <key type="filename">characters/wizard/right/01.png</key>
+            <key type="filename">characters/wizard/right/01_n.png</key>
+            <key type="filename">characters/wizard/right/02.png</key>
+            <key type="filename">characters/wizard/right/02_n.png</key>
+            <key type="filename">characters/wizard/right/03.png</key>
+            <key type="filename">characters/wizard/right/03_n.png</key>
+            <key type="filename">characters/wizard/right/04.png</key>
+            <key type="filename">characters/wizard/right/04_n.png</key>
+            <key type="filename">characters/wizard/up/01.png</key>
+            <key type="filename">characters/wizard/up/01_n.png</key>
+            <key type="filename">characters/wizard/up/02.png</key>
+            <key type="filename">characters/wizard/up/02_n.png</key>
+            <key type="filename">characters/wizard/up/03.png</key>
+            <key type="filename">characters/wizard/up/03_n.png</key>
+            <key type="filename">characters/wizard/up/04.png</key>
+            <key type="filename">characters/wizard/up/04_n.png</key>
+            <key type="filename">enemies/skeleton/down/01.png</key>
+            <key type="filename">enemies/skeleton/down/01_n.png</key>
+            <key type="filename">enemies/skeleton/down/02.png</key>
+            <key type="filename">enemies/skeleton/down/02_n.png</key>
+            <key type="filename">enemies/skeleton/down/03.png</key>
+            <key type="filename">enemies/skeleton/down/03_n.png</key>
+            <key type="filename">enemies/skeleton/down/04.png</key>
+            <key type="filename">enemies/skeleton/down/04_n.png</key>
+            <key type="filename">enemies/skeleton/frozen/01.png</key>
+            <key type="filename">enemies/skeleton/frozen/01_n.png</key>
+            <key type="filename">enemies/skeleton/left/01.png</key>
+            <key type="filename">enemies/skeleton/left/01_n.png</key>
+            <key type="filename">enemies/skeleton/left/02.png</key>
+            <key type="filename">enemies/skeleton/left/02_n.png</key>
+            <key type="filename">enemies/skeleton/left/03.png</key>
+            <key type="filename">enemies/skeleton/left/03_n.png</key>
+            <key type="filename">enemies/skeleton/left/04.png</key>
+            <key type="filename">enemies/skeleton/left/04_n.png</key>
+            <key type="filename">enemies/skeleton/right/01.png</key>
+            <key type="filename">enemies/skeleton/right/01_n.png</key>
+            <key type="filename">enemies/skeleton/right/02.png</key>
+            <key type="filename">enemies/skeleton/right/02_n.png</key>
+            <key type="filename">enemies/skeleton/right/03.png</key>
+            <key type="filename">enemies/skeleton/right/03_n.png</key>
+            <key type="filename">enemies/skeleton/right/04.png</key>
+            <key type="filename">enemies/skeleton/right/04_n.png</key>
+            <key type="filename">enemies/skeleton/up/01.png</key>
+            <key type="filename">enemies/skeleton/up/01_n.png</key>
+            <key type="filename">enemies/skeleton/up/02.png</key>
+            <key type="filename">enemies/skeleton/up/02_n.png</key>
+            <key type="filename">enemies/skeleton/up/03.png</key>
+            <key type="filename">enemies/skeleton/up/03_n.png</key>
+            <key type="filename">enemies/skeleton/up/04.png</key>
+            <key type="filename">enemies/skeleton/up/04_n.png</key>
+            <key type="filename">projectiles/arrow/01.png</key>
+            <key type="filename">projectiles/arrow/01_n.png</key>
+            <key type="filename">projectiles/arrow/02.png</key>
+            <key type="filename">projectiles/arrow/02_n.png</key>
+            <key type="filename">projectiles/fireball/01.png</key>
+            <key type="filename">projectiles/fireball/01_n.png</key>
+            <key type="filename">projectiles/fireball/02.png</key>
+            <key type="filename">projectiles/fireball/02_n.png</key>
+            <key type="filename">projectiles/iceball/01.png</key>
+            <key type="filename">projectiles/iceball/01_n.png</key>
+            <key type="filename">projectiles/iceball/02.png</key>
+            <key type="filename">projectiles/iceball/02_n.png</key>
+            <key type="filename">props/chest/01.png</key>
+            <key type="filename">props/chest/01_n.png</key>
+            <key type="filename">props/chest/02.png</key>
+            <key type="filename">props/chest/02_n.png</key>
+            <key type="filename">props/chest/03.png</key>
+            <key type="filename">props/chest/03_n.png</key>
+            <key type="filename">props/key/01.png</key>
+            <key type="filename">props/key/01_n.png</key>
+            <key type="filename">props/lever/01.png</key>
+            <key type="filename">props/lever/01_n.png</key>
+            <key type="filename">props/lever/02.png</key>
+            <key type="filename">props/lever/02_n.png</key>
+            <key type="filename">props/water/river/01.png</key>
+            <key type="filename">props/water/river/01_n.png</key>
+            <key type="filename">props/water/river/02.png</key>
+            <key type="filename">props/water/river/02_n.png</key>
+            <key type="filename">props/water/river/03.png</key>
+            <key type="filename">props/water/river/03_n.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -429,30 +355,38 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">textures/characters/ninja/ninja_01.png</key>
-            <key type="filename">textures/characters/ninja/ninja_01_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_02.png</key>
-            <key type="filename">textures/characters/ninja/ninja_02_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_03.png</key>
-            <key type="filename">textures/characters/ninja/ninja_03_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_04.png</key>
-            <key type="filename">textures/characters/ninja/ninja_04_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_05.png</key>
-            <key type="filename">textures/characters/ninja/ninja_05_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_06.png</key>
-            <key type="filename">textures/characters/ninja/ninja_06_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_07.png</key>
-            <key type="filename">textures/characters/ninja/ninja_07_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_08.png</key>
-            <key type="filename">textures/characters/ninja/ninja_08_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_09.png</key>
-            <key type="filename">textures/characters/ninja/ninja_09_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_10.png</key>
-            <key type="filename">textures/characters/ninja/ninja_10_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_11.png</key>
-            <key type="filename">textures/characters/ninja/ninja_11_n.png</key>
-            <key type="filename">textures/characters/ninja/ninja_12.png</key>
-            <key type="filename">textures/characters/ninja/ninja_12_n.png</key>
+            <key type="filename">characters/ninja/down/01.png</key>
+            <key type="filename">characters/ninja/down/01_n.png</key>
+            <key type="filename">characters/ninja/down/02.png</key>
+            <key type="filename">characters/ninja/down/02_n.png</key>
+            <key type="filename">characters/ninja/down/03.png</key>
+            <key type="filename">characters/ninja/down/03_n.png</key>
+            <key type="filename">characters/ninja/down/04.png</key>
+            <key type="filename">characters/ninja/down/04_n.png</key>
+            <key type="filename">characters/ninja/left/01.png</key>
+            <key type="filename">characters/ninja/left/01_n.png</key>
+            <key type="filename">characters/ninja/left/02.png</key>
+            <key type="filename">characters/ninja/left/02_n.png</key>
+            <key type="filename">characters/ninja/left/03.png</key>
+            <key type="filename">characters/ninja/left/03_n.png</key>
+            <key type="filename">characters/ninja/left/04.png</key>
+            <key type="filename">characters/ninja/left/04_n.png</key>
+            <key type="filename">characters/ninja/right/01.png</key>
+            <key type="filename">characters/ninja/right/01_n.png</key>
+            <key type="filename">characters/ninja/right/02.png</key>
+            <key type="filename">characters/ninja/right/02_n.png</key>
+            <key type="filename">characters/ninja/right/03.png</key>
+            <key type="filename">characters/ninja/right/03_n.png</key>
+            <key type="filename">characters/ninja/right/04.png</key>
+            <key type="filename">characters/ninja/right/04_n.png</key>
+            <key type="filename">characters/ninja/up/01.png</key>
+            <key type="filename">characters/ninja/up/01_n.png</key>
+            <key type="filename">characters/ninja/up/02.png</key>
+            <key type="filename">characters/ninja/up/02_n.png</key>
+            <key type="filename">characters/ninja/up/03.png</key>
+            <key type="filename">characters/ninja/up/03_n.png</key>
+            <key type="filename">characters/ninja/up/04.png</key>
+            <key type="filename">characters/ninja/up/04_n.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -467,8 +401,16 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">textures/enemies/king.png</key>
-            <key type="filename">textures/enemies/king_n.png</key>
+            <key type="filename">enemies/king/down/01.png</key>
+            <key type="filename">enemies/king/down/01_n.png</key>
+            <key type="filename">enemies/king/down/02.png</key>
+            <key type="filename">enemies/king/down/02_n.png</key>
+            <key type="filename">enemies/king/frozen/01.png</key>
+            <key type="filename">enemies/king/frozen/01_n.png</key>
+            <key type="filename">enemies/king/up/01.png</key>
+            <key type="filename">enemies/king/up/01_n.png</key>
+            <key type="filename">enemies/king/up/02.png</key>
+            <key type="filename">enemies/king/up/02_n.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -477,14 +419,16 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>28,41,55,83</rect>
+                <rect>14,14,27,27</rect>
                 <key>scale9Paddings</key>
-                <rect>28,41,55,83</rect>
+                <rect>14,14,27,27</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">textures/enemies/skeleton.png</key>
-            <key type="filename">textures/enemies/skeleton_n.png</key>
+            <key type="filename">props/bridge/01.png</key>
+            <key type="filename">props/bridge/01_n.png</key>
+            <key type="filename">props/bridge/02.png</key>
+            <key type="filename">props/bridge/02_n.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -493,18 +437,48 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>12,20,24,40</rect>
+                <rect>16,7,32,14</rect>
                 <key>scale9Paddings</key>
-                <rect>12,20,24,40</rect>
+                <rect>16,7,32,14</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">textures/projectiles/arrow.png</key>
-            <key type="filename">textures/projectiles/arrow_n.png</key>
-            <key type="filename">textures/projectiles/fireball.png</key>
-            <key type="filename">textures/projectiles/fireball_n.png</key>
-            <key type="filename">textures/projectiles/iceball.png</key>
-            <key type="filename">textures/projectiles/iceball_n.png</key>
+            <key type="filename">props/door/close.png</key>
+            <key type="filename">props/door/close_n.png</key>
+            <key type="filename">props/door/open.png</key>
+            <key type="filename">props/door/open_n.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">props/firefont/01.png</key>
+            <key type="filename">props/firefont/01_n.png</key>
+            <key type="filename">props/firefont/02.png</key>
+            <key type="filename">props/firefont/02_n.png</key>
+            <key type="filename">props/firefont/03.png</key>
+            <key type="filename">props/firefont/03_n.png</key>
+            <key type="filename">props/water/font/01.png</key>
+            <key type="filename">props/water/font/01_n.png</key>
+            <key type="filename">props/water/font/02.png</key>
+            <key type="filename">props/water/font/02_n.png</key>
+            <key type="filename">props/water/font/03.png</key>
+            <key type="filename">props/water/font/03_n.png</key>
+            <key type="filename">props/water/fontriver/01.png</key>
+            <key type="filename">props/water/fontriver/01_n.png</key>
+            <key type="filename">props/water/fontriver/02.png</key>
+            <key type="filename">props/water/fontriver/02_n.png</key>
+            <key type="filename">props/water/fontriver/03.png</key>
+            <key type="filename">props/water/fontriver/03_n.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -516,77 +490,16 @@
                 <rect>4,8,8,16</rect>
                 <key>scale9Paddings</key>
                 <rect>4,8,8,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">textures/props/chest.png</key>
-            <key type="filename">textures/props/chest_n.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,4,24,8</rect>
-                <key>scale9Paddings</key>
-                <rect>12,4,24,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">textures/props/door.png</key>
-            <key type="filename">textures/props/door_n.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,8,32,16</rect>
-                <key>scale9Paddings</key>
-                <rect>16,8,32,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">textures/props/firefont.png</key>
-            <key type="filename">textures/props/firefont_n.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9Paddings</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">textures/props/lever.png</key>
-            <key type="filename">textures/props/lever_n.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,4,16,8</rect>
-                <key>scale9Paddings</key>
-                <rect>8,4,16,8</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>textures</filename>
+            <filename>characters</filename>
+            <filename>enemies</filename>
+            <filename>projectiles</filename>
+            <filename>props</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

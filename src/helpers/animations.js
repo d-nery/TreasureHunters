@@ -4,12 +4,12 @@ const createAnimations = scene => {
   scene.anims.create({
     key: "fireball",
     frames: scene.anims.generateFrameNames("spriteAtlas", {
-        start: 1,
-        end: 2,
-        zeroPad: 2,
-        prefix: "fireball/",
-        suffix: ".png",
-      }),
+      start: 1,
+      end: 2,
+      zeroPad: 2,
+      prefix: "fireball/",
+      suffix: ".png",
+    }),
     frameRate: 10,
     repeat: -1,
   });
@@ -188,6 +188,45 @@ const createAnimations = scene => {
       suffix: ".png",
     }),
     frameRate: 6,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "river",
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 3,
+      zeroPad: 2,
+      prefix: `water/river/`,
+      suffix: ".png",
+    }),
+    frameRate: 6,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "riverfont",
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 3,
+      zeroPad: 2,
+      prefix: `water/fontriver/`,
+      suffix: ".png",
+    }),
+    frameRate: 8,
+    repeat: -1,
+  });
+
+  scene.anims.create({
+    key: "waterfont",
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 3,
+      zeroPad: 2,
+      prefix: `water/font/`,
+      suffix: ".png",
+    }),
+    frameRate: 8,
     repeat: -1,
   });
 

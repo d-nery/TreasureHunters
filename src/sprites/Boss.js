@@ -5,6 +5,10 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
 
+    let size = config.size || 16;
+    this.body.setSize(size, size);
+    this.body.offset.set(0, 0);
+
     this.name = config.key;
     this.animSuffix = config.suffix;
     this.speed = config.speed || 80;

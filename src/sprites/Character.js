@@ -5,10 +5,15 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
 
+    let size = config.size || 16;
+    this.body.setSize(size, size);
+    this.body.offset.set(0, 0);
+
     this.name = config.key;
     this.animSuffix = config.suffix;
     this.projectiles = config.projectiles;
     this.speed = config.speed || 80;
+    this.lightsource = config.lightsource;
 
     this.fireCooldown = -1;
     this.alive = true;
@@ -20,13 +25,24 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.lastfire = {};
 
     this.anims.play("standing" + this.animSuffix);
+    this.setPipeline("Light2D");
 
     this.body.setCollideWorldBounds(true);
+
+    // if (this.lightsource) {
+    //   console.log("Setting scroll factor");
+    //   this.lightsource.setScrollFactor(0.0);
+    // }
   }
 
   update(keys, time, delta) {
     if (!this.alive) {
       return;
+    }
+
+    if (this.lightsource) {
+      this.lightsource.x = this.x;
+      this.lightsource.y = this.y;
     }
 
     if (this.takenBy == null) {
