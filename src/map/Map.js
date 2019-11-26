@@ -73,17 +73,16 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
     for (let torch of this.torches) {
       torch.light = this.scene.lights.addLight(torch.x, torch.y, 100, 0xe25822, 4);
+      this.scene.tweens.add({
+        targets: torch.light,
+        radius: { from: 100, to: 103 },
+        ease: "Linear",
+        duration: Phaser.Math.Between(1000, 2000),
+        repeat: -1,
+        yoyo: true,
+        delay: Phaser.Math.Between(300, 1000),
+      });
     }
-
-    this.scene.tweens.add({
-      targets: this.torches.map(t => t.light),
-      radius: { from: 100, to: 103 },
-      //   intensity: { from: 2.5, to: 2.3 },
-      ease: "Linear",
-      duration: 1000,
-      repeat: -1,
-      yoyo: true,
-    });
 
     this.candles = this.filterObjects("Lights", obj => obj.name === "candle");
 
