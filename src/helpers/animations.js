@@ -3,17 +3,25 @@ const createAnimations = scene => {
 
   scene.anims.create({
     key: "fireball",
-    frames: scene.anims.generateFrameNumbers("fireball", {
-      frames: [0, 1],
-    }),
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 1,
+        end: 2,
+        zeroPad: 2,
+        prefix: "fireball/",
+        suffix: ".png",
+      }),
     frameRate: 10,
     repeat: -1,
   });
 
   scene.anims.create({
     key: "iceball",
-    frames: scene.anims.generateFrameNumbers("iceball", {
-      frames: [0, 1],
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 2,
+      zeroPad: 2,
+      prefix: "iceball/",
+      suffix: ".png",
     }),
     frameRate: 10,
     repeat: -1,
@@ -21,8 +29,12 @@ const createAnimations = scene => {
 
   scene.anims.create({
     key: "arrow",
-    frames: scene.anims.generateFrameNumbers("arrow", {
-      frames: [0, 1],
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 2,
+      zeroPad: 2,
+      prefix: "arrow/",
+      suffix: ".png",
     }),
     frameRate: 10,
     repeat: -1,
@@ -33,13 +45,16 @@ const createAnimations = scene => {
     ["-wiz", "wizard", 5],
     ["-arch", "archer", 10],
     ["-nj", "ninja", 12],
-    ["-kg", "king", 10],
-    ["-sk", "skeleton", 10],
+    ["-sk", "skeleton", 6],
   ]) {
     scene.anims.create({
       key: "standing" + char[0],
-      frames: scene.anims.generateFrameNumbers(char[1], {
-        frames: [1],
+      frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 2,
+        end: 2,
+        zeroPad: 2,
+        prefix: `${char[1]}/down/`,
+        suffix: ".png",
       }),
       frameRate: char[2],
       repeat: -1,
@@ -47,8 +62,12 @@ const createAnimations = scene => {
 
     scene.anims.create({
       key: "freeze" + char[0],
-      frames: scene.anims.generateFrameNumbers(char[1], {
-        frames: [12],
+      frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 1,
+        end: 1,
+        zeroPad: 2,
+        prefix: `${char[1]}/frozen/`,
+        suffix: ".png",
       }),
       frameRate: char[2],
       repeat: -1,
@@ -56,8 +75,12 @@ const createAnimations = scene => {
 
     scene.anims.create({
       key: "left" + char[0],
-      frames: scene.anims.generateFrameNumbers(char[1], {
-        frames: [4, 3, 4, 5],
+      frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 1,
+        end: 4,
+        zeroPad: 2,
+        prefix: `${char[1]}/left/`,
+        suffix: ".png",
       }),
       frameRate: char[2],
       repeat: -1,
@@ -65,8 +88,12 @@ const createAnimations = scene => {
 
     scene.anims.create({
       key: "right" + char[0],
-      frames: scene.anims.generateFrameNumbers(char[1], {
-        frames: [7, 6, 7, 8],
+      frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 1,
+        end: 4,
+        zeroPad: 2,
+        prefix: `${char[1]}/right/`,
+        suffix: ".png",
       }),
       frameRate: char[2],
       repeat: -1,
@@ -74,8 +101,12 @@ const createAnimations = scene => {
 
     scene.anims.create({
       key: "up" + char[0],
-      frames: scene.anims.generateFrameNumbers(char[1], {
-        frames: [10, 9, 10, 11],
+      frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 1,
+        end: 4,
+        zeroPad: 2,
+        prefix: `${char[1]}/up/`,
+        suffix: ".png",
       }),
       frameRate: char[2],
       repeat: -1,
@@ -83,8 +114,12 @@ const createAnimations = scene => {
 
     scene.anims.create({
       key: "down" + char[0],
-      frames: scene.anims.generateFrameNumbers(char[1], {
-        frames: [1, 0, 1, 2],
+      frames: scene.anims.generateFrameNames("spriteAtlas", {
+        start: 1,
+        end: 4,
+        zeroPad: 2,
+        prefix: `${char[1]}/down/`,
+        suffix: ".png",
       }),
       frameRate: char[2],
       repeat: -1,
@@ -92,18 +127,13 @@ const createAnimations = scene => {
   }
 
   scene.anims.create({
-    key: "firefont-up",
-    frames: scene.anims.generateFrameNumbers("firefont", {
-      frames: [0, 1, 2],
-    }),
-    frameRate: 8,
-    repeat: -1,
-  });
-
-  scene.anims.create({
-    key: "firefont-down",
-    frames: scene.anims.generateFrameNumbers("firefont", {
-      frames: [3, 4, 5],
+    key: "firefont",
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 3,
+      zeroPad: 2,
+      prefix: `firefont/`,
+      suffix: ".png",
     }),
     frameRate: 8,
     repeat: -1,
@@ -111,8 +141,12 @@ const createAnimations = scene => {
 
   scene.anims.create({
     key: "king-standing",
-    frames: scene.anims.generateFrameNumbers("king", {
-      frames: [1],
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 2,
+      end: 2,
+      zeroPad: 2,
+      prefix: `king/down/`,
+      suffix: ".png",
     }),
     frameRate: 6,
     repeat: -1,
@@ -120,8 +154,12 @@ const createAnimations = scene => {
 
   scene.anims.create({
     key: "king-up",
-    frames: scene.anims.generateFrameNumbers("king", {
-      frames: [2, 3],
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 4,
+      zeroPad: 2,
+      prefix: `king/up/`,
+      suffix: ".png",
     }),
     frameRate: 6,
     repeat: -1,
@@ -129,8 +167,12 @@ const createAnimations = scene => {
 
   scene.anims.create({
     key: "king-down",
-    frames: scene.anims.generateFrameNumbers("king", {
-      frames: [0, 1],
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 4,
+      zeroPad: 2,
+      prefix: `king/down/`,
+      suffix: ".png",
     }),
     frameRate: 6,
     repeat: -1,
@@ -138,8 +180,12 @@ const createAnimations = scene => {
 
   scene.anims.create({
     key: "king-freeze",
-    frames: scene.anims.generateFrameNumbers("king", {
-      frames: [4],
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 1,
+      zeroPad: 2,
+      prefix: `king/frozen/`,
+      suffix: ".png",
     }),
     frameRate: 6,
     repeat: -1,

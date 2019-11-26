@@ -126,7 +126,6 @@ export default class GameScene extends Phaser.Scene {
       speed: 50,
     });
 
-
     this.map.addWorldCollisionToCharacter(this.firegirl);
     this.map.addWorldCollisionToCharacter(this.wizard);
     this.map.addWorldCollisionToCharacter(this.archer);
@@ -285,6 +284,17 @@ export default class GameScene extends Phaser.Scene {
         proj.fire(fireData.x, fireData.y, fireData.direction);
       }
     });
+
+    this.lights.enable().setAmbientColor(0x444444);
+    this.fgLight = this.lights
+      .addLight(167, 480, 120)
+      .setColor(0xe25822)
+      .setIntensity(5);
+
+    this.wizLight = this.lights
+      .addLight(167, 480, 100)
+      .setColor(0xed6ecef)
+      .setIntensity(1);
   }
 
   createMap() {
@@ -401,7 +411,8 @@ export default class GameScene extends Phaser.Scene {
       arrow.update(time, delta);
     }
 
-   
+    this.fgLight.setPosition(this.firegirl.getCenter().x, this.firegirl.getCenter().y);
+    this.wizLight.setPosition(this.wizard.getCenter().x, this.wizard.getCenter().y);
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       this.currentCharacter.stop();

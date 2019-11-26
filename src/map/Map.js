@@ -44,9 +44,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   initialize() {
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
-    this.createStaticLayer("Floor", tiles, 0, 0);
+    this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
     this.river = this.createStaticLayer("Rio", tiles, 0, 0);
-    this.walls = this.createStaticLayer("Walls", tiles, 0, 0);
+    this.walls = this.createDynamicLayer("Walls", tiles, 0, 0).setPipeline("Light2D");
     this.createStaticLayer("Torches", tiles, 0, 0);
     this.createStaticLayer("AbovePlayer", tiles, 0, 0).setDepth(10);
 
@@ -55,39 +55,37 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.bridgeInactive = this.createDynamicLayer("BridgeInactive", tiles, 0, 0);
 
     this.hole = this.createDynamicLayer("WallHole", tiles, 0, 0);
-    this.wallHole = this.createFromObjects("Interactive", "WallBarrie", { key: "empty", frame: 0 }, this.scene);
+    this.wallHole = this.createFromObjects("Interactive", "WallBarrie", { key: "null", frame: "" }, this.scene);
     this.scene.physics.world.enable(this.wallHole);
-    
-    this.levers = this.createFromObjects("Interactive", "lever", { key: "lever", frame: 0 }, this.scene)[0];
+
+    this.levers = this.createFromObjects("Interactive", "lever", { key: "spriteAtlas", frame: "lever/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.levers);
+    this.levers.setPipeline("Light2D");
 
-    this.levers2 = this.createFromObjects("Interactive", "lever2", { key: "lever", frame: 0 }, this.scene)[0];
+    this.levers2 = this.createFromObjects("Interactive", "lever2", { key: "spriteAtlas", frame: "lever/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.levers2);
+    this.levers2.setPipeline("Light2D");
 
-    this.button = this.createFromObjects("Interactive", "button", { key: "empty", frame: 0 }, this.scene)[0];
+    this.button = this.createFromObjects("Interactive", "button", { key: "null", frame: 0 }, this.scene)[0];
     this.scene.physics.world.enable(this.button);
 
-    this.key = this.createFromObjects("Interactive", "key", { key: "key", frame: 0 }, this.scene)[0];
+    this.key = this.createFromObjects("Interactive", "key", { key: "spriteAtlas", frame:  "key/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.key);
 
-    this.chest = this.createFromObjects("Interactive", "chest", { key: "chest", frame: 0 }, this.scene)[0];
+    this.chest = this.createFromObjects("Interactive", "chest", { key: "spriteAtlas", frame:  "chest/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.chest);
 
-    this.firefonts = this.createFromObjects("Interactive", "firefont", { key: "firefont", frame: 0 }, this.scene);
+    this.firefonts = this.createFromObjects("Interactive", "firefont", { key: "spriteAtlas", frame:  "firefont/01.png" }, this.scene);
 
     for (let font of this.firefonts) {
-      if (font.data.values[0].value == "up") {
-        font.anims.play("firefont-up");
-      } else {
-        font.anims.play("firefont-down");
-      }
+        font.anims.play("firefont");
     }
 
     this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
     this.fogTreasure = this.createStaticLayer("FogTreasure", tiles, 0, 0);
     //this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
 
-    this.door = this.createFromObjects("Interactive", "door", { key: "door", frame: 0 }, this.scene)[0];
+    this.door = this.createFromObjects("Interactive", "door", { key: "spriteAtlas", frame: "door/close.png" }, this.scene)[0];
 
     this.door.setDepth(10);
     this.scene.physics.world.enable(this.door);
@@ -137,13 +135,12 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     char._bridgeCollider = this.scene.physics.add.collider(char, this.bridge);
     char._bridgeInactiveCollider = this.scene.physics.add.collider(char, this.bridgeInactive);
 
-    if (char.name != "ninja"){
-      console.debug(char.name)
+    if (char.name != "ninja") {
+      console.debug(char.name);
       char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole);
     } else {
       char._fogHoleCollider = this.scene.physics.add.overlap(char, this.wallHole, this.openFog, null, this);
     }
-    
   }
 
   addWorldCollisionToProjectile(proj) {
@@ -152,11 +149,11 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     const destroyProj = () => {
       proj.destroy();
     };
-    
+
     proj._wallCollider = this.scene.physics.add.collider(proj, this.walls, destroyProj, null, this);
     proj._doorCollider = this.scene.physics.add.collider(proj, this.door, destroyProj, null, this);
 
-    if (proj.name == "arrow"){
+    if (proj.name == "arrow") {
       proj._buttonCollider = this.scene.physics.add.collider(proj, this.button, this.buttonPressed, null, this);
     }
   }
@@ -168,9 +165,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   removeDoor1() {
     if (this.scene.keys.action.isDown) {
-      console.debug("lever1 pressed")
+      console.debug("lever1 pressed");
       this.switch1 = true;
-      this.levers.setFrame(1, false, false)
+      this.levers.setFrame(1, false, false);
       //emmit
       if (this.switch1 && this.switch2) {
         this.scene.physics.world.disable(this.door);
@@ -184,9 +181,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   removeDoor2() {
     if (this.scene.keys.action.isDown) {
-      console.debug("lever2 pressed")
+      console.debug("lever2 pressed");
       this.switch2 = true;
-      this.levers2.setFrame(1,false, false)
+      this.levers2.setFrame(1, false, false);
       //emmit
       if (this.switch1 && this.switch2) {
         this.scene.physics.world.disable(this.door);
@@ -208,9 +205,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     //emmit
   }
 
-  openFog(){
+  openFog() {
     this.fog.setVisible(0);
     //emmit
   }
-
 }
