@@ -5,6 +5,10 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
 
+    let size = config.size || 16;
+    this.body.setSize(size, size);
+    this.body.offset.set(0, 0);
+
     this.name = config.key;
     this.animSuffix = config.suffix;
     this.speed = config.speed || 80;
@@ -13,8 +17,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.stopped = true;
     this.facing = "up";
 
-
-    this.anims.play("standing" + this.animSuffix);
+    this.anims.play("king-standing");
 
     this.body.setCollideWorldBounds(true);
   }
@@ -43,10 +46,10 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     } else if (this.stopped) {
       let anim = "king-standing";
       this.anims.play(anim, true);
-    } else if (this.facing == "up"){
+    } else if (this.facing == "up") {
       let anim = "king-up";
       this.anims.play(anim, true);
-    } else if (this.facing == "down"){
+    } else if (this.facing == "down") {
       let anim = "king-down";
       this.anims.play(anim, true);
     }

@@ -18,26 +18,10 @@ export default class GameScene extends Phaser.Scene {
     this.socket = io();
 
     this.createMap();
+    this.createProjectiles();
+    this.createCharacters();
 
     this.tab = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-
-    this.fireballs = this.add.group({
-      classType: FireBall,
-      maxSize: 5,
-      runChildUpdate: false,
-    });
-
-    this.iceballs = this.add.group({
-      classType: IceBall,
-      maxSize: 5,
-      runChildUpdate: false,
-    });
-
-    this.arrows = this.add.group({
-      classType: Arrow,
-      maxSize: 5,
-      runChildUpdate: false,
-    });
 
     this.keys = {
       up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
@@ -52,44 +36,6 @@ export default class GameScene extends Phaser.Scene {
       action: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
     };
 
-    this.firegirl = new Character({
-      scene: this,
-      key: "firegirl",
-      x: 209,
-      y: 456,
-      suffix: "-fg",
-      projectiles: this.fireballs,
-    });
-
-    this.wizard = new Character({
-      scene: this,
-      key: "wizard",
-      x: 235,
-      y: 456,
-      suffix: "-wiz",
-      projectiles: this.iceballs,
-      speed: 50,
-    });
-
-    this.archer = new Character({
-      scene: this,
-      key: "archer",
-      x: 183,
-      y: 456,
-      suffix: "-arch",
-      projectiles: this.arrows,
-    });
-
-    this.ninja = new Character({
-      scene: this,
-      key: "ninja",
-      x: 262,
-      y: 456,
-      suffix: "-nj",
-      projectiles: null,
-      speed: 120,
-    });
-
     this.boss = new Boss({
       scene: this,
       key: "king",
@@ -97,7 +43,10 @@ export default class GameScene extends Phaser.Scene {
       y: 406,
       suffix: "-kg",
       speed: 40,
+      size: 55,
     });
+
+    this.enemies = this.add.group();
 
     this.enemy1 = new Enemy({
       scene: this,
@@ -107,25 +56,6 @@ export default class GameScene extends Phaser.Scene {
       suffix: "-sk",
       speed: 50,
     });
-
-    this.enemy2 = new Enemy({
-      scene: this,
-      key: "skeleton",
-      x: 230,
-      y: 350,
-      suffix: "-sk",
-      speed: 50,
-    });
-
-    this.enemy3 = new Enemy({
-      scene: this,
-      key: "skeleton",
-      x: 250,
-      y: 350,
-      suffix: "-sk",
-      speed: 50,
-    });
-
 
     this.map.addWorldCollisionToCharacter(this.firegirl);
     this.map.addWorldCollisionToCharacter(this.wizard);
@@ -285,10 +215,81 @@ export default class GameScene extends Phaser.Scene {
         proj.fire(fireData.x, fireData.y, fireData.direction);
       }
     });
+
+    this.lights.enable().setAmbientColor(0xaaaaaa);
   }
 
   createMap() {
     this.map = new Map(this, "map");
+  }
+
+  createProjectiles() {
+    this.fireballs = this.add.group({
+      classType: FireBall,
+      maxSize: 5,
+      runChildUpdate: false,
+    });
+
+    this.iceballs = this.add.group({
+      classType: IceBall,
+      maxSize: 5,
+      runChildUpdate: false,
+    });
+
+    this.arrows = this.add.group({
+      classType: Arrow,
+      maxSize: 5,
+      runChildUpdate: false,
+    });
+  }
+
+  createCharacters() {
+    this.firegirl = new Character({
+      scene: this,
+      key: "firegirl",
+      x: 209,
+      y: 456,
+      suffix: "-fg",
+      projectiles: this.fireballs,
+      //   lightsource: this.lights
+      //     .addLight(209, 456, 120)
+      //     .setColor(0xe25822)
+      //     .setIntensity(5),
+    });
+
+    this.wizard = new Character({
+      scene: this,
+      key: "wizard",
+      x: 235,
+      y: 456,
+      suffix: "-wiz",
+      projectiles: this.iceballs,
+      speed: 50,
+      //   lightsource: this.lights
+      //     .addLight(235, 456, 120)
+      //     .setColor(0xed6ecef)
+      //     .setIntensity(3),
+    });
+
+    this.archer = new Character({
+      scene: this,
+      key: "archer",
+      x: 183,
+      y: 456,
+      suffix: "-arch",
+      projectiles: this.arrows,
+    });
+
+    this.ninja = new Character({
+      scene: this,
+      key: "ninja",
+      x: 262,
+      y: 456,
+      suffix: "-nj",
+      projectiles: null,
+      speed: 120,
+      size: 13,
+    });
   }
 
   initCamera() {
@@ -366,22 +367,22 @@ export default class GameScene extends Phaser.Scene {
   }
 
   updateEnemies(enem) {
-    let enemie = null;
+    let enemy = null;
     if (enem.name === "skeleton1") {
-      enemie = this.enemy1;
+      enemy = this.enemy1;
     } else if (enem.name === "skeleton2") {
-      enemie = this.enemy2;
+      enemy = this.enemy2;
     } else if (enem.name === "skeleton3") {
-      enemie = this.enemy3;
+      enemy = this.enemy3;
     }
 
-    if (!enemie) {
+    if (!enemy) {
       return;
     }
-    enemie.facing = enem.direction;
-    enemie.setVelocityX(enem.velx);
-    enemie.setVelocityY(enem.vely);
-    enemie.animate();
+    enemy.facing = enem.direction;
+    enemy.setVelocityX(enem.velx);
+    enemy.setVelocityY(enem.vely);
+    enemy.animate();
   }
 
   update(time, delta) {
@@ -400,8 +401,6 @@ export default class GameScene extends Phaser.Scene {
     for (let arrow of this.arrows.children.entries) {
       arrow.update(time, delta);
     }
-
-   
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       this.currentCharacter.stop();

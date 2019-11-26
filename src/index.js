@@ -1,6 +1,6 @@
 import "phaser";
 import "@babel/polyfill";
-import "./assets/css/style.css";
+import "./css/style.css";
 
 import BootScene from "./scenes/BootScene";
 import TitleScene from "./scenes/TitleScene";
