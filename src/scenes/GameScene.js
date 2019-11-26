@@ -397,9 +397,7 @@ export default class GameScene extends Phaser.Scene {
       arrow.update(time, delta);
     }
 
-    if (this.keys.action.isDown) {
-      this.map.removeDoor();
-    }
+   
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       this.currentCharacter.stop();

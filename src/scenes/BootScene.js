@@ -6,6 +6,7 @@ import fireGirlSprites from "../assets/characters/firegirl.png";
 import wizardSprites from "../assets/characters/wizard.png";
 import archerSprites from "../assets/characters/archer.png";
 
+import emptySprite from "../assets/props/emptySprite.png";
 import leverSprites from "../assets/props/lever.png";
 import keySprites from "../assets/props/key.png";
 import chestSprites from "../assets/props/chest.png";
@@ -122,6 +123,11 @@ class BootScene extends Phaser.Scene {
     });
 
     this.load.spritesheet("lever", leverSprites, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("empty", emptySprite, {
       frameWidth: 16,
       frameHeight: 16,
     });

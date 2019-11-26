@@ -50,8 +50,22 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.createStaticLayer("Torches", tiles, 0, 0);
     this.createStaticLayer("AbovePlayer", tiles, 0, 0).setDepth(10);
 
-    this.levers = this.createFromObjects("Interactive", "lever", { key: "lever", frame: 0 }, this.scene);
+    this.bridge = this.createDynamicLayer("Bridge", tiles, 0, 0);
+    this.bridge.setVisible(0);
+    this.bridgeInactive = this.createDynamicLayer("BridgeInactive", tiles, 0, 0);
+
+    this.hole = this.createDynamicLayer("WallHole", tiles, 0, 0);
+    this.wallHole = this.createFromObjects("Interactive", "WallBarrie", { key: "empty", frame: 0 }, this.scene);
+    this.scene.physics.world.enable(this.wallHole);
+    
+    this.levers = this.createFromObjects("Interactive", "lever", { key: "lever", frame: 0 }, this.scene)[0];
     this.scene.physics.world.enable(this.levers);
+
+    this.levers2 = this.createFromObjects("Interactive", "lever2", { key: "lever", frame: 0 }, this.scene)[0];
+    this.scene.physics.world.enable(this.levers2);
+
+    this.button = this.createFromObjects("Interactive", "button", { key: "empty", frame: 0 }, this.scene)[0];
+    this.scene.physics.world.enable(this.button);
 
     this.key = this.createFromObjects("Interactive", "key", { key: "key", frame: 0 }, this.scene)[0];
     this.scene.physics.world.enable(this.key);
@@ -70,7 +84,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     }
 
     this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
-    this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
+    this.fogTreasure = this.createStaticLayer("FogTreasure", tiles, 0, 0);
+    //this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
 
     this.door = this.createFromObjects("Interactive", "door", { key: "door", frame: 0 }, this.scene)[0];
 
@@ -79,14 +94,17 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.door.body.setImmovable();
     this.door.body.moves = false;
 
+    this.bridge.setCollisionByExclusion([-1]);
+    this.bridgeInactive.setCollisionByExclusion([-1]);
     this.river.setCollisionByExclusion([-1]);
     this.walls.setCollisionByExclusion([-1]);
+    this.hole.setCollisionByExclusion([-1]);
 
     this.scene.physics.world.bounds.width = this.widthInPixels;
     this.scene.physics.world.bounds.height = this.heightInPixels;
 
-    this.switch1 = true;
-    this.switch2 = true;
+    this.switch1 = false;
+    this.switch2 = false;
     this.doorClosed = true;
 
     if (this.scene.registry.get("debug") === true) {
@@ -112,6 +130,20 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     char._wallCollider = this.scene.physics.add.collider(char, this.walls);
     char._riverCollider = this.scene.physics.add.collider(char, this.river);
     char._doorCollider = this.scene.physics.add.collider(char, this.door);
+
+    char._lever1Collider = this.scene.physics.add.overlap(char, this.levers, this.removeDoor1, null, this);
+    char._lever2Collider = this.scene.physics.add.overlap(char, this.levers2, this.removeDoor2, null, this);
+
+    char._bridgeCollider = this.scene.physics.add.collider(char, this.bridge);
+    char._bridgeInactiveCollider = this.scene.physics.add.collider(char, this.bridgeInactive);
+
+    if (char.name != "ninja"){
+      console.debug(char.name)
+      char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole);
+    } else {
+      char._fogHoleCollider = this.scene.physics.add.overlap(char, this.wallHole, this.openFog, null, this);
+    }
+    
   }
 
   addWorldCollisionToProjectile(proj) {
@@ -120,9 +152,13 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     const destroyProj = () => {
       proj.destroy();
     };
-
+    
     proj._wallCollider = this.scene.physics.add.collider(proj, this.walls, destroyProj, null, this);
     proj._doorCollider = this.scene.physics.add.collider(proj, this.door, destroyProj, null, this);
+
+    if (proj.name == "arrow"){
+      proj._buttonCollider = this.scene.physics.add.collider(proj, this.button, this.buttonPressed, null, this);
+    }
   }
 
   removeRiverCollisionFromCharacter(char) {
@@ -130,8 +166,51 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     delete char._riverCollider;
   }
 
-  removeDoor() {
-    this.scene.physics.world.disable(this.door);
-    this.door.setFrame(1, false, false);
+  removeDoor1() {
+    if (this.scene.keys.action.isDown) {
+      console.debug("lever1 pressed")
+      this.switch1 = true;
+      this.levers.setFrame(1, false, false)
+      //emmit
+      if (this.switch1 && this.switch2) {
+        this.scene.physics.world.disable(this.door);
+        this.door.setFrame(1, false, false);
+        //emmit
+        this.fogTreasure.setVisible(0);
+        //emmit
+      }
+    }
   }
+
+  removeDoor2() {
+    if (this.scene.keys.action.isDown) {
+      console.debug("lever2 pressed")
+      this.switch2 = true;
+      this.levers2.setFrame(1,false, false)
+      //emmit
+      if (this.switch1 && this.switch2) {
+        this.scene.physics.world.disable(this.door);
+        this.door.setFrame(1, false, false);
+        //emmit
+        this.fogTreasure.setVisible(0);
+        //emmit
+      }
+    }
+  }
+
+  buttonPressed() {
+    this.bridgeInactive.setCollisionByExclusion([0]);
+    this.bridge.setVisible(0);
+    //emmit
+
+    this.bridge.setCollisionByExclusion([0]);
+    this.bridge.setVisible(1);
+    //emmit
+  }
+
+  openFog(){
+    this.fog.setVisible(0);
+    //emmit
+  }
+
 }
