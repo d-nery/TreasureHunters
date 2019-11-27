@@ -39,6 +39,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     super(scene, mapData);
     this.logger = new Logger("Map", "🗺");
 
+    this.door_sound = new Audio('https://freesound.org/people/InspectorJ/sounds/431117/download/431117__inspectorj__door-front-opening-a.wav');
+  
+
     // Custom code
     this.initialize();
   }
@@ -259,6 +262,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
       lever.setFrame("lever/02.png", false, false);
       if (this.levers[0].ok && this.levers[1].ok) {
+        this.door_sound.play()
         this.scene.physics.world.disable(this.door);
         this.door.setFrame("door/open.png", false, false);
         this.fogTreasure.setVisible(0);
