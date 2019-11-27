@@ -246,55 +246,99 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   removeDoor(char, lever) {
     if (Phaser.Input.Keyboard.JustDown(this.scene.keys.action)) {
-      lever.ok = true;
-      console.debug(char.name);
-
-      lever.setFrame("lever/02.png", false, false);
-      if (this.levers[0].ok && this.levers[1].ok) {
-        this.door_sound.play();
-        this.scene.physics.world.disable(this.door);
-        this.door.setFrame("door/open.png", false, false);
-        this.fogTreasure.setVisible(0);
-        this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
+      let levernum
+      if (lever == this.levers[0]){
+        levernum = 0
       } else {
-        this.hud.showInfoDialog(char.name, "Nada aconteceu. Parece que há outra alavanca escondida por ai.");
+        levernum = 1
       }
+      this.removeDoor_actions(char,levernum);
+      let obj = {char: char, lever: levernum};
+     // obj.char = char;
+      //obj.lever = lever;
+      if ((!this.levers[0].ok && this.levers[1].ok) || (this.levers[0].ok && !this.levers[1].ok)) {
+        this.hud.showInfoDialog(char.name, "Uma alavanca foi ativada mas nada aconteceu.");
+      }
+      this.socket.emit("doorOpen", obj);
+      
     }
   }
 
+  removeDoor_actions(char, lever){
+    if (!this.levers[0].ok && !this.levers[1].ok) {
+      this.hud.showInfoDialog(char.name, "Ativei a alavanca");
+    }
+
+    if (lever == 0){
+      this.levers[0].ok = true;
+      this.levers[0].setFrame("lever/02.png", false, false);
+    }else {
+      this.levers[1].ok = true;
+      this.levers[1].setFrame("lever/02.png", false, false);
+    }
+    
+    console.debug(char.name,this.socket);
+    
+
+    if (this.levers[0].ok && this.levers[1].ok) {
+      this.door_sound.play();
+      this.scene.physics.world.disable(this.door);
+      this.door.setFrame("door/open.png", false, false);
+      this.fogTreasure.setVisible(0);
+      this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
+  }
+}
+
   getKey(char) {
     if (this.hasKey == "" && this.scene.keys.action.isDown) {
-      this.hasKey = char.name;
+      this.socket.emit("pickKey", char);
+    }
+  }
+
+  getKey_actions(char) {
+    this.hasKey = char.name;
       this.key.setVisible(0);
       this.hud.showInfoDialog(char.name, "Peguei a chave!");
-    }
   }
 
   openChest(char) {
     this.logger.debug("try open");
     if (this.scene.keys.action.isDown) {
       console.debug(char.name, this.hasKey);
-      if (char.name == this.hasKey) {
-        this.chest.setFrame("chest/03.png", false, false);
-        console.debug("haskey");
-        this.hud.showInfoDialog(char.name, "O baú abriu");
-        //bau na animaçao aberto
-      } else {
+      if (char.name != this.hasKey) {
         console.debug("nokey");
         this.hud.showInfoDialog(char.name, "Precisamos de uma chave");
+      } else {
+        this.socket.emit("chest", char)
       }
     }
   }
 
+  openChest_actions(char) {
+
+        this.chest.setFrame("chest/03.png", false, false);
+        console.debug("haskey");
+        this.hud.showInfoDialog(char.name, "O baú abriu");
+  
+  }
+
   buttonPressed(char) {
+    this.socket.emit("pressButton", char);
+  }
+
+  buttonPressed_actions(char) {
     this.scene.physics.world.disable(this.bridge);
     this.bridge.setFrame("bridge/01.png", false, false);
     this.hud.showInfoDialog("archer", "Agora podemos atravessar pela ponte");
   }
 
-  openFog(char) {
+  openFog(char){
+    this.socket.emit("fog")
+  }
+
+  openFog_actions() {
     this.fog.setVisible(0);
-    //emmit
+    this.hud.showInfoDialog("ninja", "Achei algo aqui!");
   }
 
   bridgeFala(char) {
@@ -313,5 +357,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     if (this.scene.keys.action.isDown) {
       this.hud.showInfoDialog("ninja", "Esse buraco parece do meu tamanho...");
     }
+  }
+
+  setSocket(socket){
+    this.socket = socket
   }
 }
