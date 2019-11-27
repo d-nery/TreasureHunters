@@ -290,7 +290,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 }
 
   getKey(char) {
+    
     if (this.hasKey == "" && this.scene.keys.action.isDown) {
+      this.getKey_actions(char)
       this.socket.emit("pickKey", char);
     }
   }
@@ -309,6 +311,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
         console.debug("nokey");
         this.hud.showInfoDialog(char.name, "Precisamos de uma chave");
       } else {
+        this.openChest_actions(char)
         this.socket.emit("chest", char)
       }
     }
@@ -324,6 +327,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   buttonPressed(char) {
     this.socket.emit("pressButton", char);
+    this.buttonPressed_actions(char);
   }
 
   buttonPressed_actions(char) {
@@ -333,7 +337,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   }
 
   openFog(char){
-    this.socket.emit("fog")
+    this.openFog_actions();
+    this.socket.emit("fog");
   }
 
   openFog_actions() {
