@@ -20,6 +20,10 @@ export default class GameScene extends Phaser.Scene {
     this.socket = data.socket;
     this.isMaster = data.isMaster;
     this.charName = data.initialChar;
+    this.firegirlOut = 0;
+    this.wizardOut = 0;
+    this.ninjaOut = 0;
+    this.archerOut = 0;
   }
 
   create() {
@@ -113,6 +117,8 @@ export default class GameScene extends Phaser.Scene {
 
       this.updateOtherChar(char);
     });
+
+    
 
     this.socket.on("playerFired", fireData => {
       this.logger.debug(`${fireData.who} has fired at (${fireData.x}, ${fireData.y})!`);
@@ -396,7 +402,7 @@ export default class GameScene extends Phaser.Scene {
       this.currentCharacter.reset();
     };
 
-    this.physics.add.overlap(this.characters, this.boss, onMeetEnemy, null, this);
+    //this.physics.add.overlap(this.characters, this.boss, onMeetEnemy, null, this);
     this.physics.add.overlap(this.characters, this.enemies, onMeetEnemy, null, this);
 
     const onProj = (enemy, proj) => {
@@ -493,6 +499,33 @@ export default class GameScene extends Phaser.Scene {
       this.map.openChest_actions(char)
     });
 
+    this.socket.on("charExit", char => {
+      if (this.map.bau) {
+        if (char.name == "firegirl") {
+          this.firegirlOut = 1;
+        } else if (char.name == "wizard") {
+          this.wizardOut = 1;
+        } else if (char.name == "ninja") {
+          this.ninjaOut = 1;
+        } else if (char.name == "archer") {
+          this.archerOut = 1;
+        }
+    }
+    });
+
+    this.socket.on("charnotExit", char => {
+      if (char.name == "firegirl") {
+        this.firegirlOut = 0;
+        
+      } else if (char.name == "wizard") {
+        this.wizardOut = 0;
+      } else if (char.name == "ninja") {
+        this.ninjaOut = 0;
+      } else if (char.name == "archer") {
+        this.archerOut = 0;
+      }
+    });
+
     if (this.currentCharacter == null) {
       return;
     }
@@ -528,5 +561,35 @@ export default class GameScene extends Phaser.Scene {
     if (this.currentCharacter.fired) {
       this.socket.emit("fired", this.currentCharacter.getLastFireData());
     }
+    if(this.archerOut && this.ninjaOut && this.wizardOut && this.firegirlOut ) {
+      this.logger.info("Finished GameScene, going to EndScene");
+      this.scene.start("EndScene");
+      //this.hud.showInfoDialog("ninja", "booa saímos!");
+    }
+    
+    if (this.currentCharacter.x > 180 && this.currentCharacter.x < 250 && this.currentCharacter.y < 510 ) {
+      if (this.map.bau) {
+        if (this.currentCharacter.name == "firegirl") {
+          this.firegirlOut = 1;
+        } else if (this.currentCharacter.name == "wizard") {
+          this.wizardOut = 1;
+        } else if (this.currentCharacter.name == "ninja") {
+          this.ninjaOut = 1;
+        } else if (this.currentCharacter.name == "archer") {
+          this.archerOut = 1;
+        }
+      }
+    } else {
+      if (this.currentCharacter.name == "firegirl") {
+        this.firegirlOut = 0;
+      } else if (this.currentCharacter.name == "wizard") {
+        this.wizardOut = 0;
+      } else if (this.currentCharacter.name == "ninja") {
+        this.ninjaOut = 0;
+      } else if (this.currentCharacter.name == "archer") {
+        this.archerOut = 0;
+      }
+    }
+
   }
 }

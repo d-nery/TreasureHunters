@@ -95,6 +95,13 @@ io.on("connection", socket => {
         char.stopped = movementData.stopped;
 
         socket.broadcast.emit("playerMoved", char);
+      
+          if (char.x > 180 && char.x < 250 && char.y < 510 ) {
+            socket.broadcast.emit("charExit", char);
+          } else {
+            socket.broadcast.emit("charnotExit", char);
+          }
+        
       });
 
       socket.on("playerSwitch", () => {

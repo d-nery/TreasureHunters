@@ -52,6 +52,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
     this.hud = this.scene.scene.get("HUDScene");
     this.hasKey = "";
+    this.bau = 0;
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
@@ -321,7 +322,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
         this.chest.setFrame("chest/03.png", false, false);
         console.debug("haskey");
-        this.hud.showInfoDialog(char.name, "O baú abriu");
+        this.hud.showInfoDialog(char.name, "O baú abriu. Bora vazar daqui!");
+        this.bau = 1;
   
   }
 
