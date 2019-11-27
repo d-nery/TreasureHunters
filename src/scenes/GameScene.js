@@ -35,7 +35,7 @@ export default class GameScene extends Phaser.Scene {
       // Creates all enemies and send their information to the server
       this.createEnemies();
     } else {
-      //   this.registerEnemyUpdate();
+      this.registerEnemyUpdate();
     }
 
     this.addAllEnemyCollisions();
@@ -45,6 +45,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.hud.events.on("create", () => {
       this.hud.showDialog(this.currentCharacter.name);
+      this.hud.placeThumbnails(this.currentCharacter.name);
     });
 
     this.socket.on("allCharacters", characters => {
@@ -281,7 +282,6 @@ export default class GameScene extends Phaser.Scene {
 
     let spawnArea = this.map.spawnArea;
     let rect = Phaser.Geom.Polygon.GetAABB(spawnArea);
-    this.logger.debug(rect);
 
     let minX = rect.x;
     let maxX = rect.x + rect.width;
@@ -315,6 +315,66 @@ export default class GameScene extends Phaser.Scene {
 
     this.map.addWorldCollisionToEnemy(this.boss);
     this.map.addWorldCollisionToEnemy(this.enemies);
+
+    this.enemyMoveTimer = this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        for (let enemy of this.enemies.children.entries) {
+          enemy.moveRandom();
+        }
+      },
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.spawnNewEnemyTimer = this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        let spawnArea = this.map.spawnArea;
+        let rect = Phaser.Geom.Polygon.GetAABB(spawnArea);
+
+        let minX = rect.x;
+        let maxX = rect.x + rect.width;
+        let minY = rect.y;
+        let maxY = rect.y + rect.height;
+
+        let newEnemy = this.enemies.get();
+
+        if (newEnemy) {
+          let newX = Phaser.Math.Between(minX, maxX);
+          let newY = Phaser.Math.Between(minY, maxY);
+
+          while (!spawnArea.contains(newX, newY)) {
+            newX = Phaser.Math.Between(minX, maxX);
+            newY = Phaser.Math.Between(minY, maxY);
+          }
+
+          newEnemy.setPosition(newX, newY);
+        }
+      },
+      callbackScope: this,
+      loop: true,
+    });
+  }
+
+  registerEnemyUpdate() {
+    this.logger.debug("Creating Enemies");
+
+    this.boss = new Boss({
+      scene: this,
+      key: "king",
+      x: 432,
+      y: 77,
+      suffix: "-kg",
+      speed: 40,
+      size: 55,
+    });
+
+    this.enemies = this.add.group({
+      classType: Skeleton,
+      maxSize: 20,
+      runChildUpdate: false,
+    });
   }
 
   addAllEnemyCollisions() {
@@ -342,6 +402,9 @@ export default class GameScene extends Phaser.Scene {
 
       if (proj.name === "iceball") {
         enemy.freeze();
+        proj.destroy();
+      } else if (proj.name === "fireball") {
+        enemy.kill();
         proj.destroy();
       }
     };
@@ -407,38 +470,6 @@ export default class GameScene extends Phaser.Scene {
     character.animate();
   }
 
-  onHitEnemy(enemy, projectile) {
-    this.logger.debug("The enemy has been slain!");
-    //this.socket.emit("enemyHit", enemy);
-  }
-
-  onFreezeEnemy(enemy, projectile) {
-    this.logger.debug("The boss is frozen solid!");
-    enemy.freeze = true;
-    //this.socket.emit("freezeEnemy", boss);
-  }
-
-  onHitBoss(boss, projectile) {
-    this.logger.debug("Not very effective!");
-  }
-
-  updateEnemies(enem) {
-    let enemy = null;
-    if (enem.name === "skeleton1") {
-      enemy = this.enemy1;
-    } else if (enem.name === "skeleton2") {
-    } else if (enem.name === "skeleton3") {
-    }
-
-    if (!enemy) {
-      return;
-    }
-    enemy.facing = enem.direction;
-    enemy.setVelocityX(enem.velx);
-    enemy.setVelocityY(enem.vely);
-    enemy.animate();
-  }
-
   update(time, delta) {
     if (this.currentCharacter == null) {
       return;
@@ -454,6 +485,10 @@ export default class GameScene extends Phaser.Scene {
 
     for (let arrow of this.arrows.children.entries) {
       arrow.update(time, delta);
+    }
+
+    for (let enemy of this.enemies.children.entries) {
+      enemy.update(time, delta);
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {

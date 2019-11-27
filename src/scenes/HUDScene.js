@@ -146,7 +146,7 @@ export default class HUDScene extends Phaser.Scene {
     this.showingDialog = true;
     let textX = mapCanvasValueToGameScale(this, 16 * 8);
     let textY = mapCanvasValueToGameScale(this, 16 * 45);
-    let textSize = mapCanvasValueToGameScale(this, 26) + "px";
+    let textSize = mapCanvasValueToGameScale(this, 36) + "px";
     this.currentFrame = this.frames[char];
 
     this.tweens.add({

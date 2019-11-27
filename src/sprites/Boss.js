@@ -17,6 +17,8 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.stopped = true;
     this.facing = "up";
 
+    this.life = 1000;
+
     this.anims.play("king-standing");
 
     this.body.setCollideWorldBounds(true);
@@ -39,11 +41,24 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     };
   }
 
+  freeze() {
+    if (!this.isFrozen()) {
+      this.anims.play("king-freeze", true);
+    }
+
+    this.freezeTime = 2500;
+  }
+
+  isFrozen() {
+    return this.freezeTime > 0;
+  }
+
   animate() {
-    if (this.freeze) {
-      let anim = "king-freeze";
-      this.anims.play(anim, true);
-    } else if (this.stopped) {
+    if (this.isFrozen()) {
+      return;
+    }
+
+    if (this.stopped) {
       let anim = "king-standing";
       this.anims.play(anim, true);
     } else if (this.facing == "up") {
@@ -52,6 +67,30 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     } else if (this.facing == "down") {
       let anim = "king-down";
       this.anims.play(anim, true);
+    }
+  }
+
+  update(time, delta) {
+    this.freezeTime -= delta;
+
+    if (this.isFrozen()) {
+      this.body.setImmovable(true);
+      this.body.moves = false;
+      return;
+    }
+
+    this.body.setImmovable(false);
+    this.body.moves = true;
+
+    this.animate();
+  }
+
+  kill(amt = 100) {
+    this.life -= amt;
+
+    if (this.life <= 0) {
+      this.setActive(false);
+      this.destroy();
     }
   }
 }

@@ -39,8 +39,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     super(scene, mapData);
     this.logger = new Logger("Map", "🗺");
 
-    this.door_sound = new Audio('https://freesound.org/people/InspectorJ/sounds/431117/download/431117__inspectorj__door-front-opening-a.wav');
-  
+    this.door_sound = new Audio(
+      "https://freesound.org/people/InspectorJ/sounds/431117/download/431117__inspectorj__door-front-opening-a.wav"
+    );
 
     // Custom code
     this.initialize();
@@ -136,18 +137,6 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
       font.anims.play("firefont");
       font.setPipeline("Light2D");
     }
-
-    // this.animriver = this.createFromObjects(
-    //   "Interactive",
-    //   "river",
-    //   { key: "spriteAtlas", frame: "water/river/01.png" },
-    //   this.scene
-    // );
-
-    // for (let riv of this.animriver) {
-    //   riv.anims.play("river");
-    //   riv.setPipeline("Light2D");
-    // }
 
     this.riverfonts = this.createFromObjects(
       "Interactive",
@@ -262,13 +251,13 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
       lever.setFrame("lever/02.png", false, false);
       if (this.levers[0].ok && this.levers[1].ok) {
-        this.door_sound.play()
+        this.door_sound.play();
         this.scene.physics.world.disable(this.door);
         this.door.setFrame("door/open.png", false, false);
         this.fogTreasure.setVisible(0);
-        this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo");
+        this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
       } else {
-        this.hud.showInfoDialog(char.name, "Nada aconteceu. Parece que há outra alavanca escondida por aí");
+        this.hud.showInfoDialog(char.name, "Nada aconteceu. Parece que há outra alavanca escondida por ai.");
       }
     }
   }
@@ -278,12 +267,11 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
       this.hasKey = char.name;
       this.key.setVisible(0);
       this.hud.showInfoDialog(char.name, "Peguei a chave!");
-      //emmit o show
     }
   }
 
   openChest(char) {
-    console.debug("try open");
+    this.logger.debug("try open");
     if (this.scene.keys.action.isDown) {
       console.debug(char.name, this.hasKey);
       if (char.name == this.hasKey) {

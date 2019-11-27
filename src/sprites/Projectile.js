@@ -20,7 +20,7 @@ export default class Projectile extends Phaser.GameObjects.Sprite {
 
   fire(x, y, d) {
     console.log("Firing projectile", this.name, Math.round(x), Math.round(y), d);
-    this.music.play();
+    // this.music.play();
 
     this.direction = d;
 
