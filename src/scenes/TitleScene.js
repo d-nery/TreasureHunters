@@ -11,6 +11,9 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create() {
+    this.bgMusic = this.sound.addAudioSprite("sfx");
+    this.bgMusic.play("bg_loop", { loop: true });
+
     this.socket = io();
 
     this.socket.on("denied", () => {
@@ -47,6 +50,9 @@ export default class TitleScene extends Phaser.Scene {
     this.socket.emit("want-in");
 
     this.socket.once("in-ok", data => {
+      this.bgMusic.stop();
+      this.bgMusic.destroy();
+
       this.scene.start("GameScene", {
         initialChar: data.charName,
         socket: this.socket,

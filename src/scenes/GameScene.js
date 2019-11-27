@@ -91,8 +91,6 @@ export default class GameScene extends Phaser.Scene {
         this.currentCharacter = this.archer;
       }
 
-
-
       this.tweens.add({
         targets: this.cam,
         scrollX: this.currentCharacter.getCenter().x - 627,
@@ -144,6 +142,10 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.emit("game-ready");
+    this.sfx = this.sound.addAudioSprite("sfx");
+
+    this.bgMusic = this.sound.addAudioSprite("sfx");
+    this.bgMusic.play("bg_loop2", { loop: true });
 
     this.lights.enable().setAmbientColor(0xaaaaaa);
   }
@@ -330,6 +332,7 @@ export default class GameScene extends Phaser.Scene {
         for (let enemy of this.enemies.children.entries) {
           enemy.moveRandom();
         }
+        this.boss.moveRandom();
       },
       callbackScope: this,
       loop: true,
@@ -358,6 +361,13 @@ export default class GameScene extends Phaser.Scene {
           }
 
           newEnemy.setPosition(newX, newY);
+          this.tweens.add({
+            targets: newEnemy,
+            alpha: { from: 1, to: 0 },
+            yoyo: true,
+            duration: 50,
+            repeat: 3,
+          });
         }
       },
       callbackScope: this,
@@ -407,6 +417,7 @@ export default class GameScene extends Phaser.Scene {
 
     const onProj = (enemy, proj) => {
       this.logger.debug("Hit enemy!", enemy.name, proj.name);
+      this.sfx.play("hit");
 
       if (proj.name === "iceball") {
         enemy.freeze();
@@ -414,6 +425,13 @@ export default class GameScene extends Phaser.Scene {
       } else if (proj.name === "fireball") {
         enemy.kill();
         proj.destroy();
+      } else if (proj.name === "arrow") {
+        if (enemy.name === "skeleton") {
+          proj.destroy();
+        } else if (enemy.name === "boss") {
+          enemy.kill();
+          proj.destroy();
+        }
       }
     };
 
@@ -480,11 +498,11 @@ export default class GameScene extends Phaser.Scene {
 
   update(time, delta) {
     this.socket.on("doorOpen", obj => {
-      this.map.removeDoor_actions(obj.char,obj.lever)
+      this.map.removeDoor_actions(obj.char, obj.lever);
     });
 
     this.socket.on("pickKey", char => {
-      this.map.getKey_actions(char)
+      this.map.getKey_actions(char);
     });
 
     this.socket.on("pressButton", char => {
@@ -496,7 +514,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.on("chest", char => {
-      this.map.openChest_actions(char)
+      this.map.openChest_actions(char);
     });
 
     this.socket.on("charExit", char => {
@@ -545,6 +563,8 @@ export default class GameScene extends Phaser.Scene {
     for (let enemy of this.enemies.children.entries) {
       enemy.update(time, delta);
     }
+
+    this.boss.update(time, delta);
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       this.currentCharacter.stop();

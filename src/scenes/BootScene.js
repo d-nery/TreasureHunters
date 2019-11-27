@@ -5,23 +5,6 @@ import tilesN from "../assets/map/new_spritesheet_n.png";
 import map from "../assets/map/map.json";
 import textures from "../assets/textures/textures.json";
 
-// import ninjaSprites from "../assets/characters/ninja.png";
-// import fireGirlSprites from "../assets/characters/firegirl.png";
-// import wizardSprites from "../assets/characters/wizard.png";
-// import archerSprites from "../assets/characters/archer.png";
-
-// import emptySprite from "../assets/props/emptySprite.png";
-// import leverSprites from "../assets/props/lever.png";
-// import leverSpritesN from "../assets/props/lever_n.png";
-// import keySprites from "../assets/props/key.png";
-// import chestSprites from "../assets/props/chest.png";
-// import fireFontSprites from "../assets/props/firefont.png";
-// import doorSprites from "../assets/props/door.png";
-
-// import fireball from "../assets/projectiles/fireball.png";
-// import iceball from "../assets/projectiles/iceball.png";
-// import arrow from "../assets/projectiles/arrow.png";
-
 import logo from "../assets/ui/TreasureHunters.png";
 import crew from "../assets/ui/tchurma.png";
 
@@ -39,9 +22,6 @@ import ninjaFrame from "../assets/ui/ninja-speaking-frame.png";
 import wizardFrame from "../assets/ui/wizard-speaking-frame.png";
 import firegirlFrame from "../assets/ui/firegirl-speaking-frame.png";
 import archerFrame from "../assets/ui/archer-speaking-frame.png";
-
-// import skeletonSprites from "../assets/enemies/skeleton.png";
-// import kingSprites from "../assets/enemies/king.png";
 
 import createAnimations from "../helpers/animations";
 import { DEBUG } from "../index";
@@ -97,6 +77,9 @@ class BootScene extends Phaser.Scene {
     this.load.tilemapTiledJSON("map", map);
 
     this.load.multiatlas("spriteAtlas", "textures.json");
+    this.load.audioSprite("sfx", "gamesfx.json", undefined, {
+      instances: 5,
+    });
   }
 }
 

@@ -59,6 +59,7 @@ module.exports = {
       excludeChunks: ["server"],
     }),
     new CopyWebpackPlugin([{ from: "./src/assets/textures" }]),
+    new CopyWebpackPlugin([{ from: "./src/assets/audio" }]),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
   ],

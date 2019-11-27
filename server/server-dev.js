@@ -140,15 +140,15 @@ io.on("connection", socket => {
   });
 
   socket.on("doorOpen", obj => {
-    socket.broadcast.emit("doorOpen",obj);
+    socket.broadcast.emit("doorOpen", obj);
   });
 
   socket.on("pickKey", char => {
-    socket.broadcast.emit("pickKey",char);
+    socket.broadcast.emit("pickKey", char);
   });
 
   socket.on("pressButton", char => {
-    socket.broadcast.emit("pressButton",char);
+    socket.broadcast.emit("pressButton", char);
   });
 
   socket.on("fog", () => {
@@ -156,10 +156,9 @@ io.on("connection", socket => {
   });
 
   socket.on("chest", char => {
-    socket.broadcast.emit("chest",char);
+    socket.broadcast.emit("chest", char);
   });
-  
-  
+
   // when a player disconnects, remove them from our players object
   socket.on("disconnect", () => {
     log("Disconnected");

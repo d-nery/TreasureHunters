@@ -17,6 +17,7 @@ export default class Skeleton extends Phaser.GameObjects.Sprite {
     this.freezeTime = 0;
 
     this.anims.play("standing-sk");
+    this.setPipeline("Light2D");
 
     this.body.setCollideWorldBounds(true);
   }

@@ -167,7 +167,7 @@ export default class HUDScene extends Phaser.Scene {
       },
     });
 
-    this.clearTimeout = setTimeout(() => this.clearDialog(), 5000);
+    this.clearTimeout = setTimeout(() => this.clearDialog(), 3000);
   }
 
   clearDialog() {

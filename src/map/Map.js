@@ -39,10 +39,6 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     super(scene, mapData);
     this.logger = new Logger("Map", "🗺");
 
-    this.door_sound = new Audio(
-      "https://freesound.org/people/InspectorJ/sounds/431117/download/431117__inspectorj__door-front-opening-a.wav"
-    );
-
     // Custom code
     this.initialize();
   }
@@ -65,8 +61,14 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
       .setPipeline("Light2D");
 
     this.hole = this.createDynamicLayer("WallHole", tiles, 0, 0);
-    this.wallHole = this.createFromObjects("Interactive", "WallBarrie", { key: "null", frame: "" }, this.scene);
+    this.wallHole = this.createFromObjects(
+      "Interactive",
+      "WallBarrie",
+      { key: "spriteAtlas", frame: "hole/01.png" },
+      this.scene
+    )[0];
     this.scene.physics.world.enable(this.wallHole);
+    this.wallHole.setPipeline("Light2D");
 
     this.levers = this.createFromObjects(
       "Interactive",
@@ -113,8 +115,16 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.bridge.body.setImmovable();
     this.bridge.body.moves = false;
 
-    this.button = this.createFromObjects("Interactive", "button", { key: "null", frame: 0 }, this.scene)[0];
+    this.button = this.createFromObjects(
+      "Interactive",
+      "button",
+      { key: "spriteAtlas", frame: "button/01.png" },
+      this.scene
+    )[0];
     this.scene.physics.world.enable(this.button);
+    this.button.body.setImmovable();
+    this.button.body.moves = false;
+    this.button.setPipeline("Light2D");
 
     this.key = this.createFromObjects("Interactive", "key", { key: "spriteAtlas", frame: "key/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.key);
@@ -153,7 +163,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
     this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
     this.fogTreasure = this.createStaticLayer("FogTreasure", tiles, 0, 0);
-    //this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
+    this.fog50 = this.createDynamicLayer("Fog_50", tiles, 0, 0);
+    this.fog50.setAlpha(0.9);
 
     this.door = this.createFromObjects(
       "Interactive",
@@ -247,61 +258,41 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   removeDoor(char, lever) {
     if (Phaser.Input.Keyboard.JustDown(this.scene.keys.action)) {
-      let levernum
-      if (lever == this.levers[0]){
-        levernum = 0
-      } else {
-        levernum = 1
+      lever.setFrame("lever/02.png", false, false);
+
+      if (!this.levers[0].ok && !this.levers[1].ok) {
+        this.hud.showInfoDialog(char.name, "Ativei a alavanca, mas nada aconteceu...");
       }
-      this.removeDoor_actions(char,levernum);
-      let obj = {char: char, lever: levernum};
-     // obj.char = char;
-      //obj.lever = lever;
-      if ((!this.levers[0].ok && this.levers[1].ok) || (this.levers[0].ok && !this.levers[1].ok)) {
-        this.hud.showInfoDialog(char.name, "Uma alavanca foi ativada mas nada aconteceu.");
+
+      lever.ok = true;
+
+      //   if ((!this.levers[0].ok && this.levers[1].ok) || (this.levers[0].ok && !this.levers[1].ok)) {
+      //     this.hud.showInfoDialog(char.name, "Uma alavanca foi ativada mas nada aconteceu.");
+      //   }
+
+      if (this.levers[0].ok && this.levers[1].ok) {
+        this.scene.physics.world.disable(this.door);
+        this.door.setFrame("door/open.png", false, false);
+        this.fogTreasure.setVisible(0);
+        this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
       }
-      this.socket.emit("doorOpen", obj);
-      
+
+      //     let obj = {char: char, lever: levernum};
+      //   this.socket.emit("doorOpen", obj);
     }
   }
-
-  removeDoor_actions(char, lever){
-    if (!this.levers[0].ok && !this.levers[1].ok) {
-      this.hud.showInfoDialog(char.name, "Ativei a alavanca");
-    }
-
-    if (lever == 0){
-      this.levers[0].ok = true;
-      this.levers[0].setFrame("lever/02.png", false, false);
-    }else {
-      this.levers[1].ok = true;
-      this.levers[1].setFrame("lever/02.png", false, false);
-    }
-    
-    console.debug(char.name,this.socket);
-    
-
-    if (this.levers[0].ok && this.levers[1].ok) {
-      this.door_sound.play();
-      this.scene.physics.world.disable(this.door);
-      this.door.setFrame("door/open.png", false, false);
-      this.fogTreasure.setVisible(0);
-      this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
-  }
-}
 
   getKey(char) {
-    
     if (this.hasKey == "" && this.scene.keys.action.isDown) {
-      this.getKey_actions(char)
+      this.getKey_actions(char);
       this.socket.emit("pickKey", char);
     }
   }
 
   getKey_actions(char) {
     this.hasKey = char.name;
-      this.key.setVisible(0);
-      this.hud.showInfoDialog(char.name, "Peguei a chave!");
+    this.key.setVisible(0);
+    this.hud.showInfoDialog(char.name, "Peguei a chave!");
   }
 
   openChest(char) {
@@ -312,11 +303,13 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
         console.debug("nokey");
         this.hud.showInfoDialog(char.name, "Precisamos de uma chave");
       } else {
-        this.openChest_actions(char)
-        this.socket.emit("chest", char)
+        this.chest.setFrame("chest/03.png", false, false);
+        this.hud.showInfoDialog(char.name, "O baú abriu!!");
+        this.socket.emit("chest", char);
       }
     }
   }
+
 
   openChest_actions(char) {
 
@@ -327,24 +320,26 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   
   }
 
-  buttonPressed(char) {
-    this.socket.emit("pressButton", char);
-    this.buttonPressed_actions(char);
-  }
 
-  buttonPressed_actions(char) {
+  buttonPressed(proj) {
+    this.socket.emit("pressButton", proj);
+
     this.scene.physics.world.disable(this.bridge);
+    this.scene.physics.world.disable(this.button);
     this.bridge.setFrame("bridge/01.png", false, false);
+    this.button.setFrame("button/02.png", false, false);
     this.hud.showInfoDialog("archer", "Agora podemos atravessar pela ponte");
+    proj.destroy();
   }
 
-  openFog(char){
+  openFog(char) {
     this.openFog_actions();
     this.socket.emit("fog");
   }
 
   openFog_actions() {
     this.fog.setVisible(0);
+    this.fog50.setVisible(0);
     this.hud.showInfoDialog("ninja", "Achei algo aqui!");
   }
 
@@ -366,7 +361,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     }
   }
 
-  setSocket(socket){
-    this.socket = socket
+  setSocket(socket) {
+    this.socket = socket;
   }
 }

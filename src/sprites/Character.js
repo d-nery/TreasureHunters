@@ -31,10 +31,6 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.setPipeline("Light2D");
 
     this.body.setCollideWorldBounds(true);
-
-    this.music = new Audio(
-      "https://freesound.org/people/nathanaelj83/sounds/145242/download/145242__nathanaelj83__water-step.wav"
-    );
   }
 
   update(keys, time, delta) {

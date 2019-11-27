@@ -13,14 +13,10 @@ export default class Projectile extends Phaser.GameObjects.Sprite {
     this.light = null;
 
     this.body.setCollideWorldBounds(true);
-    // this.scene.map.addWorldCollisionToProjectile(this);
-
-    //this.load.audio("fire_shot_sound", ["../assets/sounds/fire_shot_sound.wav"]);  // urls: an array of file url
   }
 
   fire(x, y, d) {
     console.log("Firing projectile", this.name, Math.round(x), Math.round(y), d);
-    // this.music.play();
 
     this.direction = d;
 
