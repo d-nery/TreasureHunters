@@ -144,4 +144,47 @@ export default class HUDScene extends Phaser.Scene {
       });
     }, 5000);
   }
+
+
+  showInfoDialog(char,text) {
+    let textX = mapCanvasValueToGameScale(this, 16 * 8);
+    let textY = mapCanvasValueToGameScale(this, 16 * 45);
+    let textSize = mapCanvasValueToGameScale(this, 26) + "px";
+
+    this.tweens.add({
+      targets: this.frames[char],
+      alpha: { from: 0, to: 1 },
+      ease: "Linear",
+      duration: 100,
+      repeat: 0,
+      yoyo: false,
+      onStart: () => this.frames[char].setActive(true).setVisible(true),
+      onComplete: () => {
+        this.renderedText = this.add
+          .text(textX, textY, text, {
+            fontFamily: "Dungeon",
+            fontSize: textSize,
+          })
+          .setOrigin(0);
+      },
+    });
+
+    setTimeout(() => {
+      this.tweens.add({
+        targets: this.frames[char],
+        alpha: { from: 1, to: 0 },
+        ease: "Linear",
+        duration: 100,
+        repeat: 0,
+        yoyo: false,
+        onStart: () => {
+          this.renderedText.destroy();
+        },
+        onComplete: () => {
+          this.frames[char].setActive(false).setVisible(false);
+
+        },
+      });
+    }, 5000);
+  }
 }
