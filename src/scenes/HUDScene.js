@@ -12,6 +12,7 @@ export default class HUDScene extends Phaser.Scene {
     this.scene.bringToTop();
     this.loadImages();
     this.gameScene = this.scene.get("GameScene");
+    this.showingDialog = false;
   }
 
   loadImages() {
@@ -105,18 +106,25 @@ export default class HUDScene extends Phaser.Scene {
   }
 
   showDialog(char) {
+    if (this.showingDialog) {
+      return;
+    }
+
+    this.showingDialog = true;
     let textX = mapCanvasValueToGameScale(this, 16 * 8);
     let textY = mapCanvasValueToGameScale(this, 16 * 45);
     let textSize = mapCanvasValueToGameScale(this, 26) + "px";
 
+    this.currentFrame = this.frames[char];
+
     this.tweens.add({
-      targets: this.frames[char],
+      targets: this.currentFrame,
       alpha: { from: 0, to: 1 },
       ease: "Linear",
       duration: 100,
       repeat: 0,
       yoyo: false,
-      onStart: () => this.frames[char].setActive(true).setVisible(true),
+      onStart: () => this.currentFrame.setActive(true).setVisible(true),
       onComplete: () => {
         this.renderedText = this.add
           .text(textX, textY, "Hello World", {
@@ -127,29 +135,19 @@ export default class HUDScene extends Phaser.Scene {
       },
     });
 
-    setTimeout(() => {
-      this.tweens.add({
-        targets: this.frames[char],
-        alpha: { from: 1, to: 0 },
-        ease: "Linear",
-        duration: 100,
-        repeat: 0,
-        yoyo: false,
-        onStart: () => {
-          this.renderedText.destroy();
-        },
-        onComplete: () => {
-          this.frames[char].setActive(false).setVisible(false);
-        },
-      });
-    }, 5000);
+    this.clearTimeout = setTimeout(() => this.clearDialog(), 5000);
   }
 
+  showInfoDialog(char, text) {
+    if (this.showingDialog) {
+      return;
+    }
 
-  showInfoDialog(char,text) {
+    this.showingDialog = true;
     let textX = mapCanvasValueToGameScale(this, 16 * 8);
     let textY = mapCanvasValueToGameScale(this, 16 * 45);
     let textSize = mapCanvasValueToGameScale(this, 26) + "px";
+    this.currentFrame = this.frames[char];
 
     this.tweens.add({
       targets: this.frames[char],
@@ -169,22 +167,24 @@ export default class HUDScene extends Phaser.Scene {
       },
     });
 
-    setTimeout(() => {
-      this.tweens.add({
-        targets: this.frames[char],
-        alpha: { from: 1, to: 0 },
-        ease: "Linear",
-        duration: 100,
-        repeat: 0,
-        yoyo: false,
-        onStart: () => {
-          this.renderedText.destroy();
-        },
-        onComplete: () => {
-          this.frames[char].setActive(false).setVisible(false);
+    this.clearTimeout = setTimeout(() => this.clearDialog(), 5000);
+  }
 
-        },
-      });
-    }, 5000);
+  clearDialog() {
+    this.tweens.add({
+      targets: this.currentFrame,
+      alpha: { from: 1, to: 0 },
+      ease: "Linear",
+      duration: 100,
+      repeat: 0,
+      yoyo: false,
+      onStart: () => {
+        this.renderedText.destroy();
+      },
+      onComplete: () => {
+        this.currentFrame.setActive(false).setVisible(false);
+        this.showingDialog = false;
+      },
+    });
   }
 }

@@ -3,8 +3,7 @@
     {
      "export":
         {
-         "format":"json",
-         "target":"map.json"
+         "format":"json"
         }
     },
  "height":32,
@@ -335,6 +334,61 @@
         }, 
         {
          "draworder":"topdown",
+         "id":31,
+         "name":"EnemySpawn",
+         "objects":[
+                {
+                 "height":0,
+                 "id":44,
+                 "name":"sk-spawn",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":82.6667,
+                         "y":0
+                        }, 
+                        {
+                         "x":82,
+                         "y":328
+                        }, 
+                        {
+                         "x":-76.6667,
+                         "y":330.667
+                        }, 
+                        {
+                         "x":-77.3333,
+                         "y":271.333
+                        }, 
+                        {
+                         "x":-140,
+                         "y":268.667
+                        }, 
+                        {
+                         "x":-136,
+                         "y":172
+                        }, 
+                        {
+                         "x":2.66667,
+                         "y":164.667
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":228.667,
+                 "y":55.3333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":29,
          "name":"Lights",
          "objects":[
@@ -592,8 +646,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":31,
- "nextobjectid":44,
+ "nextlayerid":32,
+ "nextobjectid":45,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tiledversion":"1.3.1",

@@ -12,10 +12,6 @@ import { enemies } from "./enemies.js";
 
 const MAX_PLAYERS = 3;
 
-const sleep = milliseconds => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
-};
-
 const app = express(),
   DIST_DIR = __dirname,
   HTML_FILE = path.join(DIST_DIR, "index.html"),
@@ -65,67 +61,74 @@ io.on("connection", socket => {
       }
     }
 
-    // Allow some time for scene creation
-    await sleep(100);
+    // If this is the master player, get enemy position
+    if (players[socket.id].master) {
+      socket.on("enemies", data => {
+        log("Enemy data received", data);
+      });
+    }
 
-    log("Sending all characters and updating players of new player");
-    socket.emit("allCharacters", characters);
+    socket.once("game-ready", () => {
+      log("Ready!");
+      log("Sending all characters and updating players of new player");
+      socket.emit("allCharacters", characters);
 
-    socket.broadcast.emit("newPlayer", {
-      id: socket.id,
-      char: characters[players[socket.id].char],
-    });
+      socket.broadcast.emit("newPlayer", {
+        id: socket.id,
+        char: characters[players[socket.id].char],
+      });
 
-    socket.broadcast.emit("takenUpdate", characters);
+      socket.broadcast.emit("takenUpdate", characters);
 
-    socket.on("playerMovement", movementData => {
-      const player = players[socket.id];
+      socket.on("playerMovement", movementData => {
+        const player = players[socket.id];
 
-      if (!player) {
-        return;
-      }
-
-      const char = characters[player.char];
-
-      char.x = movementData.x;
-      char.y = movementData.y;
-      char.direction = movementData.direction;
-      char.stopped = movementData.stopped;
-
-      socket.broadcast.emit("playerMoved", char);
-    });
-
-    socket.on("playerSwitch", () => {
-      log("Received player switch request");
-
-      const cycleOrder = Object.keys(characters);
-      const idx = cycleOrder.indexOf(players[socket.id].char);
-
-      let new_idx = (idx + 1) % cycleOrder.length;
-      while (new_idx != idx) {
-        let c = cycleOrder[new_idx];
-
-        if (characters[c].takenBy == null) {
-          console.debug("Found non-taken character: ", c);
-          characters[cycleOrder[idx]].takenBy = null;
-
-          characters[c].takenBy = socket.id;
-          players[socket.id].char = c;
-
-          socket.emit("newCharacter", c);
-          socket.broadcast.emit("takenUpdate", characters);
-
-          break;
+        if (!player) {
+          return;
         }
 
-        new_idx = (new_idx + 1) % cycleOrder.length;
-      }
-    });
+        const char = characters[player.char];
 
-    socket.on("fired", fireData => {
-      log("A player just fired!", fireData);
+        char.x = movementData.x;
+        char.y = movementData.y;
+        char.direction = movementData.direction;
+        char.stopped = movementData.stopped;
 
-      socket.broadcast.emit("playerFired", fireData);
+        socket.broadcast.emit("playerMoved", char);
+      });
+
+      socket.on("playerSwitch", () => {
+        log("Received player switch request");
+
+        const cycleOrder = Object.keys(characters);
+        const idx = cycleOrder.indexOf(players[socket.id].char);
+
+        let new_idx = (idx + 1) % cycleOrder.length;
+        while (new_idx != idx) {
+          let c = cycleOrder[new_idx];
+
+          if (characters[c].takenBy == null) {
+            console.debug("Found non-taken character: ", c);
+            characters[cycleOrder[idx]].takenBy = null;
+
+            characters[c].takenBy = socket.id;
+            players[socket.id].char = c;
+
+            socket.emit("newCharacter", c);
+            socket.broadcast.emit("takenUpdate", characters);
+
+            break;
+          }
+
+          new_idx = (new_idx + 1) % cycleOrder.length;
+        }
+      });
+
+      socket.on("fired", fireData => {
+        log("A player just fired!", fireData);
+
+        socket.broadcast.emit("playerFired", fireData);
+      });
     });
   });
 
@@ -145,12 +148,6 @@ io.on("connection", socket => {
       id: socket.id,
       char: player.char,
     });
-  });
-
-  socket.on("destroyDoor", () => {
-    log("Destroyed door");
-    // emit a message to all players to remove this player
-    socket.broadcast.emit("destroyDoor");
   });
 });
 

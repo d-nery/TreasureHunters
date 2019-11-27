@@ -5,6 +5,9 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
 
+    this.initialX = config.x;
+    this.initialY = config.y;
+
     let size = config.size || 16;
     this.body.setSize(size, size);
     this.body.offset.set(0, 0);
@@ -131,5 +134,31 @@ export default class Character extends Phaser.GameObjects.Sprite {
       let anim = this.facing + this.animSuffix;
       this.anims.play(anim, true);
     }
+  }
+
+  reset() {
+    this.alive = false;
+    this.stop();
+
+    this.scene.tweens.add({
+      targets: this,
+      alpha: { from: 1, to: 0 },
+      ease: "Linear",
+      duration: 100,
+      repeat: 2,
+      yoyo: true,
+      onComplete: () => {
+        this.setPosition(this.initialX, this.initialY);
+        this.scene.tweens.add({
+          targets: this,
+          alpha: { from: 1, to: 0 },
+          ease: "Linear",
+          duration: 100,
+          repeat: 5,
+          yoyo: true,
+          onComplete: () => (this.alive = true),
+        });
+      },
+    });
   }
 }

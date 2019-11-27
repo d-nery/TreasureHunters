@@ -31,14 +31,14 @@ export default class GameScene extends Phaser.Scene {
     this.createProjectiles();
     this.createCharacters();
 
-    // if (this.isMaster) {
-    //   // Creates all enemies and send their information to the server
-    //   this.createEnemies();
-    // } else {
-    //   this.registerEnemyUpdate();
-    // }
+    if (this.isMaster) {
+      // Creates all enemies and send their information to the server
+      this.createEnemies();
+    } else {
+      //   this.registerEnemyUpdate();
+    }
 
-    // this.addAllEnemyCollisions();
+    this.addAllEnemyCollisions();
 
     this.scene.launch("HUDScene");
     this.hud = this.scene.get("HUDScene");
@@ -134,6 +134,8 @@ export default class GameScene extends Phaser.Scene {
       }
     });
 
+    this.socket.emit("game-ready");
+
     this.lights.enable().setAmbientColor(0xaaaaaa);
   }
 
@@ -151,17 +153,25 @@ export default class GameScene extends Phaser.Scene {
       runChildUpdate: false,
     });
 
+    this.fireballs.name = "fireballs";
+
     this.iceballs = this.add.group({
       classType: IceBall,
       maxSize: 5,
       runChildUpdate: false,
     });
 
+    this.iceballs.name = "iceballs";
+
     this.arrows = this.add.group({
       classType: Arrow,
       maxSize: 5,
       runChildUpdate: false,
     });
+
+    this.arrows.name = "arrows";
+
+    this.projectiles = this.add.group([this.fireballs, this.iceballs, this.arrows]);
 
     this.map.addWorldCollisionToProjectile(this.fireballs);
     this.map.addWorldCollisionToProjectile(this.iceballs);
@@ -218,6 +228,8 @@ export default class GameScene extends Phaser.Scene {
       size: 13,
     });
 
+    this.characters = this.add.group([this.firegirl, this.wizard, this.archer, this.ninja]);
+
     if (this.charName === "firegirl") {
       this.currentCharacter = this.firegirl;
     } else if (this.charName === "wizard") {
@@ -254,8 +266,8 @@ export default class GameScene extends Phaser.Scene {
     this.boss = new Boss({
       scene: this,
       key: "king",
-      x: 262,
-      y: 406,
+      x: 432,
+      y: 77,
       suffix: "-kg",
       speed: 40,
       size: 55,
@@ -266,25 +278,78 @@ export default class GameScene extends Phaser.Scene {
       maxSize: 20,
       runChildUpdate: false,
     });
+
+    let spawnArea = this.map.spawnArea;
+    let rect = Phaser.Geom.Polygon.GetAABB(spawnArea);
+    this.logger.debug(rect);
+
+    let minX = rect.x;
+    let maxX = rect.x + rect.width;
+    let minY = rect.y;
+    let maxY = rect.y + rect.height;
+    let enemies = [];
+
+    let newEnemy = this.enemies.get();
+    while (newEnemy) {
+      let newX = Phaser.Math.Between(minX, maxX);
+      let newY = Phaser.Math.Between(minY, maxY);
+
+      while (!spawnArea.contains(newX, newY)) {
+        newX = Phaser.Math.Between(minX, maxX);
+        newY = Phaser.Math.Between(minY, maxY);
+      }
+
+      newEnemy.setPosition(newX, newY);
+      enemies.push([newX, newY]);
+      newEnemy = this.enemies.get();
+    }
+
+    this.logger.debug("Sending enemy data to server");
+    this.socket.emit("enemies", {
+      boss: {
+        x: 432,
+        y: 77,
+      },
+      enemies: enemies,
+    });
+
+    this.map.addWorldCollisionToEnemy(this.boss);
+    this.map.addWorldCollisionToEnemy(this.enemies);
   }
 
   addAllEnemyCollisions() {
     this.logger.debug("Adding enemy collision");
 
-    // this.physics.add.overlap(this.firegirl, this.boss, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.firegirl, this.enemy1, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.wizard, this.boss, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.wizard, this.enemy1, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.archer, this.boss, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.archer, this.enemy1, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.ninja, this.boss, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.ninja, this.enemy1, this.onMeetEnemy, false, this);
-    // this.physics.add.overlap(this.boss, this.iceballs, this.onFreezeEnemy, false, this);
-    // this.physics.add.overlap(this.boss, this.fireballs, this.onHitBoss, false, this);
-    // this.physics.add.overlap(this.boss, this.arrows, this.onHitBoss, false, this);
-    // this.physics.add.overlap(this.enemy1, this.fireballs, this.onHitEnemy, false, this);
-    // this.physics.add.overlap(this.enemy1, this.iceballs, this.onFreezeEnemy, false, this);
-    // this.physics.add.overlap(this.enemy1, this.arrows, this.onHitEnemy, false, this);
+    const onMeetEnemy = (player, enemy) => {
+      if (!player.alive) {
+        return;
+      }
+
+      this.logger.debug(`${player.name} hit ${enemy.name}`);
+
+      if (this.currentCharacter.name != player.name) {
+        return;
+      }
+
+      this.currentCharacter.reset();
+    };
+
+    this.physics.add.overlap(this.characters, this.boss, onMeetEnemy, null, this);
+    this.physics.add.overlap(this.characters, this.enemies, onMeetEnemy, null, this);
+
+    const onProj = (enemy, proj) => {
+      this.logger.debug("Hit enemy!", enemy.name, proj.name);
+
+      if (proj.name === "iceball") {
+        enemy.freeze();
+        proj.destroy();
+      }
+    };
+
+    this.projectiles.children.each(projs => {
+      this.physics.add.overlap(this.boss, projs, onProj, null, this);
+      this.physics.add.overlap(this.enemies, projs, onProj, null, this);
+    });
   }
 
   initInput() {
@@ -310,7 +375,6 @@ export default class GameScene extends Phaser.Scene {
     this.logger.debug("Initializing camera");
 
     this.cam = this.cameras.main;
-
     this.cam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     let targetWidth = 320;
@@ -341,30 +405,6 @@ export default class GameScene extends Phaser.Scene {
     character.facing = char.direction;
     character.setPosition(char.x, char.y);
     character.animate();
-  }
-
-  onMeetEnemy(player, enemy) {
-    if (this.currentCharacter.name == "firegirl") {
-      this.logger.debug("The firegirl has died!");
-      this.currentCharacter.setPosition(200, 504);
-      this.currentCharacter.stopped = true;
-      this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.name == "wizard") {
-      this.logger.debug("The wizard has died!");
-      this.currentCharacter.setPosition(232, 504);
-      this.currentCharacter.stopped = true;
-      this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.name == "ninja") {
-      this.logger.debug("The ninja has died!");
-      this.currentCharacter.setPosition(248, 504);
-      this.currentCharacter.stopped = true;
-      this.currentCharacter.facing = "up";
-    } else if (this.currentCharacter.name == "archer") {
-      this.logger.debug("The archer has died!");
-      this.currentCharacter.setPosition(216, 504);
-      this.currentCharacter.stopped = true;
-      this.currentCharacter.facing = "up";
-    }
   }
 
   onHitEnemy(enemy, projectile) {

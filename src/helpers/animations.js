@@ -125,6 +125,19 @@ const createAnimations = scene => {
   }
 
   scene.anims.create({
+    key: "skeleton-freeze",
+    frames: scene.anims.generateFrameNames("spriteAtlas", {
+      start: 1,
+      end: 1,
+      zeroPad: 2,
+      prefix: `skeleton/frozen/`,
+      suffix: ".png",
+    }),
+    frameRate: 8,
+    repeat: -1,
+  });
+
+  scene.anims.create({
     key: "firefont",
     frames: scene.anims.generateFrameNames("spriteAtlas", {
       start: 1,

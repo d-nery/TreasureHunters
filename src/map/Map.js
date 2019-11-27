@@ -45,8 +45,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   initialize() {
     this.logger.info("Initializing");
+
     this.hud = this.scene.scene.get("HUDScene");
-    this.hasKey = ""
+    this.hasKey = "";
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
@@ -113,7 +114,12 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.key = this.createFromObjects("Interactive", "key", { key: "spriteAtlas", frame: "key/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.key);
 
-    this.chest = this.createFromObjects("Interactive", "chest", { key: "spriteAtlas", frame: "chest/01.png" },this.scene)[0];
+    this.chest = this.createFromObjects(
+      "Interactive",
+      "chest",
+      { key: "spriteAtlas", frame: "chest/01.png" },
+      this.scene
+    )[0];
     this.scene.physics.world.enable(this.chest);
 
     this.firefonts = this.createFromObjects(
@@ -168,6 +174,13 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.door.body.setImmovable();
     this.door.body.moves = false;
 
+    let spawn = this.findObject("EnemySpawn", obj => obj.name == "sk-spawn");
+    let polygon = spawn.polygon.map(point => {
+      return { x: point.x + spawn.x, y: point.y + spawn.y };
+    });
+
+    this.spawnArea = new Phaser.Geom.Polygon(polygon);
+
     this.river.setCollisionByExclusion([-1]);
     this.walls.setCollisionByExclusion([-1]);
     this.hole.setCollisionByExclusion([-1]);
@@ -205,21 +218,27 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     char._bridgeCollider = this.scene.physics.add.collider(char, this.bridge, this.bridgeFala, null, this);
 
     char._chestCollider = this.scene.physics.add.overlap(char, this.chest, this.openChest, null, this);
-    console.debug(char._chestCollider);
     char._leversCollider = this.scene.physics.add.overlap(char, this.levers, this.removeDoor, null, this);
-    char._keyCollider = this.scene.physics.add.overlap(char,this.key, this.getKey, null, this)
+    char._keyCollider = this.scene.physics.add.overlap(char, this.key, this.getKey, null, this);
+
     if (char.name != "ninja") {
-      console.log(char.name);
       char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole, this.buracoFala, null, this);
     } else {
       char._fogHoleCollider = this.scene.physics.add.overlap(char, this.wallHole, this.openFog, null, this);
     }
 
-    char._chestCollider = this.scene.physics.add.OVER
+    char._chestCollider = this.scene.physics.add.OVER;
+  }
+
+  addWorldCollisionToEnemy(enemy) {
+    enemy._doorCollider = this.scene.physics.add.collider(enemy, this.door);
+    enemy._wallCollider = this.scene.physics.add.collider(enemy, this.walls);
+    enemy._riverCollider = this.scene.physics.add.collider(enemy, this.river);
+    enemy._bridgeCollider = this.scene.physics.add.collider(enemy, this.bridge);
   }
 
   addWorldCollisionToProjectile(proj) {
-    this.logger.debug(`Adding colliders to`, proj);
+    this.logger.debug(`Adding colliders to`, proj.name);
 
     const destroyProj = (p, _) => {
       p.destroy();
@@ -228,58 +247,57 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     proj._wallCollider = this.scene.physics.add.collider(proj, this.walls, destroyProj, null, this);
     proj._doorCollider = this.scene.physics.add.collider(proj, this.door, destroyProj, null, this);
 
-    if (proj.name === "arrow") {
+    if (proj.name === "arrows") {
       proj._buttonCollider = this.scene.physics.add.collider(proj, this.button, this.buttonPressed, null, this);
     }
   }
 
   removeDoor(char, lever) {
-    if (this.scene.keys.action.isDown) {
+    if (Phaser.Input.Keyboard.JustDown(this.scene.keys.action)) {
       lever.ok = true;
-      console.debug(char.name)
+      console.debug(char.name);
 
       lever.setFrame("lever/02.png", false, false);
       if (this.levers[0].ok && this.levers[1].ok) {
         this.scene.physics.world.disable(this.door);
         this.door.setFrame("door/open.png", false, false);
         this.fogTreasure.setVisible(0);
-        this.hud.showInfoDialog("ninja","Ouvi o barulho de uma porta abrindo");
+        this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo");
       } else {
-        this.hud.showInfoDialog(char.name,"Nada aconteceu. Parece que há outra alavanca escondida por aí");
-
+        this.hud.showInfoDialog(char.name, "Nada aconteceu. Parece que há outra alavanca escondida por aí");
       }
     }
   }
 
-  getKey(char){
-    if (this.hasKey == "" && this.scene.keys.action.isDown){
+  getKey(char) {
+    if (this.hasKey == "" && this.scene.keys.action.isDown) {
       this.hasKey = char.name;
-      this.key.setVisible(0)
-      this.hud.showInfoDialog(char.name,"Peguei a chave!");
+      this.key.setVisible(0);
+      this.hud.showInfoDialog(char.name, "Peguei a chave!");
       //emmit o show
     }
   }
 
-  openChest(char){
-    console.debug("try open")
+  openChest(char) {
+    console.debug("try open");
     if (this.scene.keys.action.isDown) {
-      console.debug(char.name,this.hasKey);
-      if(char.name == this.hasKey){
+      console.debug(char.name, this.hasKey);
+      if (char.name == this.hasKey) {
         this.chest.setFrame("chest/03.png", false, false);
-        console.debug("haskey")
-        this.hud.showInfoDialog(char.name,"O baú abriu");
+        console.debug("haskey");
+        this.hud.showInfoDialog(char.name, "O baú abriu");
         //bau na animaçao aberto
       } else {
-        console.debug("nokey")
-        this.hud.showInfoDialog(char.name,"Precisamos de uma chave");
+        console.debug("nokey");
+        this.hud.showInfoDialog(char.name, "Precisamos de uma chave");
       }
-      }
+    }
   }
 
   buttonPressed(char) {
     this.scene.physics.world.disable(this.bridge);
     this.bridge.setFrame("bridge/01.png", false, false);
-    this.hud.showInfoDialog("archer","Agora podemos atravessar pela ponte");
+    this.hud.showInfoDialog("archer", "Agora podemos atravessar pela ponte");
   }
 
   openFog(char) {
@@ -289,19 +307,19 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   bridgeFala(char) {
     if (this.scene.keys.action.isDown) {
-      this.hud.showInfoDialog(char.name,"A ponte está elevada. Precisamos achar o mecanismo para descê-la");
+      this.hud.showInfoDialog(char.name, "A ponte está elevada. Precisamos achar o mecanismo para descê-la");
     }
   }
 
   doorFala(char) {
     if (this.scene.keys.action.isDown) {
-      this.hud.showInfoDialog(char.name,"Está trancada! Será que essa alavanca funciona?");
+      this.hud.showInfoDialog(char.name, "Está trancada! Será que essa alavanca funciona?");
     }
   }
 
-  buracoFala(char){
+  buracoFala(char) {
     if (this.scene.keys.action.isDown) {
-      this.hud.showInfoDialog("ninja","Esse buraco parece do meu tamanho...");
+      this.hud.showInfoDialog("ninja", "Esse buraco parece do meu tamanho...");
     }
   }
 }

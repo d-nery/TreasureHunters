@@ -34,12 +34,39 @@ export default class Skeleton extends Phaser.GameObjects.Sprite {
     };
   }
 
+  update(time, delta) {
+    this.freezeTime -= delta;
+
+    if (!this.frozen()) {
+      this.body.setImmovable(false);
+      this.body.moves = true;
+    }
+  }
+
+  freeze() {
+    if (this.freezeTime <= 0) {
+      this.anim.play("skeleton-freeze", true);
+    }
+
+    this.freezeTime = 1500;
+    this.body.setImmovable(true);
+    this.body.moves = false;
+  }
+
   animate() {
+    if (this.frozen()) {
+      return;
+    }
+
     if (this.stopped) {
       this.anims.stop();
     } else {
       let anim = this.facing + "-sk";
       this.anims.play(anim, true);
     }
+  }
+
+  frozen() {
+    return this.freezeTime > 0;
   }
 }
