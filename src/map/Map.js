@@ -42,6 +42,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   }
 
   initialize() {
+    this.scene.scene.launch("HUDScene");
+    this.hud = this.scene.scene.get("HUDScene");
+
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
@@ -199,17 +202,19 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
     char._wallCollider = this.scene.physics.add.collider(char, this.walls);
     char._riverCollider = this.scene.physics.add.collider(char, this.river);
-    char._doorCollider = this.scene.physics.add.collider(char, this.door);
-    char._bridgeCollider = this.scene.physics.add.collider(char, this.bridge);
+    char._doorCollider = this.scene.physics.add.collider(char, this.door, this.doorFala, null, this);
+    char._bridgeCollider = this.scene.physics.add.collider(char, this.bridge, this.bridgeFala, null, this);
 
     char._leversCollider = this.scene.physics.add.overlap(char, this.levers, this.removeDoor, null, this);
 
     if (char.name != "ninja") {
       console.log(char.name);
-      char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole);
+      char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole, this.buracoFala, null, this);
     } else {
       char._fogHoleCollider = this.scene.physics.add.overlap(char, this.wallHole, this.openFog, null, this);
     }
+
+    char._chestCollider = this.scene.physics.add.OVER
   }
 
   addWorldCollisionToProjectile(proj) {
@@ -230,22 +235,47 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   removeDoor(char, lever) {
     if (this.scene.keys.action.isDown) {
       lever.ok = true;
+      console.debug(char.name)
+
       lever.setFrame("lever/02.png", false, false);
       if (this.levers[0].ok && this.levers[1].ok) {
         this.scene.physics.world.disable(this.door);
         this.door.setFrame("door/open.png", false, false);
         this.fogTreasure.setVisible(0);
+        this.hud.showInfoDialog("ninja","Ouvi o barulho de uma porta abrindo");
+      } else {
+        this.hud.showInfoDialog(char.name,"Nada aconteceu. Parece que há outra alavanca escondida por aí");
+
       }
     }
   }
 
-  buttonPressed() {
+  buttonPressed(char) {
     this.scene.physics.world.disable(this.bridge);
     this.bridge.setFrame("bridge/01.png", false, false);
+    this.hud.showInfoDialog("archer","Agora podemos atravessar pela ponte");
   }
 
-  openFog() {
+  openFog(char) {
     this.fog.setVisible(0);
     //emmit
+  }
+
+  bridgeFala(char) {
+    if (this.scene.keys.action.isDown) {
+      this.hud.showInfoDialog(char.name,"A ponte está elevada. Precisamos achar o mecanismo para descê-la");
+    }
+  }
+
+  doorFala(char) {
+    if (this.scene.keys.action.isDown) {
+      this.hud.showInfoDialog(char.name,"Está trancada! Será que essa alavanca funciona?");
+    }
+  }
+
+  buracoFala(char){
+    if (this.scene.keys.action.isDown) {
+      this.hud.showInfoDialog("ninja","Esse buraco parece do meu tamanho...");
+    }
   }
 }
