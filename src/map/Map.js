@@ -44,7 +44,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   initialize() {
     this.scene.scene.launch("HUDScene");
     this.hud = this.scene.scene.get("HUDScene");
-
+    this.hasKey = ""
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
@@ -109,12 +109,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.key = this.createFromObjects("Interactive", "key", { key: "spriteAtlas", frame: "key/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.key);
 
-    this.chest = this.createFromObjects(
-      "Interactive",
-      "chest",
-      { key: "spriteAtlas", frame: "chest/01.png" },
-      this.scene
-    )[0];
+    this.chest = this.createFromObjects("Interactive", "chest", { key: "spriteAtlas", frame: "chest/01.png" },this.scene)[0];
     this.scene.physics.world.enable(this.chest);
 
     this.firefonts = this.createFromObjects(
@@ -205,8 +200,10 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     char._doorCollider = this.scene.physics.add.collider(char, this.door, this.doorFala, null, this);
     char._bridgeCollider = this.scene.physics.add.collider(char, this.bridge, this.bridgeFala, null, this);
 
+    char._chestCollider = this.scene.physics.add.overlap(char, this.chest, this.openChest, null, this);
+    console.debug(char._chestCollider);
     char._leversCollider = this.scene.physics.add.overlap(char, this.levers, this.removeDoor, null, this);
-
+    char._keyCollider = this.scene.physics.add.overlap(char,this.key, this.getKey, null, this)
     if (char.name != "ninja") {
       console.log(char.name);
       char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole, this.buracoFala, null, this);
@@ -248,6 +245,31 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
       }
     }
+  }
+
+  getKey(char){
+    if (this.hasKey == "" && this.scene.keys.action.isDown){
+      this.hasKey = char.name;
+      this.key.setVisible(0)
+      this.hud.showInfoDialog(char.name,"Peguei a chave!");
+      //emmit o show
+    }
+  }
+
+  openChest(char){
+    console.debug("try open")
+    if (this.scene.keys.action.isDown) {
+      console.debug(char.name,this.hasKey);
+      if(char.name == this.hasKey){
+        this.chest.setFrame("chest/03.png", false, false);
+        console.debug("haskey")
+        this.hud.showInfoDialog(char.name,"O baú abriu");
+        //bau na animaçao aberto
+      } else {
+        console.debug("nokey")
+        this.hud.showInfoDialog(char.name,"Precisamos de uma chave");
+      }
+      }
   }
 
   buttonPressed(char) {
