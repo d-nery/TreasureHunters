@@ -1,3 +1,5 @@
+import Logger from "../helpers/Logger";
+
 import tiles from "../assets/map/new_spritesheet.png";
 import tilesN from "../assets/map/new_spritesheet_n.png";
 import map from "../assets/map/map.json";
@@ -49,9 +51,13 @@ class BootScene extends Phaser.Scene {
     super({
       key: "BootScene",
     });
+
+    this.logger = new Logger("Boot", "🕹");
   }
 
   preload() {
+    this.logger.info("Starting");
+
     const progress = this.add.graphics();
     this.registry.set("debug", DEBUG);
 
@@ -62,9 +68,10 @@ class BootScene extends Phaser.Scene {
     });
 
     this.load.on("complete", () => {
+      this.logger.info("Finished loading assets, creating animations");
       createAnimations(this);
       progress.destroy();
-      console.log("Finish Booting");
+      this.logger.info("Finished Booting, going to TitleScene");
       this.scene.start("TitleScene");
     });
 

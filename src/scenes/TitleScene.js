@@ -1,11 +1,31 @@
+import io from "socket.io-client";
+import Logger from "../helpers/Logger";
+
 export default class TitleScene extends Phaser.Scene {
   constructor() {
     super({
       key: "TitleScene",
     });
+
+    this.logger = new Logger("TitleScene");
   }
 
   create() {
+    this.socket = io();
+
+    this.socket.on("denied", () => {
+      // Show "Full room" message
+      this.logger.warn("Connection request denied");
+    });
+
+    this.socket.once("connection-ok", () => {
+      this.logger.info("🎉 Connection Success! Press space to enter game.");
+
+      this.spacebar.once("down", event => {
+        this.connectAndStartGame();
+      });
+    });
+
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     this.title = this.add.image(this.sys.game.config.width / 2, this.sys.game.config.height * 0.15, "logo");
@@ -21,10 +41,17 @@ export default class TitleScene extends Phaser.Scene {
 
     this.crew.setScale(scale);
     this.crew.setVisible(true);
+  }
 
-    this.spacebar.on("down", event => {
-      this.spacebar.off("down");
-      this.scene.start("GameScene");
+  connectAndStartGame() {
+    this.socket.emit("want-in");
+
+    this.socket.once("in-ok", data => {
+      this.scene.start("GameScene", {
+        initialChar: data.charName,
+        socket: this.socket,
+        isMaster: data.isMaster,
+      });
     });
   }
 }

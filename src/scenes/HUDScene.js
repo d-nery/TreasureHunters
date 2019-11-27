@@ -1,12 +1,14 @@
 import { mapCanvasValueToGameScale } from "../helpers/scale.js";
+import Logger from "../helpers/Logger";
 
 export default class HUDScene extends Phaser.Scene {
   constructor() {
     super({ key: "HUDScene" });
+    this.logger = new Logger("HUDScene");
   }
 
   create() {
-    console.log("Starting HUD");
+    this.logger.info("Creating");
     this.scene.bringToTop();
     this.loadImages();
     this.gameScene = this.scene.get("GameScene");

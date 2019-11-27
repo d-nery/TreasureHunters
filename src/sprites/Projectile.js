@@ -10,15 +10,14 @@ export default class Projectile extends Phaser.GameObjects.Sprite {
     this.body.offset.set(4, 4);
 
     this.direction = "up";
-
     this.light = null;
 
     this.body.setCollideWorldBounds(true);
-    this.scene.map.addWorldCollisionToProjectile(this);
+    // this.scene.map.addWorldCollisionToProjectile(this);
   }
 
   fire(x, y, d) {
-    console.log("Firing projectile", this.name, x, y, d);
+    console.log("Firing projectile", this.name, Math.round(x), Math.round(y), d);
 
     this.direction = d;
 
@@ -48,7 +47,6 @@ export default class Projectile extends Phaser.GameObjects.Sprite {
 
   update(time, delta) {
     if (!this.body.blocked.none) {
-      console.log("Destroying " + this.name);
       this.destroy();
     }
 

@@ -1,4 +1,5 @@
 import Parse from "phaser/src/tilemaps/parsers/Parse";
+import Logger from "../helpers/Logger";
 
 export default class Map extends Phaser.Tilemaps.Tilemap {
   constructor(scene, key, tileWidth, tileHeight, width, height, data, insertNull) {
@@ -36,12 +37,14 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     }
 
     super(scene, mapData);
+    this.logger = new Logger("Map", "🗺");
 
     // Custom code
     this.initialize();
   }
 
   initialize() {
+    this.logger.info("Initializing");
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
@@ -63,7 +66,9 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
       { key: "spriteAtlas", frame: "lever/01.png" },
       this.scene
     );
+
     this.scene.physics.world.enable(this.levers);
+
     for (let lever of this.levers) {
       lever.setPipeline("Light2D");
       lever.ok = false;
@@ -195,7 +200,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   }
 
   addWorldCollisionToCharacter(char) {
-    console.log("Adding colliders to", char);
+    this.logger.debug(`Adding colliders to ${char.name}`);
 
     char._wallCollider = this.scene.physics.add.collider(char, this.walls);
     char._riverCollider = this.scene.physics.add.collider(char, this.river);
@@ -205,7 +210,6 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     char._leversCollider = this.scene.physics.add.overlap(char, this.levers, this.removeDoor, null, this);
 
     if (char.name != "ninja") {
-      console.log(char.name);
       char._wallHoleCollider = this.scene.physics.add.collider(char, this.hole);
     } else {
       char._fogHoleCollider = this.scene.physics.add.overlap(char, this.wallHole, this.openFog, null, this);
@@ -213,16 +217,16 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
   }
 
   addWorldCollisionToProjectile(proj) {
-    console.log("Adding colliders to", proj);
+    this.logger.debug(`Adding colliders to`, proj);
 
-    const destroyProj = () => {
-      proj.destroy();
+    const destroyProj = (p, _) => {
+      p.destroy();
     };
 
     proj._wallCollider = this.scene.physics.add.collider(proj, this.walls, destroyProj, null, this);
     proj._doorCollider = this.scene.physics.add.collider(proj, this.door, destroyProj, null, this);
 
-    if (proj.name == "arrow") {
+    if (proj.name === "arrow") {
       proj._buttonCollider = this.scene.physics.add.collider(proj, this.button, this.buttonPressed, null, this);
     }
   }

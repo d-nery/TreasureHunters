@@ -1,6 +1,4 @@
 const createAnimations = scene => {
-  console.log("[createAnimations] Starting...");
-
   scene.anims.create({
     key: "fireball",
     frames: scene.anims.generateFrameNames("spriteAtlas", {
@@ -229,8 +227,6 @@ const createAnimations = scene => {
     frameRate: 8,
     repeat: -1,
   });
-
-  console.log("[createAnimations] Done.");
 };
 
 export default createAnimations;

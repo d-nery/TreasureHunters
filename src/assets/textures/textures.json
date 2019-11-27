@@ -5,8 +5,8 @@
 			"normalMap": "textures_n.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 426,
-				"h": 123
+				"w": 443,
+				"h": 124
 			},
 			"scale": 1,
 			"frames": [
@@ -746,28 +746,28 @@
 					}
 				},
 				{
-					"filename": "chest/01.png",
+					"filename": "archer/right/02.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
 						"w": 16,
 						"h": 16
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 1,
+						"y": 0,
 						"w": 16,
-						"h": 15
+						"h": 16
 					},
 					"frame": {
 						"x": 207,
 						"y": 107,
 						"w": 16,
-						"h": 15
+						"h": 16
 					}
 				},
 				{
-					"filename": "archer/right/02.png",
+					"filename": "archer/right/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -788,7 +788,7 @@
 					}
 				},
 				{
-					"filename": "archer/right/03.png",
+					"filename": "archer/right/04.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -830,7 +830,7 @@
 					}
 				},
 				{
-					"filename": "archer/right/04.png",
+					"filename": "chest/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -851,7 +851,7 @@
 					}
 				},
 				{
-					"filename": "chest/02.png",
+					"filename": "chest/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -872,7 +872,7 @@
 					}
 				},
 				{
-					"filename": "chest/03.png",
+					"filename": "firegirl/down/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -893,7 +893,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/down/01.png",
+					"filename": "firegirl/down/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -914,7 +914,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/down/02.png",
+					"filename": "firegirl/down/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -935,7 +935,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/down/03.png",
+					"filename": "firegirl/down/04.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -977,7 +977,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/down/04.png",
+					"filename": "firegirl/left/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -998,7 +998,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/left/01.png",
+					"filename": "firegirl/left/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1019,7 +1019,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/left/03.png",
+					"filename": "firegirl/up/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1040,7 +1040,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/up/01.png",
+					"filename": "firegirl/up/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1061,7 +1061,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/up/02.png",
+					"filename": "firegirl/up/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1082,7 +1082,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/up/03.png",
+					"filename": "firegirl/up/04.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1124,7 +1124,7 @@
 					}
 				},
 				{
-					"filename": "firegirl/up/04.png",
+					"filename": "skeleton/frozen/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1145,7 +1145,7 @@
 					}
 				},
 				{
-					"filename": "skeleton/frozen/01.png",
+					"filename": "spider/alive/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1166,7 +1166,7 @@
 					}
 				},
 				{
-					"filename": "water/river/01.png",
+					"filename": "spider/alive/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1187,7 +1187,7 @@
 					}
 				},
 				{
-					"filename": "water/river/02.png",
+					"filename": "spider/dying/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1208,7 +1208,7 @@
 					}
 				},
 				{
-					"filename": "water/river/03.png",
+					"filename": "spider/dying/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1229,7 +1229,7 @@
 					}
 				},
 				{
-					"filename": "wizard/down/01.png",
+					"filename": "spider/dying/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1250,7 +1250,7 @@
 					}
 				},
 				{
-					"filename": "wizard/down/02.png",
+					"filename": "spider/dying/04.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1292,7 +1292,7 @@
 					}
 				},
 				{
-					"filename": "wizard/down/03.png",
+					"filename": "water/river/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1313,7 +1313,7 @@
 					}
 				},
 				{
-					"filename": "wizard/down/04.png",
+					"filename": "water/river/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1334,7 +1334,7 @@
 					}
 				},
 				{
-					"filename": "wizard/left/01.png",
+					"filename": "water/river/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1355,7 +1355,7 @@
 					}
 				},
 				{
-					"filename": "wizard/left/02.png",
+					"filename": "wizard/down/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1397,7 +1397,7 @@
 					}
 				},
 				{
-					"filename": "wizard/left/03.png",
+					"filename": "wizard/down/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1439,7 +1439,7 @@
 					}
 				},
 				{
-					"filename": "wizard/left/04.png",
+					"filename": "wizard/down/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1460,7 +1460,7 @@
 					}
 				},
 				{
-					"filename": "wizard/right/01.png",
+					"filename": "wizard/down/04.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1481,7 +1481,7 @@
 					}
 				},
 				{
-					"filename": "wizard/right/02.png",
+					"filename": "wizard/left/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1502,7 +1502,7 @@
 					}
 				},
 				{
-					"filename": "wizard/right/03.png",
+					"filename": "wizard/left/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1523,7 +1523,7 @@
 					}
 				},
 				{
-					"filename": "wizard/right/04.png",
+					"filename": "wizard/left/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1544,7 +1544,7 @@
 					}
 				},
 				{
-					"filename": "wizard/up/01.png",
+					"filename": "wizard/left/04.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1586,7 +1586,7 @@
 					}
 				},
 				{
-					"filename": "wizard/up/02.png",
+					"filename": "wizard/right/01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1607,7 +1607,7 @@
 					}
 				},
 				{
-					"filename": "wizard/up/03.png",
+					"filename": "wizard/right/02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1628,7 +1628,7 @@
 					}
 				},
 				{
-					"filename": "wizard/up/04.png",
+					"filename": "wizard/right/03.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1649,9 +1649,9 @@
 					}
 				},
 				{
-					"filename": "archer/up/01.png",
+					"filename": "wizard/right/04.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
 						"w": 16,
 						"h": 16
@@ -1659,20 +1659,20 @@
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					},
 					"frame": {
 						"x": 315,
 						"y": 106,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					}
 				},
 				{
-					"filename": "archer/up/02.png",
+					"filename": "wizard/up/01.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
 						"w": 16,
 						"h": 16
@@ -1680,41 +1680,20 @@
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 15,
-						"h": 16
-					},
-					"frame": {
-						"x": 332,
-						"y": 106,
-						"w": 15,
-						"h": 16
-					}
-				},
-				{
-					"filename": "archer/up/03.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
 						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 15,
 						"h": 16
 					},
 					"frame": {
 						"x": 333,
 						"y": 70,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					}
 				},
 				{
-					"filename": "archer/up/04.png",
+					"filename": "wizard/up/02.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
 						"w": 16,
 						"h": 16
@@ -1722,55 +1701,13 @@
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 15,
-						"h": 16
-					},
-					"frame": {
-						"x": 333,
-						"y": 88,
-						"w": 15,
-						"h": 16
-					}
-				},
-				{
-					"filename": "firegirl/left/02.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
 						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 15,
-						"h": 16
-					},
-					"frame": {
-						"x": 349,
-						"y": 106,
-						"w": 15,
-						"h": 16
-					}
-				},
-				{
-					"filename": "firegirl/left/04.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 15,
 						"h": 16
 					},
 					"frame": {
 						"x": 345,
 						"y": 34,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					}
 				},
@@ -1796,9 +1733,9 @@
 					}
 				},
 				{
-					"filename": "firegirl/right/01.png",
+					"filename": "wizard/up/03.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
 						"w": 16,
 						"h": 16
@@ -1806,20 +1743,20 @@
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					},
 					"frame": {
 						"x": 367,
 						"y": 1,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					}
 				},
 				{
-					"filename": "firegirl/right/02.png",
+					"filename": "wizard/up/04.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
 						"w": 16,
 						"h": 16
@@ -1827,18 +1764,18 @@
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					},
 					"frame": {
 						"x": 345,
 						"y": 52,
-						"w": 15,
+						"w": 16,
 						"h": 16
 					}
 				},
 				{
-					"filename": "firegirl/right/03.png",
+					"filename": "archer/up/01.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -1852,14 +1789,35 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 350,
-						"y": 70,
+						"x": 333,
+						"y": 88,
 						"w": 15,
 						"h": 16
 					}
 				},
 				{
-					"filename": "firegirl/right/04.png",
+					"filename": "archer/up/02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 333,
+						"y": 106,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "archer/up/03.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -1880,7 +1838,7 @@
 					}
 				},
 				{
-					"filename": "lever/01.png",
+					"filename": "archer/up/04.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -1891,17 +1849,17 @@
 						"x": 0,
 						"y": 0,
 						"w": 15,
-						"h": 15
+						"h": 16
 					},
 					"frame": {
-						"x": 366,
-						"y": 106,
+						"x": 351,
+						"y": 70,
 						"w": 15,
-						"h": 15
+						"h": 16
 					}
 				},
 				{
-					"filename": "lever/02.png",
+					"filename": "firegirl/left/02.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -1912,13 +1870,76 @@
 						"x": 1,
 						"y": 0,
 						"w": 15,
-						"h": 15
+						"h": 16
 					},
 					"frame": {
-						"x": 362,
+						"x": 350,
+						"y": 106,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "firegirl/left/04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 367,
+						"y": 88,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "firegirl/right/01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 367,
+						"y": 106,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "firegirl/right/02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 363,
 						"y": 34,
 						"w": 15,
-						"h": 15
+						"h": 16
 					}
 				},
 				{
@@ -1943,6 +1964,111 @@
 					}
 				},
 				{
+					"filename": "firegirl/right/03.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 363,
+						"y": 52,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "firegirl/right/04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 368,
+						"y": 70,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "chest/01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 16,
+						"h": 15
+					},
+					"frame": {
+						"x": 384,
+						"y": 88,
+						"w": 16,
+						"h": 15
+					}
+				},
+				{
+					"filename": "lever/01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 15
+					},
+					"frame": {
+						"x": 384,
+						"y": 105,
+						"w": 15,
+						"h": 15
+					}
+				},
+				{
+					"filename": "lever/02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 15,
+						"h": 15
+					},
+					"frame": {
+						"x": 401,
+						"y": 105,
+						"w": 15,
+						"h": 15
+					}
+				},
+				{
 					"filename": "skeleton/down/01.png",
 					"rotated": false,
 					"trimmed": true,
@@ -1957,8 +2083,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 384,
-						"y": 1,
+						"x": 380,
+						"y": 34,
 						"w": 13,
 						"h": 16
 					}
@@ -1978,8 +2104,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 362,
-						"y": 51,
+						"x": 380,
+						"y": 52,
 						"w": 13,
 						"h": 16
 					}
@@ -1999,8 +2125,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 367,
-						"y": 69,
+						"x": 385,
+						"y": 70,
 						"w": 13,
 						"h": 16
 					}
@@ -2020,35 +2146,14 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 377,
-						"y": 51,
+						"x": 385,
+						"y": 1,
 						"w": 13,
 						"h": 16
 					}
 				},
 				{
 					"filename": "ninja/right/02.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 13,
-						"h": 13
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 13
-					},
-					"frame": {
-						"x": 379,
-						"y": 34,
-						"w": 12,
-						"h": 13
-					}
-				},
-				{
-					"filename": "ninja/right/04.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -2083,10 +2188,31 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 367,
-						"y": 87,
+						"x": 395,
+						"y": 34,
 						"w": 13,
 						"h": 16
+					}
+				},
+				{
+					"filename": "ninja/right/04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 13,
+						"h": 13
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 13
+					},
+					"frame": {
+						"x": 399,
+						"y": 19,
+						"w": 12,
+						"h": 13
 					}
 				},
 				{
@@ -2104,8 +2230,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 382,
-						"y": 69,
+						"x": 400,
+						"y": 1,
 						"w": 13,
 						"h": 16
 					}
@@ -2125,8 +2251,29 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 392,
-						"y": 49,
+						"x": 395,
+						"y": 52,
+						"w": 13,
+						"h": 16
+					}
+				},
+				{
+					"filename": "skeleton/left/04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 16
+					},
+					"frame": {
+						"x": 400,
+						"y": 70,
 						"w": 13,
 						"h": 16
 					}
@@ -2146,31 +2293,10 @@
 						"h": 13
 					},
 					"frame": {
-						"x": 393,
-						"y": 34,
+						"x": 402,
+						"y": 88,
 						"w": 12,
 						"h": 13
-					}
-				},
-				{
-					"filename": "skeleton/left/04.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 13,
-						"h": 16
-					},
-					"frame": {
-						"x": 382,
-						"y": 87,
-						"w": 13,
-						"h": 16
 					}
 				},
 				{
@@ -2188,29 +2314,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 383,
-						"y": 105,
-						"w": 13,
-						"h": 16
-					}
-				},
-				{
-					"filename": "skeleton/right/02.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 3,
-						"y": 0,
-						"w": 13,
-						"h": 16
-					},
-					"frame": {
-						"x": 399,
-						"y": 1,
+						"x": 410,
+						"y": 34,
 						"w": 13,
 						"h": 16
 					}
@@ -2230,10 +2335,31 @@
 						"h": 13
 					},
 					"frame": {
-						"x": 399,
+						"x": 413,
 						"y": 19,
 						"w": 12,
 						"h": 13
+					}
+				},
+				{
+					"filename": "skeleton/right/02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 0,
+						"w": 13,
+						"h": 16
+					},
+					"frame": {
+						"x": 415,
+						"y": 1,
+						"w": 13,
+						"h": 16
 					}
 				},
 				{
@@ -2251,8 +2377,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 397,
-						"y": 67,
+						"x": 410,
+						"y": 52,
 						"w": 13,
 						"h": 16
 					}
@@ -2272,50 +2398,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 397,
-						"y": 85,
-						"w": 13,
-						"h": 16
-					}
-				},
-				{
-					"filename": "skeleton/up/01.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 3,
-						"y": 0,
-						"w": 13,
-						"h": 16
-					},
-					"frame": {
-						"x": 398,
-						"y": 103,
-						"w": 13,
-						"h": 16
-					}
-				},
-				{
-					"filename": "skeleton/up/02.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 16,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 3,
-						"y": 0,
-						"w": 13,
-						"h": 16
-					},
-					"frame": {
-						"x": 407,
-						"y": 34,
+						"x": 415,
+						"y": 70,
 						"w": 13,
 						"h": 16
 					}
@@ -2335,14 +2419,14 @@
 						"h": 12
 					},
 					"frame": {
-						"x": 413,
-						"y": 19,
+						"x": 416,
+						"y": 88,
 						"w": 11,
 						"h": 12
 					}
 				},
 				{
-					"filename": "iceball/02.png",
+					"filename": "skeleton/up/01.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -2351,15 +2435,36 @@
 					},
 					"spriteSourceSize": {
 						"x": 3,
-						"y": 3,
-						"w": 10,
-						"h": 10
+						"y": 0,
+						"w": 13,
+						"h": 16
 					},
 					"frame": {
-						"x": 414,
-						"y": 1,
-						"w": 10,
-						"h": 10
+						"x": 429,
+						"y": 88,
+						"w": 13,
+						"h": 16
+					}
+				},
+				{
+					"filename": "skeleton/up/02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 0,
+						"w": 13,
+						"h": 16
+					},
+					"frame": {
+						"x": 418,
+						"y": 106,
+						"w": 13,
+						"h": 16
 					}
 				},
 				{
@@ -2377,8 +2482,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 412,
-						"y": 52,
+						"x": 425,
+						"y": 34,
 						"w": 13,
 						"h": 16
 					}
@@ -2398,10 +2503,31 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 412,
-						"y": 70,
+						"x": 425,
+						"y": 52,
 						"w": 13,
 						"h": 16
+					}
+				},
+				{
+					"filename": "iceball/02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 3,
+						"w": 10,
+						"h": 10
+					},
+					"frame": {
+						"x": 430,
+						"y": 70,
+						"w": 10,
+						"h": 10
 					}
 				}
 			]
@@ -2410,6 +2536,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:a2c136eb3768a50f5e17a6bbb67aa531:300e9fff49a9aee65653707e270467c8:fd456a3ebaf86f7cc6117b06ae45e352$"
+		"smartupdate": "$TexturePacker:SmartUpdate:693d195aa9ed6d4fb39d40699270f485:de888bab0c66916f070c16d3b3081d3e:fd456a3ebaf86f7cc6117b06ae45e352$"
 	}
 }

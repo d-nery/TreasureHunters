@@ -18,7 +18,7 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.fireCooldown = -1;
     this.alive = true;
     this.stopped = true;
-    this.facing = "up";
+    this.facing = "down";
     this.takenBy = null;
 
     this.fired = false;
@@ -28,11 +28,6 @@ export default class Character extends Phaser.GameObjects.Sprite {
     this.setPipeline("Light2D");
 
     this.body.setCollideWorldBounds(true);
-
-    // if (this.lightsource) {
-    //   console.log("Setting scroll factor");
-    //   this.lightsource.setScrollFactor(0.0);
-    // }
   }
 
   update(keys, time, delta) {
