@@ -87,6 +87,8 @@ export default class GameScene extends Phaser.Scene {
         this.currentCharacter = this.archer;
       }
 
+
+
       this.tweens.add({
         targets: this.cam,
         scrollX: this.currentCharacter.getCenter().x - 627,
@@ -185,7 +187,7 @@ export default class GameScene extends Phaser.Scene {
 
   createCharacters() {
     this.logger.debug("Creating Characters");
-
+    this.map.setSocket(this.socket);
     this.firegirl = new Character({
       scene: this,
       key: "firegirl",
@@ -490,6 +492,26 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
+    this.socket.on("doorOpen", obj => {
+      this.map.removeDoor_actions(obj.char,obj.lever)
+    });
+
+    this.socket.on("pickKey", char => {
+      this.map.getKey_actions(char)
+    });
+
+    this.socket.on("pressButton", char => {
+      this.map.buttonPressed_actions();
+    });
+
+    this.socket.on("fog", () => {
+      this.map.openFog_actions();
+    });
+
+    this.socket.on("chest", char => {
+      this.map.openChest_actions(char)
+    });
+
     if (this.currentCharacter == null) {
       return;
     }
