@@ -20,6 +20,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.life = 1000;
 
     this.anims.play("king-standing");
+    this.setPipeline("Light2D");
 
     this.body.setCollideWorldBounds(true);
   }

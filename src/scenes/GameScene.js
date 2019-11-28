@@ -136,6 +136,10 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.emit("game-ready");
+    this.sfx = this.sound.addAudioSprite("sfx");
+
+    this.bgMusic = this.sound.addAudioSprite("sfx");
+    this.bgMusic.play("bg_loop2", { loop: true });
 
     this.lights.enable().setAmbientColor(0xaaaaaa);
   }
@@ -350,6 +354,13 @@ export default class GameScene extends Phaser.Scene {
           }
 
           newEnemy.setPosition(newX, newY);
+          this.tweens.add({
+            targets: newEnemy,
+            alpha: { from: 1, to: 0 },
+            yoyo: true,
+            duration: 50,
+            repeat: 3,
+          });
         }
       },
       callbackScope: this,
@@ -399,6 +410,7 @@ export default class GameScene extends Phaser.Scene {
 
     const onProj = (enemy, proj) => {
       this.logger.debug("Hit enemy!", enemy.name, proj.name);
+      this.sfx.play("hit");
 
       if (proj.name === "iceball") {
         enemy.freeze();
@@ -406,6 +418,13 @@ export default class GameScene extends Phaser.Scene {
       } else if (proj.name === "fireball") {
         enemy.kill();
         proj.destroy();
+      } else if (proj.name === "arrow") {
+        if (enemy.name === "skeleton") {
+          proj.destroy();
+        } else if (enemy.name === "boss") {
+          enemy.kill();
+          proj.destroy();
+        }
       }
     };
 

@@ -133,7 +133,7 @@ const createAnimations = scene => {
       prefix: `skeleton/frozen/`,
       suffix: ".png",
     }),
-    frameRate: 1,
+    frameRate: 3,
     repeat: 0,
   });
 

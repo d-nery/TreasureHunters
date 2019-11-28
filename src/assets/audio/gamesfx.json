@@ -1,0 +1,40 @@
+{
+  "resources": [
+    "gamesfx.ogg",
+    "gamesfx.m4a",
+    "gamesfx.mp3",
+    "gamesfx.ac3"
+  ],
+  "spritemap": {
+    "arrow": {
+      "start": 0,
+      "end": 0.5,
+      "loop": false
+    },
+    "bg_loop": {
+      "start": 2,
+      "end": 52.16902494331066,
+      "loop": false
+    },
+    "bg_loop2": {
+      "start": 54,
+      "end": 113.7942857142857,
+      "loop": false
+    },
+    "button": {
+      "start": 115,
+      "end": 115.59786848072562,
+      "loop": false
+    },
+    "hit": {
+      "start": 117,
+      "end": 117.20680272108844,
+      "loop": false
+    },
+    "lever": {
+      "start": 119,
+      "end": 120.0384126984127,
+      "loop": false
+    }
+  }
+}

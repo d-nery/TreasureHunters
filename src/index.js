@@ -7,7 +7,7 @@ import TitleScene from "./scenes/TitleScene";
 import GameScene from "./scenes/GameScene";
 import HUDScene from "./scenes/HUDScene";
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 const ratio = 320 / 240;
 const DEFAULT_HEIGHT = window.innerHeight;

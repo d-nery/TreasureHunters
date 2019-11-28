@@ -39,10 +39,6 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     super(scene, mapData);
     this.logger = new Logger("Map", "🗺");
 
-    this.door_sound = new Audio(
-      "https://freesound.org/people/InspectorJ/sounds/431117/download/431117__inspectorj__door-front-opening-a.wav"
-    );
-
     // Custom code
     this.initialize();
   }
@@ -64,8 +60,14 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
       .setPipeline("Light2D");
 
     this.hole = this.createDynamicLayer("WallHole", tiles, 0, 0);
-    this.wallHole = this.createFromObjects("Interactive", "WallBarrie", { key: "null", frame: "" }, this.scene);
+    this.wallHole = this.createFromObjects(
+      "Interactive",
+      "WallBarrie",
+      { key: "spriteAtlas", frame: "hole/01.png" },
+      this.scene
+    )[0];
     this.scene.physics.world.enable(this.wallHole);
+    this.wallHole.setPipeline("Light2D");
 
     this.levers = this.createFromObjects(
       "Interactive",
@@ -112,8 +114,16 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     this.bridge.body.setImmovable();
     this.bridge.body.moves = false;
 
-    this.button = this.createFromObjects("Interactive", "button", { key: "null", frame: 0 }, this.scene)[0];
+    this.button = this.createFromObjects(
+      "Interactive",
+      "button",
+      { key: "spriteAtlas", frame: "button/01.png" },
+      this.scene
+    )[0];
     this.scene.physics.world.enable(this.button);
+    this.button.body.setImmovable();
+    this.button.body.moves = false;
+    this.button.setPipeline("Light2D");
 
     this.key = this.createFromObjects("Interactive", "key", { key: "spriteAtlas", frame: "key/01.png" }, this.scene)[0];
     this.scene.physics.world.enable(this.key);
@@ -152,7 +162,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
     this.fog = this.createStaticLayer("Fog", tiles, 0, 0);
     this.fogTreasure = this.createStaticLayer("FogTreasure", tiles, 0, 0);
-    //this.fog50 = this.createStaticLayer("Fog_50", tiles, 0, 0);
+    this.fog50 = this.createDynamicLayer("Fog_50", tiles, 0, 0);
+    this.fog50.setAlpha(0.9);
 
     this.door = this.createFromObjects(
       "Interactive",
@@ -251,7 +262,6 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
       lever.setFrame("lever/02.png", false, false);
       if (this.levers[0].ok && this.levers[1].ok) {
-        this.door_sound.play();
         this.scene.physics.world.disable(this.door);
         this.door.setFrame("door/open.png", false, false);
         this.fogTreasure.setVisible(0);
@@ -286,15 +296,18 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     }
   }
 
-  buttonPressed(char) {
+  buttonPressed(proj, button) {
     this.scene.physics.world.disable(this.bridge);
+    this.scene.physics.world.disable(this.button);
     this.bridge.setFrame("bridge/01.png", false, false);
+    this.button.setFrame("button/02.png", false, false);
     this.hud.showInfoDialog("archer", "Agora podemos atravessar pela ponte");
+    proj.destroy();
   }
 
   openFog(char) {
     this.fog.setVisible(0);
-    //emmit
+    this.fog50.setVisible(0);
   }
 
   bridgeFala(char) {
