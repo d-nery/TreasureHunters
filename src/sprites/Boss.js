@@ -16,6 +16,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.alive = true;
     this.stopped = true;
     this.facing = "up";
+    this.freezeTime = 0;
 
     this.life = 1000;
 
@@ -91,7 +92,34 @@ export default class Boss extends Phaser.GameObjects.Sprite {
 
     if (this.life <= 0) {
       this.setActive(false);
-      this.destroy();
+      this.setVisible(false);
+      this.scene.physics.world.disable(this);
     }
+  }
+
+  moveRandom() {
+    if (!this.stopped) {
+      return;
+    }
+
+    this.stopped = false;
+    let time = Phaser.Math.Between(100, 1000);
+    let speedY = Phaser.Math.Between(5, 15);
+
+    setTimeout(() => {
+      let goUp = Math.random() > 0.5;
+
+      if (goUp) {
+        this.body.setVelocityY(-speedY);
+      } else {
+        this.body.setVelocityY(speedY);
+      }
+
+      this.facing = goUp ? "up" : "down";
+
+      setTimeout(() => {
+        this.stop();
+      }, 1000);
+    }, time);
   }
 }

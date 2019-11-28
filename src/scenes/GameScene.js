@@ -87,8 +87,6 @@ export default class GameScene extends Phaser.Scene {
         this.currentCharacter = this.archer;
       }
 
-
-
       this.tweens.add({
         targets: this.cam,
         scrollX: this.currentCharacter.getCenter().x - 627,
@@ -328,6 +326,7 @@ export default class GameScene extends Phaser.Scene {
         for (let enemy of this.enemies.children.entries) {
           enemy.moveRandom();
         }
+        this.boss.moveRandom();
       },
       callbackScope: this,
       loop: true,
@@ -493,11 +492,11 @@ export default class GameScene extends Phaser.Scene {
 
   update(time, delta) {
     this.socket.on("doorOpen", obj => {
-      this.map.removeDoor_actions(obj.char,obj.lever)
+      this.map.removeDoor_actions(obj.char, obj.lever);
     });
 
     this.socket.on("pickKey", char => {
-      this.map.getKey_actions(char)
+      this.map.getKey_actions(char);
     });
 
     this.socket.on("pressButton", char => {
@@ -509,7 +508,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.on("chest", char => {
-      this.map.openChest_actions(char)
+      this.map.openChest_actions(char);
     });
 
     if (this.currentCharacter == null) {
@@ -531,6 +530,8 @@ export default class GameScene extends Phaser.Scene {
     for (let enemy of this.enemies.children.entries) {
       enemy.update(time, delta);
     }
+
+    this.boss.update(time, delta);
 
     if (Phaser.Input.Keyboard.JustDown(this.tab)) {
       this.currentCharacter.stop();

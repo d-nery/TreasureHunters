@@ -309,8 +309,8 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     }
   }
 
-  buttonPressed(char) {
-    this.socket.emit("pressButton", char);
+  buttonPressed(proj) {
+    this.socket.emit("pressButton", proj);
 
     this.scene.physics.world.disable(this.bridge);
     this.scene.physics.world.disable(this.button);
