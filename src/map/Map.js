@@ -48,7 +48,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
     this.hud = this.scene.scene.get("HUDScene");
     this.hasKey = "";
-    this.bau = 0;
+    this.bau = false;
     let tiles = this.addTilesetImage("sprites", "tiles", 16, 16, 0, 0);
 
     this.createDynamicLayer("Floor", tiles, 0, 0).setPipeline("Light2D");
@@ -174,6 +174,7 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
     )[0];
 
     this.door.setDepth(10);
+    this.door.setPipeline("Light2D");
     this.scene.physics.world.enable(this.door);
     this.door.body.setImmovable();
     this.door.body.moves = false;
@@ -266,24 +267,33 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
       lever.ok = true;
 
-      //   if ((!this.levers[0].ok && this.levers[1].ok) || (this.levers[0].ok && !this.levers[1].ok)) {
-      //     this.hud.showInfoDialog(char.name, "Uma alavanca foi ativada mas nada aconteceu.");
-      //   }
-
       if (this.levers[0].ok && this.levers[1].ok) {
-        this.scene.physics.world.disable(this.door);
-        this.door.setFrame("door/open.png", false, false);
-        this.fogTreasure.setVisible(0);
-        this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
+        this.openDoor(char, this.levers[0] ? 0 : 1);
       }
 
-      //     let obj = {char: char, lever: levernum};
-      //   this.socket.emit("doorOpen", obj);
+      let obj = { char: char, lever: lever == this.levers[0] ? 0 : 1 };
+      this.socket.emit("doorOpen", obj);
+    }
+  }
+
+  openDoor(char, lever) {
+    this.levers[lever].ok = true;
+    this.levers[lever].setFrame("lever/02.png", false, false);
+
+    if ((!this.levers[0].ok && this.levers[1].ok) || (this.levers[0].ok && !this.levers[1].ok)) {
+      this.hud.showInfoDialog(char.name, "Uma alavanca foi ativada mas nada aconteceu.");
+    }
+
+    if (this.levers[0].ok && this.levers[1].ok) {
+      this.scene.physics.world.disable(this.door);
+      this.door.setFrame("door/open.png", false, false);
+      this.fogTreasure.setVisible(0);
+      this.hud.showInfoDialog("ninja", "Ouvi o barulho de uma porta abrindo.");
     }
   }
 
   getKey(char) {
-    if (this.hasKey == "" && this.scene.keys.action.isDown) {
+    if (this.hasKey == "" && Phaser.Input.Keyboard.JustDown(this.scene.keys.action)) {
       this.getKey_actions(char);
       this.socket.emit("pickKey", char);
     }
@@ -297,39 +307,40 @@ export default class Map extends Phaser.Tilemaps.Tilemap {
 
   openChest(char) {
     this.logger.debug("try open");
-    if (this.scene.keys.action.isDown) {
+    if (Phaser.Input.Keyboard.JustDown(this.scene.keys.action)) {
       console.debug(char.name, this.hasKey);
       if (char.name != this.hasKey) {
         console.debug("nokey");
         this.hud.showInfoDialog(char.name, "Precisamos de uma chave");
       } else {
         this.chest.setFrame("chest/03.png", false, false);
-        this.hud.showInfoDialog(char.name, "O baú abriu!!");
+        this.hud.showInfoDialog(char.name, "O bau abriu!! Bora vazar daqui!");
+        this.bau = true;
         this.socket.emit("chest", char);
       }
     }
   }
 
-
   openChest_actions(char) {
-
-        this.chest.setFrame("chest/03.png", false, false);
-        console.debug("haskey");
-        this.hud.showInfoDialog(char.name, "O baú abriu. Bora vazar daqui!");
-        this.bau = 1;
-  
+    this.chest.setFrame("chest/03.png", false, false);
+    this.hud.showInfoDialog(char.name, "O bau abriu!! Bora vazar daqui!");
+    this.bau = true;
   }
 
-
-  buttonPressed(proj) {
-    this.socket.emit("pressButton", proj);
+  buttonPressed(proj, _, s = true) {
+    if (s) {
+      this.socket.emit("pressButton", proj);
+    }
 
     this.scene.physics.world.disable(this.bridge);
     this.scene.physics.world.disable(this.button);
     this.bridge.setFrame("bridge/01.png", false, false);
     this.button.setFrame("button/02.png", false, false);
     this.hud.showInfoDialog("archer", "Agora podemos atravessar pela ponte");
-    proj.destroy();
+
+    if (proj) {
+      proj.destroy();
+    }
   }
 
   openFog(char) {

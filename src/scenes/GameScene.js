@@ -20,14 +20,15 @@ export default class GameScene extends Phaser.Scene {
     this.socket = data.socket;
     this.isMaster = data.isMaster;
     this.charName = data.initialChar;
-    this.firegirlOut = 0;
-    this.wizardOut = 0;
-    this.ninjaOut = 0;
-    this.archerOut = 0;
   }
 
   create() {
     this.logger.info("Creating");
+
+    this.firegirlOut = false;
+    this.wizardOut = false;
+    this.ninjaOut = false;
+    this.archerOut = false;
 
     this.createMap();
     this.initCamera();
@@ -116,8 +117,6 @@ export default class GameScene extends Phaser.Scene {
       this.updateOtherChar(char);
     });
 
-    
-
     this.socket.on("playerFired", fireData => {
       this.logger.debug(`${fireData.who} has fired at (${fireData.x}, ${fireData.y})!`);
 
@@ -138,6 +137,38 @@ export default class GameScene extends Phaser.Scene {
 
       if (proj) {
         proj.fire(fireData.x, fireData.y, fireData.direction);
+      }
+    });
+
+    this.socket.on("doorOpen", obj => {
+      this.map.openDoor(obj.char, obj.lever);
+    });
+
+    this.socket.on("pickKey", char => {
+      this.map.getKey_actions(char);
+    });
+
+    this.socket.on("pressButton", char => {
+      this.map.buttonPressed(null, null, false);
+    });
+
+    this.socket.on("fog", () => {
+      this.map.openFog_actions();
+    });
+
+    this.socket.on("chest", char => {
+      this.map.openChest_actions(char);
+    });
+
+    this.socket.on("charnotExit", char => {
+      if (char.name == "firegirl") {
+        this.firegirlOut = 0;
+      } else if (char.name == "wizard") {
+        this.wizardOut = 0;
+      } else if (char.name == "ninja") {
+        this.ninjaOut = 0;
+      } else if (char.name == "archer") {
+        this.archerOut = 0;
       }
     });
 
@@ -393,6 +424,16 @@ export default class GameScene extends Phaser.Scene {
       maxSize: 20,
       runChildUpdate: false,
     });
+
+    this.socket.on("enemies", enem => {
+      for (let [x, y] of enem) {
+        let newEnemy = this.enemies.get();
+
+        if (newEnemy) {
+          newEnemy.setPosition(newX, newY);
+        }
+      }
+    });
   }
 
   addAllEnemyCollisions() {
@@ -412,7 +453,7 @@ export default class GameScene extends Phaser.Scene {
       this.currentCharacter.reset();
     };
 
-    //this.physics.add.overlap(this.characters, this.boss, onMeetEnemy, null, this);
+    this.physics.add.overlap(this.characters, this.boss, onMeetEnemy, null, this);
     this.physics.add.overlap(this.characters, this.enemies, onMeetEnemy, null, this);
 
     const onProj = (enemy, proj) => {
@@ -497,53 +538,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    this.socket.on("doorOpen", obj => {
-      this.map.removeDoor_actions(obj.char, obj.lever);
-    });
-
-    this.socket.on("pickKey", char => {
-      this.map.getKey_actions(char);
-    });
-
-    this.socket.on("pressButton", char => {
-      this.map.buttonPressed_actions();
-    });
-
-    this.socket.on("fog", () => {
-      this.map.openFog_actions();
-    });
-
-    this.socket.on("chest", char => {
-      this.map.openChest_actions(char);
-    });
-
-    this.socket.on("charExit", char => {
-      if (this.map.bau) {
-        if (char.name == "firegirl") {
-          this.firegirlOut = 1;
-        } else if (char.name == "wizard") {
-          this.wizardOut = 1;
-        } else if (char.name == "ninja") {
-          this.ninjaOut = 1;
-        } else if (char.name == "archer") {
-          this.archerOut = 1;
-        }
-    }
-    });
-
-    this.socket.on("charnotExit", char => {
-      if (char.name == "firegirl") {
-        this.firegirlOut = 0;
-        
-      } else if (char.name == "wizard") {
-        this.wizardOut = 0;
-      } else if (char.name == "ninja") {
-        this.ninjaOut = 0;
-      } else if (char.name == "archer") {
-        this.archerOut = 0;
-      }
-    });
-
     if (this.currentCharacter == null) {
       return;
     }
@@ -581,35 +575,41 @@ export default class GameScene extends Phaser.Scene {
     if (this.currentCharacter.fired) {
       this.socket.emit("fired", this.currentCharacter.getLastFireData());
     }
-    if(this.archerOut && this.ninjaOut && this.wizardOut && this.firegirlOut ) {
-      this.logger.info("Finished GameScene, going to EndScene");
-      this.scene.start("EndScene");
-      //this.hud.showInfoDialog("ninja", "booa saímos!");
-    }
-    
-    if (this.currentCharacter.x > 180 && this.currentCharacter.x < 250 && this.currentCharacter.y < 510 ) {
-      if (this.map.bau) {
-        if (this.currentCharacter.name == "firegirl") {
-          this.firegirlOut = 1;
-        } else if (this.currentCharacter.name == "wizard") {
-          this.wizardOut = 1;
-        } else if (this.currentCharacter.name == "ninja") {
-          this.ninjaOut = 1;
-        } else if (this.currentCharacter.name == "archer") {
-          this.archerOut = 1;
-        }
-      }
+
+    if (this.firegirl.x > 180 && this.firegirl.x < 250 && this.firegirl.y > 500) {
+      this.firegirlOut = true;
     } else {
-      if (this.currentCharacter.name == "firegirl") {
-        this.firegirlOut = 0;
-      } else if (this.currentCharacter.name == "wizard") {
-        this.wizardOut = 0;
-      } else if (this.currentCharacter.name == "ninja") {
-        this.ninjaOut = 0;
-      } else if (this.currentCharacter.name == "archer") {
-        this.archerOut = 0;
-      }
+      this.firegirlOut = false;
     }
 
+    if (this.wizard.x > 180 && this.wizard.x < 250 && this.wizard.y > 500) {
+      this.wizardOut = true;
+    } else {
+      this.wizardOut = false;
+    }
+
+    if (this.ninja.x > 180 && this.ninja.x < 250 && this.ninja.y > 500) {
+      this.ninjaOut = true;
+    } else {
+      this.ninjaOut = false;
+    }
+
+    if (this.archer.x > 180 && this.archer.x < 250 && this.archer.y > 500) {
+      this.archerOut = true;
+    } else {
+      this.archerOut = false;
+    }
+
+    if (this.map.bau && this.archerOut && this.ninjaOut && this.wizardOut && this.firegirlOut) {
+      this.logger.info("Finished GameScene, going to EndScene");
+      //   this.enemyMoveTimer.remove();
+      //   this.spawnNewEnemyTimer.remove();
+
+      //   this.socket.close();
+      //   this.scene.start("EndScene");
+      this.hud.showInfoDialog("ninja", "booa saímos!");
+
+      this.map.bau = false;
+    }
   }
 }

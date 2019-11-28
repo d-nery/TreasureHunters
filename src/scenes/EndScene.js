@@ -11,8 +11,6 @@ export default class EndScene extends Phaser.Scene {
   }
 
   create() {
-    this.socket = io();
-
     this.title = this.add.image(this.sys.game.config.width / 2, this.sys.game.config.height * 0.15, "logo");
     let w = this.title.width;
     let scale = (this.sys.game.config.width * 0.5) / w;
@@ -27,5 +25,4 @@ export default class EndScene extends Phaser.Scene {
     this.crew.setScale(scale);
     this.crew.setVisible(true);
   }
-  
 }

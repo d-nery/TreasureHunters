@@ -9,7 +9,7 @@ export default class Boss extends Phaser.GameObjects.Sprite {
     this.body.setSize(size, size);
     this.body.offset.set(0, 0);
 
-    this.name = config.key;
+    this.name = "boss";
     this.animSuffix = config.suffix;
     this.speed = config.speed || 80;
     this.frozen = false;
